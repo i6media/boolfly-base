@@ -1,0 +1,21 @@
+{
+  "name": "boolfly/module-base",
+  "description": "Core module",
+  "require": {
+    "php": "~7.0.0||~7.1.3"
+  },
+  "type": "magento2-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Boolfly\\Base\\": ""
+    }
+  },
+  "version": "1.0.0"
+}
