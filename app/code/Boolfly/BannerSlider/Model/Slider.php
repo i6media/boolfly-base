@@ -68,7 +68,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Set Status
      *
-     * @param int|boolean $status
+     * @param integer|boolean $status
      *
      * @return $this
      * @since 1.0.0
@@ -92,7 +92,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Set Display Title
      *
-     * @param bool|int $displayTitle
+     * @param boolean|integer $displayTitle
      *
      * @return $this
      * @since 1.0.0
@@ -105,7 +105,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Get Mode
      *
-     * @return int
+     * @return integer
      * @since 1.0.0
      */
     public function getMode()
@@ -116,7 +116,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Set Mode
      *
-     * @param string|int $mode
+     * @param string|integer $mode
      *
      * @return $this
      * @since 1.0.0
@@ -164,7 +164,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Set Auto Play
      *
-     * @param int|boolean $autoPlay
+     * @param integer|boolean $autoPlay
      *
      * @return $this
      * @since 1.0.0
@@ -177,7 +177,7 @@ class Slider extends AbstractModel implements SliderInterface
     /**
      * Get Speed
      *
-     * @return int|null
+     * @return integer|null
      * @since 1.0.0
      */
     public function getSpeed()

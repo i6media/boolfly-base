@@ -54,12 +54,12 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     /**
      * Banner constructor.
      *
-     * @param Context $context
-     * @param Registry $registry
+     * @param Context               $context
+     * @param Registry              $registry
      * @param StoreManagerInterface $storeManager
      * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      */
     public function __construct(
         Context $context,
@@ -87,7 +87,7 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
      * Get Image Url
      *
      * @param $image
-     * @return bool|string
+     * @return boolean|string
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -97,11 +97,11 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
         if ($image) {
             if (is_string($image)) {
                 /** @var \Magento\Store\Model\Store $store */
-                $store = $this->storeManager->getStore();
+                $store        = $this->storeManager->getStore();
                 $mediaBaseUrl = $store->getBaseUrl(
                     UrlInterface::URL_TYPE_MEDIA
                 );
-                $url = $mediaBaseUrl
+                $url          = $mediaBaseUrl
                     . ltrim(self::ENTITY_MEDIA_PATH, '/')
                     . '/'
                     . $image;
@@ -153,7 +153,7 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     /**
      * Set Status
      *
-     * @param int|boolean $status
+     * @param integer|boolean $status
      *
      * @return $this
      * @since 1.0.0

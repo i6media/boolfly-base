@@ -88,7 +88,7 @@ interface BannerInterface
     /**
      * Set Status
      *
-     * @param int|boolean $status
+     * @param integer|boolean $status
      *
      * @return $this
      * @since 1.0.0
@@ -256,5 +256,4 @@ interface BannerInterface
      * @since 1.0.0
      */
     public function setAlignText($alignText);
-
 }
