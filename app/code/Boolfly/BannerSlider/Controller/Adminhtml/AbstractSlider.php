@@ -12,7 +12,6 @@ namespace Boolfly\BannerSlider\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Boolfly\BannerSlider\Api\Data\SliderInterfaceFactory;
 
 /**
@@ -34,14 +33,8 @@ abstract class AbstractSlider extends Action
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
-    /**
-     * Date filter instance
-     *
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     */
-    protected $_dateFilter;
 
     /**
      * @var SliderInterfaceFactory
@@ -53,18 +46,15 @@ abstract class AbstractSlider extends Action
      *
      * @param Context                $context
      * @param Registry               $coreRegistry
-     * @param Date                   $dateFilter
      * @param SliderInterfaceFactory $sliderFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        Date $dateFilter,
         SliderInterfaceFactory $sliderFactory
     ) {
         parent::__construct($context);
-        $this->_coreRegistry = $coreRegistry;
-        $this->_dateFilter   = $dateFilter;
+        $this->coreRegistry  = $coreRegistry;
         $this->sliderFactory = $sliderFactory;
     }
 

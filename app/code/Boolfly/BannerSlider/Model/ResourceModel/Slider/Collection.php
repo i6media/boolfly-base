@@ -22,6 +22,13 @@ class Collection extends AbstractCollection
 {
 
     /**
+     * Primary column
+     *
+     * @var string
+     */
+    protected $_idFieldName = 'slider_id';
+
+    /**
      * Initialize resource collection
      *
      * @return void

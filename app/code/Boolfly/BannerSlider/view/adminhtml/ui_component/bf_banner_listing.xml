@@ -58,6 +58,43 @@
                 </statefull>
             </settings>
         </filters>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <settings>
+            </settings>
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="*/*/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="status">
+                <settings>
+                    <type>status</type>
+                    <label translate="true">Change status</label>
+                    <actions>
+                        <action name="0">
+                            <type>enable</type>
+                            <label translate="true">Enable</label>
+                            <url path="*/*/massStatus">
+                                <param name="status">1</param>
+                            </url>
+                        </action>
+                        <action name="1">
+                            <type>disable</type>
+                            <label translate="true">Disable</label>
+                            <url path="*/*/massStatus">
+                                <param name="status">0</param>
+                            </url>
+                        </action>
+                    </actions>
+                </settings>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="banner_columns">
@@ -151,6 +188,9 @@
         <actionsColumn name="actions" class="Boolfly\BannerSlider\Ui\Component\Listing\Columns\EditActions" sortOrder="400">
             <settings>
                 <indexField>banner_id</indexField>
+                <options>
+                    <option name="routePath" xsi:type="string">bannerslider/banner/edit</option>
+                </options>
             </settings>
         </actionsColumn>
     </columns>

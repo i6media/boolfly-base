@@ -7,21 +7,21 @@
  *  * @author    info@boolfly.com
  * *  @project   Banner Slider
  */
-namespace Boolfly\BannerSlider\Controller\Adminhtml\Banner;
+namespace Boolfly\BannerSlider\Controller\Adminhtml\Slider;
 
-use Boolfly\BannerSlider\Controller\Adminhtml\AbstractBanner;
+use Boolfly\BannerSlider\Controller\Adminhtml\AbstractSlider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
-use Boolfly\BannerSlider\Api\Data\BannerInterface;
 
 /**
  * Class Validate
  *
- * @package Boolfly\BannerSlider\Controller\Adminhtml\Banner
+ * @package Boolfly\BannerSlider\Controller\Adminhtml\Slider
  */
-class Validate extends AbstractBanner
+class Validate extends AbstractSlider
 {
+
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\ResultInterface
      */
@@ -45,9 +45,9 @@ class Validate extends AbstractBanner
         $messages = [];
         $response = new DataObject();
         try {
-            $images = $this->getRequest()->getParam(BannerInterface::IMAGE_DESKTOP);
-            if (!($images && is_array($images))) {
-                throw new LocalizedException(__('You should upload image desktop.'));
+            $banners = $this->getRequest()->getParam('banners');
+            if (!($banners && isset($banners['assigned_banners']))) {
+                throw new LocalizedException(__('You should assign least a banner.'));
             }
         } catch (LocalizedException $e) {
             $error      = true;

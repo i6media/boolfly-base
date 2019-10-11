@@ -9,6 +9,7 @@
  */
 namespace Boolfly\BannerSlider\Model\Banner;
 
+use Boolfly\BannerSlider\Model\ImageUploader;
 use Boolfly\BannerSlider\Model\ResourceModel\Banner\CollectionFactory;
 use Boolfly\BannerSlider\Model\ResourceModel\Banner\Collection;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -40,21 +41,28 @@ class DataProvider extends AbstractDataProvider
     protected $coreRegistry;
 
     /**
-     * Initialize dependencies.
+     * @var ImageUploader
+     */
+    private $imageUploader;
+
+    /**
+     * DataProvider constructor.
      *
-     * @param string                      $name
-     * @param string                      $primaryFieldName
-     * @param string                      $requestFieldName
-     * @param CollectionFactory           $collectionFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param array                       $meta
-     * @param array                       $data
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
+     * @param CollectionFactory $collectionFactory
+     * @param ImageUploader     $imageUploader
+     * @param Registry          $registry
+     * @param array             $meta
+     * @param array             $data
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        ImageUploader $imageUploader,
         Registry $registry,
         array $meta = [],
         array $data = []
@@ -62,6 +70,7 @@ class DataProvider extends AbstractDataProvider
         $this->collection   = $collectionFactory->create();
         $this->coreRegistry = $registry;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->imageUploader = $imageUploader;
     }
 
     /**
@@ -78,20 +87,19 @@ class DataProvider extends AbstractDataProvider
             $bannerData = $banner->getData();
             foreach (ImageField::getField() as $field) {
                 unset($bannerData[$field]);
+                $imageName = $banner->getData($field);
+                if ($imageSrc = $banner->getImageUrl($imageName)) {
+                    $bannerData[$field][] = [
+                        'name' => $imageName,
+                        'url' => $imageSrc,
+                        'size' => $this->imageUploader->getSize($imageName)
+                    ];
+                }
             }
-
-            if ($banner->getImageDesktopUrl()) {
-                $bannerData['image_desktop'][0]['name'] = $banner->getData('image_desktop');
-                $bannerData['image_desktop'][0]['url']  = $banner->getImageDesktopUrl();
-            }
-
-            if ($banner->getImageTabletUrl()) {
-                $bannerData['image_tablet'][0]['name'] = $banner->getData('image_tablet');
-                $bannerData['image_tablet'][0]['url']  = $banner->getImageTabletUrl();
-            }
-            if ($banner->getImageDesktopUrl()) {
-                $bannerData['image_mobile'][0]['name'] = $banner->getData('image_mobile');
-                $bannerData['image_mobile'][0]['url']  = $banner->getImageMobileUrl();
+            if ($banner->getButtonText() || $banner->getButtonUrl()) {
+                $bannerData['enable_button'] = true;
+            } else {
+                $bannerData['enable_button'] = false;
             }
             $this->loadedData[$banner->getId()] = $bannerData;
         } else {

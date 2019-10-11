@@ -54,16 +54,19 @@ class EditActions extends Column
     {
         if (isset($dataSource['data']['items'])) {
             $storeId = $this->context->getFilterParam('store_id');
-
-            foreach ($dataSource['data']['items'] as &$item) {
-                $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl(
-                        'bannerslider/banner/edit',
-                        ['id' => $item['banner_id'], 'store' => $storeId]
-                    ),
-                    'label' => __('Edit'),
-                    'hidden' => false,
-                ];
+            $fieldId = $this->getDataByPath('config/indexField');
+            if ($fieldId) {
+                $routePath = $this->getDataByPath('options/routePath') ?: '*/*/edit';
+                foreach ($dataSource['data']['items'] as &$item) {
+                    $item[$this->getData('name')]['edit'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            $routePath,
+                            ['id' => $item[$fieldId], 'store' => $storeId]
+                        ),
+                        'label' => __('Edit'),
+                        'hidden' => false,
+                    ];
+                }
             }
         }
 

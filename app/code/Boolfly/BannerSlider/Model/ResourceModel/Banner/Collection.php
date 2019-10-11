@@ -20,6 +20,12 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  */
 class Collection extends AbstractCollection
 {
+    /**
+     * Primary column
+     *
+     * @var string
+     */
+    protected $_idFieldName = 'banner_id';
 
     /**
      * Initialize resource collection

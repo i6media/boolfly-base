@@ -17,6 +17,7 @@
       <arguments>
          <argument name="collections" xsi:type="array">
             <item name="bf_banner_listing_data_source" xsi:type="string">BoolflyBannerCollection</item>
+            <item name="bf_banner_grid_data_source" xsi:type="string">BoolflyBannerCollection</item>
             <item name="bf_slider_listing_data_source" xsi:type="string">BoolflySliderCollection</item>
          </argument>
       </arguments>

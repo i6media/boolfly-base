@@ -52,11 +52,17 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     private $storeManager;
 
     /**
+     * @var ImageUploader
+     */
+    private $imageUploader;
+
+    /**
      * Banner constructor.
      *
      * @param Context               $context
      * @param Registry              $registry
      * @param StoreManagerInterface $storeManager
+     * @param ImageUploader         $imageUploader
      * @param AbstractResource|null $resource
      * @param AbstractDb|null       $resourceCollection
      * @param array                 $data
@@ -65,12 +71,14 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
         Context $context,
         Registry $registry,
         StoreManagerInterface $storeManager,
+        ImageUploader $imageUploader,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->storeManager = $storeManager;
+        $this->storeManager  = $storeManager;
+        $this->imageUploader = $imageUploader;
     }
 
     /**
@@ -91,7 +99,7 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getImageUrl($image)
+    public function getImageUrl($image)
     {
         $url = false;
         if ($image) {
@@ -401,5 +409,32 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
         }
 
         return array_unique($identities);
+    }
+
+    /**
+     * After Delete Commit
+     *
+     * @return mixed
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function afterDeleteCommit()
+    {
+        $this->deleteImageUploaded();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Delete image when delete banner
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    protected function deleteImageUploaded()
+    {
+        foreach (ImageField::getField() as $field) {
+            $image = $this->getData($field);
+            if ($image) {
+                $this->imageUploader->deleteImageFile($image);
+            }
+        }
     }
 }
