@@ -158,7 +158,7 @@ class InstallSchema implements InstallSchemaInterface
                     'created_at',
                     Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => true],
                     'Created At'
                 )->addColumn(
                     'updated_at',
@@ -253,7 +253,7 @@ class InstallSchema implements InstallSchemaInterface
                     'created_at',
                     Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => true],
                     'Created At'
                 )->addColumn(
                     'updated_at',
@@ -306,6 +306,14 @@ class InstallSchema implements InstallSchemaInterface
                         'primary'  => true,
                     ],
                     'Slider Id'
+                )->addColumn(
+                    'position',
+                    Table::TYPE_SMALLINT,
+                    6,
+                    [
+                        'nullable' => true,
+                    ],
+                    'Position'
                 )->addIndex(
                     $installer->getIdxName($tableName, ['slider_id']),
                     ['slider_id']

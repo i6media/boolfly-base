@@ -14,20 +14,18 @@ use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Class AlignText
+ * Class Effect
  *
  * @package Boolfly\BannerSlider\Model\Source
  */
-class AlignText extends AbstractSource implements SourceInterface, OptionSourceInterface
+class Effect extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
     /**#@+
-     * Align Text Values
+     * Effect Values
      */
-    const CENTER_ALIGN_TEXT = 'center';
+    const FADE_EFFECT = 'fade';
 
-    const LEFT_ALIGN_TEXT = 'left';
-
-    const RIGHT_ALIGN_TEXT = 'right';
+    const SLIDE_EFFECT = 'slide';
 
     /**
      * Retrieve option array
@@ -37,9 +35,8 @@ class AlignText extends AbstractSource implements SourceInterface, OptionSourceI
     public static function getOptionArray()
     {
         return [
-            self::CENTER_ALIGN_TEXT => __('Center'),
-            self::LEFT_ALIGN_TEXT => __('Left'),
-            self::RIGHT_ALIGN_TEXT => __('Right')
+            self::FADE_EFFECT => __('Fade'),
+            self::SLIDE_EFFECT => __('Slide')
         ];
     }
 

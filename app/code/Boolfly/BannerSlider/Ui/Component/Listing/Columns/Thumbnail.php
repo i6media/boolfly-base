@@ -9,6 +9,7 @@
  */
 namespace Boolfly\BannerSlider\Ui\Component\Listing\Columns;
 
+use Boolfly\BannerSlider\Helper\Data;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -26,11 +27,10 @@ class Thumbnail extends Column
      * @var UrlInterface
      */
     protected $urlBuilder;
-
     /**
-     * @var ImageUploader
+     * @var Data
      */
-    private $imageUploader;
+    private $helperData;
 
     /**
      * Thumbnail constructor.
@@ -38,7 +38,7 @@ class Thumbnail extends Column
      * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlInterface       $urlBuilder
-     * @param ImageUploader      $imageUploader
+     * @param Data               $helperData
      * @param array              $components
      * @param array              $data
      */
@@ -46,13 +46,13 @@ class Thumbnail extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
-        ImageUploader $imageUploader,
+        Data $helperData,
         array $components = [],
         array $data = []
     ) {
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->imageUploader = $imageUploader;
+        $this->helperData = $helperData;
     }
 
     /**
@@ -60,6 +60,7 @@ class Thumbnail extends Column
      *
      * @param array $dataSource
      * @return array
+     * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource)
@@ -71,13 +72,13 @@ class Thumbnail extends Column
                     continue;
                 }
                 $imageName                      = $item[$fieldName];
-                $item[$fieldName . '_src']      = $this->imageUploader->getImageUrl($imageName);
+                $item[$fieldName . '_src']      = $this->helperData->getResizeImage($imageName);
                 $item[$fieldName . '_alt']      = $item['image_alt'];
                 $item[$fieldName . '_link']     = $this->urlBuilder->getUrl(
                     'bannerslider/banner/edit',
                     ['id' => $item['banner_id'], 'store' => $this->context->getRequestParam('store')]
                 );
-                $item[$fieldName . '_orig_src'] = $this->imageUploader->getImageUrl($imageName);
+                $item[$fieldName . '_orig_src'] = $this->helperData->getImageUrl($imageName);
             }
         }
 

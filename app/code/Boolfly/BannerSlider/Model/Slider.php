@@ -12,13 +12,14 @@ namespace Boolfly\BannerSlider\Model;
 use Boolfly\BannerSlider\Api\Data\SliderInterface;
 use Boolfly\BannerSlider\Model\ResourceModel\Slider as SliderResourceModel;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Class Slider
  *
  * @package Boolfly\BannerSlider\Model
  */
-class Slider extends AbstractModel implements SliderInterface
+class Slider extends AbstractModel implements SliderInterface, IdentityInterface
 {
 
     /**
@@ -220,5 +221,23 @@ class Slider extends AbstractModel implements SliderInterface
     public function setPosition($position)
     {
         return $this->setData(self::POSITION, $position);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $identities = [
+            self::CACHE_TAG . '_' . $this->getId(),
+        ];
+
+        if (!$this->getId() || $this->isDeleted()) {
+            $identities[] = self::CACHE_TAG;
+        }
+
+        return array_unique($identities);
     }
 }

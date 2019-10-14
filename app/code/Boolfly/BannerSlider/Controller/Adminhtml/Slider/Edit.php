@@ -26,7 +26,7 @@ class Edit extends AbstractSlider
     {
         /** @var \Boolfly\BannerSlider\Model\Slider $model */
         $model = $this->sliderFactory->create();
-        $this->_coreRegistry->register('current_slider', $model);
+        $this->coreRegistry->register('current_slider', $model);
 
         $id = $this->getRequest()->getParam('id');
         if ($id) {

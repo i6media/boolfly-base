@@ -21,55 +21,24 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 class DeleteButton extends Template implements ButtonProviderInterface
 {
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
-     * DeleteButton constructor.
-     *
-     * @param Template\Context $context
-     * @param Registry         $registry
-     * @param array            $data
-     */
-    public function __construct(
-        Template\Context $context,
-        Registry $registry,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->registry = $registry;
-    }
-
-    /**
      * Delete button
      *
      * @return array
      */
     public function getButtonData()
     {
-        if ($this->getBanner() && $this->getBanner()->getId()) {
+        if ($id = $this->getRequest()->getParam('id', false)) {
             return [
                 'id' => 'delete',
                 'label' => __('Delete'),
-                'on_click' => "deleteConfirm('" .__('Are you sure you want to delete this banner?') ."', '"
-                    . $this->getDeleteUrl() . "', {data: {}})",
+                'on_click' => "deleteConfirm('" .__('Are you sure you want to delete this?') ."', '"
+                    . $this->getDeleteUrl(['id' => $id]) . "', {data: {}})",
                 'class' => 'delete',
-                'sort_order' => 10
+                'sort_order' => 30
             ];
         }
 
         return [];
-    }
-
-    /**
-     * Get Banner
-     *
-     * @return null|\Boolfly\BannerSlider\Api\Data\BannerInterface
-     */
-    public function getBanner()
-    {
-        return $this->registry->registry('current_banner');
     }
 
     /**
@@ -79,7 +48,7 @@ class DeleteButton extends Template implements ButtonProviderInterface
     public function getDeleteUrl(array $args = [])
     {
         $params = array_merge($this->getDefaultUrlParams(), $args);
-        return $this->getUrl('catalog/*/delete', $params);
+        return $this->getUrl('*/*/delete', $params);
     }
 
     /**

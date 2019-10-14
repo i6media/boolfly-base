@@ -250,6 +250,16 @@ class ImageUploader
     }
 
     /**
+     * @param $image
+     * @return boolean
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function deleteImageFile($image)
+    {
+        return $this->mediaDirectory->delete($this->getFilePath($this->getBasePath(), $image));
+    }
+
+    /**
      * Get Image Url
      *
      * @param $name

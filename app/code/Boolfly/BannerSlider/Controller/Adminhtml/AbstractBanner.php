@@ -37,13 +37,6 @@ abstract class AbstractBanner extends Action
     protected $_coreRegistry = null;
 
     /**
-     * Date filter instance
-     *
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     */
-    protected $_dateFilter;
-
-    /**
      * @var BannerInterfaceFactory
      */
     protected $bannerFactory;
@@ -53,18 +46,15 @@ abstract class AbstractBanner extends Action
      *
      * @param Context                $context
      * @param Registry               $coreRegistry
-     * @param Date                   $dateFilter
      * @param BannerInterfaceFactory $bannerFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        Date $dateFilter,
         BannerInterfaceFactory $bannerFactory
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
-        $this->_dateFilter   = $dateFilter;
         $this->bannerFactory = $bannerFactory;
     }
 

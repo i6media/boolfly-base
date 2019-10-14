@@ -20,8 +20,10 @@
     </argument>
     <settings>
         <buttons>
+            <button name="back" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\BackButton"/>
             <button name="save" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveButton"/>
             <button name="delete" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\DeleteButton"/>
+            <button name="save_and_continue" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveAndContinueButton"/>
         </buttons>
         <namespace>bf_banner_form</namespace>
         <dataScope>data</dataScope>
@@ -46,6 +48,7 @@
             </settings>
         </dataProvider>
     </dataSource>
+
     <fieldset name="general" sortOrder="5">
         <settings>
             <collapsible>false</collapsible>
@@ -108,39 +111,39 @@
                 <label translate="true">Description</label>
             </settings>
         </field>
-        <!-- @TODO depend enable Button -->
-        <!--<field name="enable_button" sortOrder="60" formElement="checkbox">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="source" xsi:type="string">bf_banner</item>-->
-                    <!--<item name="default" xsi:type="number">1</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-            <!--<settings>-->
-                <!--<validation>-->
-                    <!--<rule name="required-entry" xsi:type="boolean">false</rule>-->
-                <!--</validation>-->
-                <!--<dataType>boolean</dataType>-->
-                <!--<label translate="true">Enable Button</label>-->
-            <!--</settings>-->
-            <!--<formElements>-->
-                <!--<checkbox>-->
-                    <!--<settings>-->
-                        <!--<valueMap>-->
-                            <!--<map name="false" xsi:type="string">0</map>-->
-                            <!--<map name="true" xsi:type="string">1</map>-->
-                        <!--</valueMap>-->
-                        <!--<prefer>toggle</prefer>-->
-                    <!--</settings>-->
-                <!--</checkbox>-->
-            <!--</formElements>-->
-        <!--</field>-->
+        <field name="enable_button" sortOrder="60" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>boolean</dataType>
+                <label translate="true">Enable Button</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
         <field name="button_text" sortOrder="70" formElement="input">
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Button Text</label>
                 <imports>
-                    <link name="visible">${$.provider}:data.bf_banner.enable_button</link>
+                    <link name="visible">ns = ${ $.ns }, index = enable_button:checked</link>
+                    <link name="disabled">!ns = ${ $.ns }, index = enable_button:checked</link>
                 </imports>
             </settings>
         </field>
@@ -149,7 +152,8 @@
                 <dataType>string</dataType>
                 <label translate="true">Button URL</label>
                 <imports>
-                    <link name="visible">${ $.parentName }.enable_button:value</link>
+                    <link name="visible">ns = ${ $.ns }, index = enable_button:checked</link>
+                    <link name="disabled">!ns = ${ $.ns }, index = enable_button:checked</link>
                 </imports>
             </settings>
         </field>
@@ -178,12 +182,14 @@
                 <dataType>string</dataType>
                 <label translate="true">Desktop Image</label>
                 <visible>true</visible>
-                <required>false</required>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
             <formElements>
                 <imageUploader>
                     <settings>
-                        <required>false</required>
+                        <required>true</required>
                         <uploaderConfig>
                             <param xsi:type="url" name="url" path="bannerslider/image/upload"/>
                         </uploaderConfig>
