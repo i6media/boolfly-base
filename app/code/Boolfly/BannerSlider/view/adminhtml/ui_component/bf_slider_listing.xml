@@ -121,12 +121,20 @@
                 <label translate="true">Display Title</label>
             </settings>
         </column>
-        <column name="mode" sortOrder="50">
+        <column name="display_title" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
             <settings>
-                <filter>text</filter>
-                <label translate="true">Mode</label>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Display Title</label>
             </settings>
         </column>
+        <!--<column name="mode" sortOrder="50">-->
+            <!--<settings>-->
+                <!--<filter>text</filter>-->
+                <!--<label translate="true">Mode</label>-->
+            <!--</settings>-->
+        <!--</column>-->
         <column name="created_at" sortOrder="60">
             <settings>
                 <filter>text</filter>
