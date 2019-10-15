@@ -37,4 +37,34 @@ class Collection extends AbstractCollection
     {
         $this->_init(Slider::class, SliderResourceModel::class);
     }
+
+    /**
+     * Get Resource
+     *
+     * @return SliderResourceModel|mixed
+     */
+    public function getResource()
+    {
+        return parent::getResource();
+    }
+
+    /**
+     * @param $pageId
+     * @return $this
+     */
+    public function addCmsPageToFilter($pageId)
+    {
+        if ($pageId && is_numeric($pageId)) {
+            $conditions = $this->getConnection()->quoteInto(
+                'main_table.slider_id = cms_page.slider_id AND cms_page.page_id = ?', $pageId
+            );
+            $this->getSelect()->joinInner(
+                ['cms_page' => $this->getResource()->getSliderCmsPageTable()],
+                $conditions,
+                'page_id'
+            );
+        }
+
+        return $this;
+    }
 }

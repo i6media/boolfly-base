@@ -126,10 +126,10 @@ class Data extends AbstractHelper
             /** @var \Magento\Framework\Image\Adapter\AbstractAdapter $imageResize */
             $imageResize = $this->imageFactory->create();
             $imageResize->open($absolutePath);
-            $imageResize->constrainOnly(true);
+            $imageResize->constrainOnly(false);
             $imageResize->keepTransparency(true);
             $imageResize->keepFrame(false);
-            $imageResize->keepAspectRatio(false);
+            $imageResize->keepAspectRatio(true);
             $imageResize->resize($width, $height);
             $imageResize->save($imageResized);
         }
