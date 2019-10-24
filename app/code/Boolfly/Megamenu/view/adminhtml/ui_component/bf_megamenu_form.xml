@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /************************************************************
+ * *
+ *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Banner Slider
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">bf_megamenu_form.bf_megamenu_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Banner Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\BackButton"/>
+            <button name="save" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveButton"/>
+            <button name="delete" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\DeleteButton"/>
+            <button name="save_and_continue" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveAndContinueButton"/>
+        </buttons>
+        <namespace>bf_megamenu_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>bf_megamenu_form.bf_megamenu_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="bf_megamenu_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <validateUrl path="bannerslider/banner/validate"/>
+            <submitUrl path="bannerslider/banner/save"/>
+        </settings>
+        <dataProvider class="Boolfly\BannerSlider\Model\Banner\DataProvider" name="bf_megamenu_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>banner_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="5">
+        <settings>
+            <collapsible>false</collapsible>
+            <label/>
+        </settings>
+        <dynamicRows name="list_attributes" component="Boolfly_Megamenu/js/dynamic-rows/tree" template="Boolfly_Megamenu/dynamic-rows/tree">
+            <settings>
+                <defaultRecord>false</defaultRecord>
+                <deleteProperty>delete</deleteProperty>
+                <deleteValue>1</deleteValue>
+                <recordTemplate>record</recordTemplate>
+                <columnsHeader>false</columnsHeader>
+                <identificationProperty>record_id</identificationProperty>
+                <addButtonLabel translate="true">Add New</addButtonLabel>
+            </settings>
+            <container name="record" component="Boolfly_Megamenu/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                    </item>
+                </argument>
+                <container name="item" component="Boolfly_Megamenu/js/menu/tree" template="Boolfly_Megamenu/menu/item">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="formElement" xsi:type="string">container</item>
+                            <item name="dataScope" xsi:type="string"/>
+                            <item name="label" xsi:type="string"/>
+                        </item>
+                    </argument>
+                    <field name="menu_children" formElement="hidden">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="source" xsi:type="string">bf_megamenu</item>
+                                <item name="default" xsi:type="array"/>
+                            </item>
+                        </argument>
+                        <settings>
+                            <label translate="true">Children</label>
+                            <dataType>text</dataType>
+                            <dataScope>menu_children</dataScope>
+                        </settings>
+                    </field>
+                    <field name="attribute_code">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Attribute Name</item>
+                                <item name="componentType" xsi:type="string">field</item>
+                                <item name="formElement" xsi:type="string">input</item>
+                                <item name="source" xsi:type="string">bf_megamenu</item>
+                                <item name="dataType" xsi:type="string">string</item>
+                                <item name="sortOrder" xsi:type="number">20</item>
+                                <item name="required" xsi:type="boolean">true</item>
+                                <item name="visible" xsi:type="boolean">false</item>
+                                <item name="validation" xsi:type="array">
+                                    <item name="required-entry" xsi:type="boolean">true</item>
+                                </item>
+                            </item>
+                        </argument>
+                    </field>
+                    <field name="position">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Position</item>
+                                <item name="formElement" xsi:type="string">input</item>
+                                <item name="dataType" xsi:type="string">string</item>
+                                <item name="sortOrder" xsi:type="number">30</item>
+                                <item name="source" xsi:type="string">bf_megamenu</item>
+                                <item name="required" xsi:type="boolean">true</item>
+                                <item name="visible" xsi:type="boolean">false</item>
+                                <item name="validation" xsi:type="array">
+                                    <item name="validate-zero-or-greater" xsi:type="boolean">true</item>
+                                    <item name="required-entry" xsi:type="boolean">true</item>
+                                </item>
+                            </item>
+                        </argument>
+                    </field>
+                </container>
+                    <!--<field name="attribute_code">-->
+                        <!--<argument name="data" xsi:type="array">-->
+                            <!--<item name="config" xsi:type="array">-->
+                                <!--<item name="label" xsi:type="string" translate="true">Attribute Name</item>-->
+                                <!--<item name="componentType" xsi:type="string">field</item>-->
+                                <!--<item name="formElement" xsi:type="string">input</item>-->
+                                <!--<item name="source" xsi:type="string">bf_megamenu</item>-->
+                                <!--<item name="dataType" xsi:type="string">string</item>-->
+                                <!--<item name="sortOrder" xsi:type="number">20</item>-->
+                                <!--<item name="required" xsi:type="boolean">true</item>-->
+                                <!--<item name="visible" xsi:type="boolean">false</item>-->
+                                <!--<item name="validation" xsi:type="array">-->
+                                    <!--<item name="required-entry" xsi:type="boolean">true</item>-->
+                                <!--</item>-->
+                            <!--</item>-->
+                        <!--</argument>-->
+                    <!--</field>-->
+                    <!--<field name="position">-->
+                        <!--<argument name="data" xsi:type="array">-->
+                            <!--<item name="config" xsi:type="array">-->
+                                <!--<item name="label" xsi:type="string" translate="true">Position</item>-->
+                                <!--<item name="formElement" xsi:type="string">input</item>-->
+                                <!--<item name="dataType" xsi:type="string">string</item>-->
+                                <!--<item name="sortOrder" xsi:type="number">30</item>-->
+                                <!--<item name="source" xsi:type="string">bf_megamenu</item>-->
+                                <!--<item name="required" xsi:type="boolean">true</item>-->
+                                <!--<item name="visible" xsi:type="boolean">false</item>-->
+                                <!--<item name="validation" xsi:type="array">-->
+                                    <!--<item name="validate-zero-or-greater" xsi:type="boolean">true</item>-->
+                                    <!--<item name="required-entry" xsi:type="boolean">true</item>-->
+                                <!--</item>-->
+                            <!--</item>-->
+                        <!--</argument>-->
+                    <!--</field>-->
+            </container>
+            <!--</container>-->
+        </dynamicRows>
+        <container name="menu_container" component="Boolfly_Megamenu/js/group" template="Boolfly_Megamenu/group">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="string"/>
+                    <item name="label" xsi:type="string"/>
+                </item>
+            </argument>
+        </container>
+        <modal name="assign_banner_modal">
+            <settings>
+                <options>
+                    <option name="title" xsi:type="string" translate="true">Assign Banners</option>
+                    <option name="buttons" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="text" xsi:type="string">Cancel</item>
+                            <item name="class" xsi:type="string">action-secondary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
+                                </item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="text" xsi:type="string" translate="true">Done</item>
+                            <item name="class" xsi:type="string">action-primary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">index = assign_banner_grid</item>
+                                    <item name="actionName" xsi:type="string">save</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionDone</item>
+                                </item>
+                            </item>
+                        </item>
+                    </option>
+                </options>
+            </settings>
+            <fieldset name="general" sortOrder="5">
+                <settings>
+                    <collapsible>false</collapsible>
+                    <label/>
+                </settings>
+                <field name="title">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Name</item>
+                            <item name="componentType" xsi:type="string">field</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="dataType" xsi:type="string">string</item>
+                            <item name="sortOrder" xsi:type="number">20</item>
+                            <item name="required" xsi:type="boolean">true</item>
+                            <item name="visible" xsi:type="boolean">true</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </fieldset>
+        </modal>
+    </fieldset>
+</form>

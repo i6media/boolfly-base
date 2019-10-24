@@ -1,0 +1,14 @@
+<fieldset class="admin__field"
+          visible="visible"
+          css="_required: required"
+          attr="'data-index': index">
+    <legend class="admin__field-label" if="showLabel">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+    </legend>
+
+    <div class="admin__field-control" css="$data.additionalClasses">
+        <each args="getRegion('insideGroup')" render=""/>
+    </div>
+
+    <each args="getRegion('outsideGroup')" render=""/>
+</fieldset>

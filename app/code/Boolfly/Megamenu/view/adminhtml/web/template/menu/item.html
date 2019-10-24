@@ -1,0 +1,21 @@
+<div class="dd-handle" text="dataScope"></div>
+<span class="actions">
+    <button type="button" data-bind="attr: {'data-index': index}, click: $data.editRecord.bind($data, $record().index, $record().recordId)"
+            class="action-basic"
+            data-index="assign_banner_button">
+        <span data-bind="i18n: 'Edit'"></span>
+    </button>
+    <button class="action-delete" data-bind="
+            click: $data.deleteRecord.bind($data, $record().index, $record().recordId),
+            attr: {
+                title: $parent.deleteButtonLabel
+            }
+        , attr: {'data-action': 'remove_row'}" data-action="remove_row">
+    <span data-bind="i18n: $parent.deleteButtonLabel"></span>
+</button>
+</span>
+<div class="dd3-content" visible="false">
+    <each args="data: elems, as: 'element'">
+        <render if="hasTemplate()"/>
+    </each>
+</div>
