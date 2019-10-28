@@ -129,7 +129,7 @@ define([
             var target,
                 params = [],
                 actionName = 'toggleModal',
-                targetName = 'bf_megamenu_form.bf_megamenu_form.general.assign_banner_modal';
+                targetName = 'bf_megamenu_form.bf_megamenu_form.general.menu_modal';
             if (!registry.has(targetName)) {
                 this.getFromTemplate(targetName);
             }

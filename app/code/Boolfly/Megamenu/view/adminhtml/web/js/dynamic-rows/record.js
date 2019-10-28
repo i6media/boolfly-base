@@ -8,8 +8,9 @@
  */
 define([
     'underscore',
+    'uiRegistry',
     'Magento_Ui/js/dynamic-rows/record'
-], function (_, dynamicRowsRecord) {
+], function (_, registry, dynamicRowsRecord) {
     'use strict';
 
     return dynamicRowsRecord.extend({
@@ -21,8 +22,10 @@ define([
                 recordData: 'setDifferedFromDefault setRecordDataToCache',
                 currentPage: 'changePage',
                 elems: 'checkSpinner',
-                changed: 'updateTrigger'
+                changed: 'updateTrigger',
+                childElems: 'updateChildElement'
             },
+            parentItem: false,
             isChild: false,
             hasChild: false,
             expandTmpl: 'Boolfly_Megamenu/menu/expand',
@@ -38,11 +41,38 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe(['isChild', 'hasChild'])
+                .observe(['isChild', 'hasChild', 'parentItem'])
                 .observe('childElems', []);
 
             return this;
         },
+
+        /**
+         *
+         * @param elems
+         */
+        updateChildElement: function (elems) {
+            this.hasChild(elems.length > 0);
+            var component, children = [];
+            elems.forEach(function (elem) {
+                children.push(elem.index);
+            }, this);
+            component = registry.get(this.name + '.item.menu_children');
+            if (component) {
+                component.value(children);
+            }
+        },
+
+        /**
+         *
+         */
+        destroy: function () {
+            this.childElems.each(function (elem) {
+                elem.destroy(true);
+            });
+
+            this._super();
+        }
 
     });
 });

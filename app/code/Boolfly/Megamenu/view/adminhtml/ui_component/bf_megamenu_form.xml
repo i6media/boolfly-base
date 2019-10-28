@@ -173,7 +173,7 @@
                 </item>
             </argument>
         </container>
-        <modal name="assign_banner_modal">
+        <modal name="menu_modal">
             <settings>
                 <options>
                     <option name="title" xsi:type="string" translate="true">Assign Banners</option>

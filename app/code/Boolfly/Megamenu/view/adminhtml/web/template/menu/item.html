@@ -1,9 +1,8 @@
 <div class="dd-handle" text="dataScope"></div>
 <span class="actions">
     <button type="button" data-bind="attr: {'data-index': index}, click: $data.editRecord.bind($data, $record().index, $record().recordId)"
-            class="action-basic"
+            class="action-edit"
             data-index="assign_banner_button">
-        <span data-bind="i18n: 'Edit'"></span>
     </button>
     <button class="action-delete" data-bind="
             click: $data.deleteRecord.bind($data, $record().index, $record().recordId),

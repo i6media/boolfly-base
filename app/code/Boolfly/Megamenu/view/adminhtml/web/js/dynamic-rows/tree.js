@@ -15,7 +15,7 @@ define([
     'uiCollection',
     'uiRegistry',
     'mage/translate',
-    'Boolfly_Base/js/jquery.nestable'
+    'nestable'
 ], function ($, ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
@@ -141,7 +141,7 @@ define([
                 component: 'Magento_Ui/js/dynamic-rows/dnd',
                 template: 'ui/dynamic-rows/cells/dnd',
                 recordsProvider: '${ $.name }',
-                enabled: true
+                enabled: false
             },
             templates: {
                 record: {
@@ -160,7 +160,7 @@ define([
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
                 currentPage: 'changePage',
-                elems: 'checkSpinner updateElementTree',
+                elems: 'checkSpinner',
                 changed: 'updateTrigger',
                 recordData: "initElements setToInsertData setRelatedData"
             },
@@ -193,12 +193,90 @@ define([
          */
         initEventNestable: function (element) {
             this.elementNestable = $(element);
-            this.elementNestable.nestable({}).on('change', $.proxy(this.updateMenuTree, this));
+            this.elementNestable.nestable({
+                callback: $.proxy(this.updateMenuTree, this)
+            });
         },
 
-        updateMenuTree: function (e) {
-            var list = e.length ? e : $(e.target);
-            this.updateDataChildren(list.nestable('serialize'));
+        /**
+         * Update menu after drap & drop
+         *
+         * @param root
+         * @param element
+         */
+        updateMenuTree: function (root, element) {
+            var elem, parentIndex, oldParentItem;
+            elem = this.getElementTree(element.data('index'));
+            if (elem) {
+                parentIndex = this.getNewParentIndex(element);
+                oldParentItem = elem.parentItem();
+                if (parentIndex === false && oldParentItem === false) {
+                    //@TODO sort item
+                    return;
+                }
+                //Remove html move by nestable
+                element.remove();
+
+                if (!oldParentItem && parentIndex) {
+                    //Move from root to child
+                    utils.remove(this._elems, elem);
+                } else if (oldParentItem) {
+                    this.removeChildElems(elem, oldParentItem);
+                    if (!parentIndex){
+                        //Move from child to root
+                        utils.add(this._elems, elem);
+                        elem.parentItem(false);
+                    }
+                }
+                this.updateParentAndChild(elem, parentIndex);
+                this.updateStructureMenu(elem.index, parentIndex);
+                this._updateCollection();
+            }
+        },
+
+        /**
+         * Remove Child Element
+         *
+         * @param element
+         * @param parent
+         */
+        removeChildElems: function (element, parent) {
+            var childElems = parent.childElems();
+            if (childElems.length > 0) {
+                parent.childElems(_.filter(childElems, function (elem) {
+                    return element.index !== elem.index;
+                }, this));
+            }
+        },
+
+
+        /**
+         *
+         * @param index
+         * @param parentIndex
+         */
+        updateStructureMenu: function (index, parentIndex) {
+            var structureMenu = this.structureMenu();
+            if (parentIndex === false) {
+                delete structureMenu[index];
+            } else {
+                structureMenu[index] = parentIndex;
+            }
+            this.structureMenu(structureMenu);
+        },
+
+        /**
+         * Get Parent Index
+         *
+         * @param element
+         * @returns {boolean}
+         */
+        getNewParentIndex: function (element) {
+            if (element.parent().parent('li').length > 0) {
+                return element.parent().parent('li').data('index');
+            }
+
+            return false;
         },
 
         /**
@@ -224,21 +302,48 @@ define([
                 var structureMenu = this.structureMenu(), children = this.source.get(elem.dataScope + '.menu_children');
                 this.elementTree[recordId] = elem;
                 children.forEach(function (childId) {
-                    structureMenu[childId] = recordId;
+                    this.updateStructureMenu(childId, recordId);
                 }, this);
-                this.structureMenu(structureMenu);
                 if (structureMenu[recordId]) {
-                    var childElems,
-                        parentElement = this.getParentElement(structureMenu[recordId]);
-                    childElems = parentElement.childElems();
-                    childElems.push(elem);
-                    parentElement.childElems(childElems);
-                    parentElement.hasChild(true);
+                    this.initElement(elem);
+                    this.updateParentAndChild(elem, structureMenu[recordId]);
                     return true;
                 }
             }
 
             return false;
+        },
+
+        /**
+         *
+         * @param {Object} elem
+         * @param {*} parentIndex
+         */
+        updateParentAndChild: function (elem, parentIndex) {
+            if (parentIndex) {
+                var parentElement = this.getElementTree(parentIndex);
+                if (parentElement) {
+                    var childElems = parentElement.childElems();
+                    elem.parentItem(parentElement);
+                    if (childElems.length < 1 || !this.checkChildElement(childElems, elem.index)) {
+                        childElems.push(elem);
+                        parentElement.childElems(childElems);
+                    }
+                }
+            }
+        },
+
+
+        /**
+         *
+         * @param elems
+         * @param index
+         * @returns {*}
+         */
+        checkChildElement: function (elems, index) {
+            return _.find(elems, function (ele) {
+                return ele.index === index;
+            })
         },
 
         /**
@@ -252,60 +357,36 @@ define([
 
         /**
          *
-         * @param {Array} elems
-         * @returns {exports}
+         * @param index
+         * @returns {{Object}}
          */
-        updateElementTree: function (elems) {
-            // var children, childElems, child;
-            // elems.forEach(function (elem) {
-            //     if (typeof elem.childElems === 'function') {
-            //         children = this.source.get(elem.dataScope + '.menu_children');
-            //         children.forEach(function (childId) {
-            //             childElems = elem.childElems();
-            //             if (!this.checkChildElement(childElems, childId)) {
-            //                 child = this.checkChildElement(elems, childId);
-            //                 if (child) {
-            //                     child.isChild(true);
-            //                     childElems.push(child);
-            //                     elem.childElems(childElems);
-            //                     elem.hasChild(true);
-            //                 }
-            //             }
-            //         }, this);
-            //     }
-            // }, this);
-
-            return this;
-        },
-
-        checkChildElement: function (elems, index) {
-            return _.find(elems, function (ele) {
-                return ele.index === index;
-            })
-        },
-
         getElementTree: function (index) {
             return this.elementTree[index];
         },
 
-        getNewIndex: function (index) {
-            return (parseInt(index) + 1).toString();
-        },
-
+        /**
+         *
+         * @param data
+         * @returns {Array}
+         */
         updateDataChildren: function (data) {
             var currentComponent,
-                self = this,
+                subChild = [],
                 children = [];
             if ($.isArray(data)) {
                 data.forEach(function (value) {
                     children.push(value.index);
                     if (value.hasOwnProperty('children')) {
-                        currentComponent = registry.get(value.component + '.item.menu_children');
-                        if (currentComponent) {
-                            currentComponent.value(self.updateDataChildren(value.children));
-                        }
+                        subChild = this.updateDataChildren(value.children);
+                        currentComponent = registry.get(value.component);
+                        var childElems = [];
+                        subChild.forEach(function (index) {
+                            childElems.push(this.elementTree[index]);
+                        }, this);
+                        currentComponent.childElems(childElems);
                     }
-                });
+
+                }, this);
             }
             return children;
         },
@@ -322,7 +403,6 @@ define([
                 'processingDeleteRecord',
                 'onChildrenUpdate',
                 'checkDefaultState',
-                'renderColumnsHeader',
                 'deleteHandler'
             );
 
@@ -330,11 +410,8 @@ define([
 
             this._super()
                 .initChildren()
-                .initDnd()
                 .initDefaultRecord()
-                .setInitialProperty()
-                .setColumnsHeaderListener()
-                .checkSpinner();
+                .setInitialProperty();
             this.observe('structureMenu', []);
 
             this.on('recordData', this.checkDefaultState);
@@ -373,18 +450,6 @@ define([
             return this._super();
         },
 
-        /**
-         * Inits DND module
-         *
-         * @returns {Object} Chainable.
-         */
-        initDnd: function () {
-            if (this.dndConfig.enabled) {
-                layout([this.dndConfig]);
-            }
-
-            return this;
-        },
 
         /**
          * Initialize elements from grid
@@ -601,24 +666,6 @@ define([
         },
 
         /**
-         * Checks columnsHeaderAfterRender property,
-         * and set listener on elems if needed
-         *
-         * @returns {Object} Chainable.
-         */
-        setColumnsHeaderListener: function () {
-            if (this.columnsHeaderAfterRender) {
-                this.on('recordData', this.renderColumnsHeader);
-
-                if (_.isArray(this.recordData()) && this.recordData().length) {
-                    this.renderColumnsHeader();
-                }
-            }
-
-            return this;
-        },
-
-        /**
          * Checks whether component's state is default or not
          */
         checkDefaultState: function () {
@@ -671,13 +718,6 @@ define([
          */
         hasChanged: function () {
             return this.changed();
-        },
-
-        /**
-         * Render column header
-         */
-        renderColumnsHeader: function () {
-            this.recordData().length ? this.columnsHeader(true) : this.columnsHeader(false);
         },
 
         /**
@@ -790,7 +830,8 @@ define([
          * @param {Array} elems
          */
         checkSpinner: function (elems) {
-            this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
+            this.showSpinner(false);
+            // this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
         },
 
 
@@ -812,15 +853,8 @@ define([
          *
          * @returns {Array} data
          */
-        getChildItems: function (data, page) {
-            var dataRecord = data || this.relatedData,
-                startIndex;
-
-            this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
-
-            startIndex = page || this.startIndex;
-
-            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
+        getChildItems: function () {
+            return this.relatedData;
         },
 
         /**
@@ -864,6 +898,7 @@ define([
             this.bubble('addChild', false);
 
             this.addChild(ctx, index, prop);
+            this.showSpinner(false);
         },
 
         /**
@@ -954,14 +989,13 @@ define([
 
             if (this.deleteProperty) {
                 recordsData = this.recordData();
-                recordInstance = _.find(this.elementTree, function (elem) {
-                    return elem.index === index;
-                });
+                recordInstance = this.elementTree[index];
                 this.deleteChildrenRecord(index, recordsData);
                 recordInstance.destroy();
                 recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
                 this.recordData(recordsData);
                 if (index.toString() === recordId.toString()) {
+                    this.updateParent(index);
                     this._updateCollection();
                     this.reinitRecordData();
                     // this.reload();
@@ -972,15 +1006,35 @@ define([
         /**
          *
          * @param index
+         */
+        updateParent: function (index) {
+            var structureMenu = this.structureMenu();
+            if (structureMenu[index]) {
+                var childElems, parent, parentIndex = structureMenu[index];
+                parent = this.getElementTree(parentIndex);
+                childElems = _.filter(parent.childElems(), function(item) {
+                    return item.index !== index
+                });
+                parent.childElems(childElems);
+            }
+        },
+
+        /**
+         *
+         * @param index
          * @param recordsData
          * @returns {exports}
          */
         deleteChildrenRecord: function (index, recordsData) {
-            var self = this,
-                children = recordsData[index]['menu_children'];
-            children.forEach(function (childIndex) {
-                self.deleteRecord(childIndex.toString(), index);
-            });
+            var children, recordData =  _.find(recordsData, function (record) {
+                    return record.record_id === index;
+                });
+            if (recordData && recordData.menu_children) {
+                children = recordData.menu_children;
+                children.forEach(function (childIndex) {
+                    this.deleteRecord(childIndex, index);
+                }, this);
+            }
 
             return this;
         },
@@ -1059,7 +1113,7 @@ define([
          */
         reload: function () {
             this.clear();
-            this.initChildren(false, true);
+            this.initChildren();
         },
 
         /**
@@ -1127,7 +1181,7 @@ define([
          * @returns {Object} Chainable.
          */
         initChildren: function () {
-            this.showSpinner(true);
+            // this.showSpinner(true);
             this.getChildItems().forEach(function (data, index) {
                 this.addChild(data, data[this.identificationProperty]);
             }, this);
@@ -1236,7 +1290,7 @@ define([
             });
 
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
-        },
+        }
 
     });
 });
