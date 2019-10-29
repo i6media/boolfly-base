@@ -136,6 +136,8 @@ define([
                 enabled: false,
                 distinct: true
             },
+            itemEditScope: '',
+            sourceDataModal: '',
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/dynamic-rows/dnd',
@@ -196,6 +198,25 @@ define([
             this.elementNestable.nestable({
                 callback: $.proxy(this.updateMenuTree, this)
             });
+        },
+
+        /**
+         * Save Menu Item
+         */
+        saveMenuItem: function () {
+            var itemScope,
+                target,
+                modalData = this.source.get(this.sourceDataModal);
+            if (modalData && modalData[this.itemEditScope]) {
+                itemScope = modalData[this.itemEditScope];
+                delete modalData[this.itemEditScope];
+                $.each(modalData, function(key, value) {
+                    target = registry.get(itemScope + '.' + key);
+                    if (target) {
+                        target.value(value);
+                    }
+                });
+            }
         },
 
         /**
@@ -413,7 +434,6 @@ define([
                 .initDefaultRecord()
                 .setInitialProperty();
             this.observe('structureMenu', []);
-
             this.on('recordData', this.checkDefaultState);
 
             return this;
@@ -841,11 +861,13 @@ define([
          * @return void
          */
         reinitRecordData: function () {
-            this.recordData(
-                _.filter(this.recordData(), function (elem) {
-                    return elem && elem[this.deleteProperty] !== this.deleteValue;
-                }, this)
-            );
+            var recordData = {}, recordDataArray = _.filter(this.recordData(), function (elem) {
+                return elem && elem[this.deleteProperty] !== this.deleteValue;
+            }, this);
+            recordDataArray.forEach(function (value) {
+                recordData[value[this.identificationProperty]] = value;
+            }, this);
+            this.recordData(recordData);
         },
 
         /**
@@ -989,16 +1011,18 @@ define([
 
             if (this.deleteProperty) {
                 recordsData = this.recordData();
-                recordInstance = this.elementTree[index];
-                this.deleteChildrenRecord(index, recordsData);
-                recordInstance.destroy();
-                recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
-                this.recordData(recordsData);
-                if (index.toString() === recordId.toString()) {
-                    this.updateParent(index);
-                    this._updateCollection();
-                    this.reinitRecordData();
-                    // this.reload();
+                recordInstance = this.getElementTree(index);
+                if (recordInstance) {
+                    this.deleteChildrenRecord(index, recordsData);
+                    recordInstance.destroy();
+                    recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
+                    this.recordData(recordsData);
+                    if (index.toString() === recordId.toString()) {
+                        this.updateParent(index);
+                        this._updateCollection();
+                        this.reinitRecordData();
+                        // this.reload();
+                    }
                 }
             }
         },

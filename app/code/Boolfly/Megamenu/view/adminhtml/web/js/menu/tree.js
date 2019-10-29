@@ -21,6 +21,7 @@ define([
             visible: true,
             label: '',
             addButtonLabel: 'Add Menu Item',
+            newItemLabel: 'New Menu Item',
             required: false,
             template: 'Boolfly_Megamenu/menu/tree',
             templates: {
@@ -31,8 +32,18 @@ define([
                     nodeTemplate: '${ $.parent }.${ $.$data.collection.itemTemplate }'
                 }
             },
+            links: {
+                itemTitle: '${ $.name }.menu_title:value'
+            },
+            itemTitle: '',
+            targetName: null,
+            modalMap: '',
+            actionName: 'toggleModal',
+            itemEditScope: 'item_data_scope',
             childElems: [],
+            menuTitle: null,
             elementTmpl: 'Boolfly_Megamenu/menu/item',
+            buttonTmpl: 'Boolfly_Megamenu/menu/button',
             additionalClasses: {}
         },
 
@@ -55,7 +66,10 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('visible')
+                .observe([
+                    'visible',
+                    'itemTitle'
+                ])
                 .observe('childElems', [])
                 .observe({
                     required: !!+this.required
@@ -121,25 +135,30 @@ define([
          * @param {Number} index
          * @param {Number} id
          */
-        deleteRecord: function (index, id) {
+        deleteMenuItem: function (index, id) {
             this.bubble('deleteRecord', index, id);
         },
 
-        editRecord: function (index, id) {
-            var target,
-                params = [],
-                actionName = 'toggleModal',
-                targetName = 'bf_megamenu_form.bf_megamenu_form.general.menu_modal';
-            if (!registry.has(targetName)) {
-                this.getFromTemplate(targetName);
+        /**
+         * Edit Menu Item
+         */
+        editMenuItem: function () {
+            var data,
+                target,
+                params = [];
+            if (this.targetName) {
+                if (!registry.has(this.targetName)) {
+                    this.getFromTemplate(this.targetName);
+                }
+                data = this.source.get(this.dataScope);
+                data[this.itemEditScope] = this.name;
+                this.source.set(this.modalMap, data);
+                target = registry.async(this.targetName);
+                if (target && typeof target === 'function' && this.actionName) {
+                    params.unshift(this.actionName);
+                    target.apply(target, params);
+                }
             }
-            target = registry.async(targetName);
-
-            if (target && typeof target === 'function' && actionName) {
-                params.unshift(actionName);
-                target.apply(target, params);
-            }
-            
         }
     });
 });
