@@ -143,14 +143,13 @@ define([
          * Edit Menu Item
          */
         editMenuItem: function () {
-            var data,
+            var data = this.source.get(this.dataScope) || {},
                 target,
                 params = [];
             if (this.targetName) {
                 if (!registry.has(this.targetName)) {
                     this.getFromTemplate(this.targetName);
                 }
-                data = this.source.get(this.dataScope);
                 data[this.itemEditScope] = this.name;
                 this.source.set(this.modalMap, data);
                 target = registry.async(this.targetName);

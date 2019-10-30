@@ -184,6 +184,84 @@ define([
         },
 
         /**
+         * Extends instance with default config, calls initialize of parent
+         * class, calls initChildren method, set observe variable.
+         * Use parent "track" method - wrapper observe array
+         *
+         * @returns {Object} Chainable.
+         */
+        initialize: function () {
+            _.bindAll(this,
+                'processingDeleteRecord',
+                'checkDefaultState',
+                'deleteHandler'
+            );
+
+            this.setToInsertData = _.debounce(this.setToInsertData, 200);
+
+            this._super()
+                .initChildren()
+                .initDefaultRecord()
+                .setInitialProperty();
+            this.observe('structureMenu', []);
+            this.on('recordData', this.checkDefaultState);
+
+            return this;
+        },
+
+        /**
+         * Set data from recordData to insertData
+         */
+        setToInsertData: function () {
+            var insertData = [],
+                obj;
+
+            if (this.recordData().length && !this.update) {
+                _.each(this.recordData(), function (recordData) {
+                    obj = {};
+                    obj[this.identificationProperty] = recordData[this.identificationProperty];
+                    insertData.push(obj);
+                }, this);
+
+                if (insertData.length && this.dataProvider) {
+                    this.source.set(this.dataProvider, insertData);
+                }
+            }
+        },
+
+        /**
+         * @inheritdoc
+         */
+        bubble: function (event) {
+            if (event === 'deleteRecord' || event === 'update') {
+                return false;
+            }
+
+            return this._super();
+        },
+
+
+        /**
+         * Initialize elements from grid
+         *
+         * @param {Array} data
+         *
+         * @returns {Object} Chainable.
+         */
+        initElements: function (data) {
+            var newData = this.getNewData(data);
+
+            if (newData.length) {
+                if (this.insertData().length) {
+                    this.processingAddChild(newData[0], data.length - 1, newData[0][this.identificationProperty]);
+                }
+            }
+
+            return this;
+        },
+
+
+        /**
          * Sets record data to cache
          */
         setRecordDataToCache: function (data) {
@@ -196,21 +274,42 @@ define([
          * @returns {boolean}
          */
         showMenuButton: function () {
-            return this.elems().length > 0;
+            var isHasChildren = false;
+            this.elems().each(function (elem) {
+                if (elem.childElems().length > 0) {
+                    isHasChildren = true;
+                }
+            });
+
+            return isHasChildren;
         },
 
         /**
          * Expand All Item
          */
         expandAll: function () {
-            this.elementNestable.nestable('expandAll');
+            this.toggleAllItems(false);
         },
 
         /**
          * Collapse All Item
          */
         collapseAll: function () {
-            this.elementNestable.nestable('collapseAll');
+            this.toggleAllItems(true);
+        },
+
+        /**
+         * Toggle All Items
+         *
+         * @param isCollapse
+         */
+        toggleAllItems: function (isCollapse) {
+            this.elems().each(function (elem) {
+                elem.isCollapse(isCollapse);
+                elem.childElems().each(function (child) {
+                    child.isCollapse(isCollapse);
+                })
+            });
         },
 
         /**
@@ -243,6 +342,29 @@ define([
         },
 
         /**
+         *
+         * @param data
+         */
+        updatePositionMenuItem: function (data) {
+            var elem, target, position = 0;
+            if (Array.isArray(data)) {
+                data.each(function (item) {
+                    elem = registry.get(item.component);
+                    target = registry.get(item.component + '.item.position');
+                    if (elem) {
+                        elem.position = position;
+                    }
+                    if (target) {
+                        target.set('value', position);
+                    }
+                    position++;
+                    this.updatePositionMenuItem(item.children);
+                }, this);
+            }
+        },
+
+
+        /**
          * Update menu after drap & drop
          *
          * @param root
@@ -251,16 +373,16 @@ define([
         updateMenuTree: function (root, element) {
             var elem, parentIndex, oldParentItem;
             elem = this.getElementTree(element.data('index'));
+            this.updatePositionMenuItem(this.elementNestable.nestable('serialize'));
             if (elem) {
                 parentIndex = this.getNewParentIndex(element);
                 oldParentItem = elem.parentItem();
                 if (parentIndex === false && oldParentItem === false) {
-                    //@TODO sort item
+                    this.elems(this._sort());
                     return;
                 }
                 //Remove html move by nestable
                 element.remove();
-
                 if (!oldParentItem && parentIndex) {
                     //Move from root to child
                     utils.remove(this._elems, elem);
@@ -330,6 +452,7 @@ define([
          */
         _insert: function (elem) {
             if (!this.isChildElement(elem)) {
+                elem.position = this.elems().length;
                 this._super(elem);
             }
         },
@@ -370,12 +493,12 @@ define([
                     elem.parentItem(parentElement);
                     if (childElems.length < 1 || !this.checkChildElement(childElems, elem.index)) {
                         childElems.push(elem);
+                        childElems = this._sort(childElems);
                         parentElement.childElems(childElems);
                     }
                 }
             }
         },
-
 
         /**
          *
@@ -433,88 +556,6 @@ define([
             }
             return children;
         },
-
-        /**
-         * Extends instance with default config, calls initialize of parent
-         * class, calls initChildren method, set observe variable.
-         * Use parent "track" method - wrapper observe array
-         *
-         * @returns {Object} Chainable.
-         */
-        initialize: function () {
-            _.bindAll(this,
-                'processingDeleteRecord',
-                'onChildrenUpdate',
-                'checkDefaultState',
-                'deleteHandler'
-            );
-
-            this.setToInsertData = _.debounce(this.setToInsertData, 200);
-
-            this._super()
-                .initChildren()
-                .initDefaultRecord()
-                .setInitialProperty();
-            this.observe('structureMenu', []);
-            this.on('recordData', this.checkDefaultState);
-            this.showSpinner.subscribe(function (value) {
-                debugger;
-            });
-
-            return this;
-        },
-
-        /**
-         * Set data from recordData to insertData
-         */
-        setToInsertData: function () {
-            var insertData = [],
-                obj;
-
-            if (this.recordData().length && !this.update) {
-                _.each(this.recordData(), function (recordData) {
-                    obj = {};
-                    obj[this.identificationProperty] = recordData[this.identificationProperty];
-                    insertData.push(obj);
-                }, this);
-
-                if (insertData.length && this.dataProvider) {
-                    this.source.set(this.dataProvider, insertData);
-                }
-            }
-        },
-
-        /**
-         * @inheritdoc
-         */
-        bubble: function (event) {
-            if (event === 'deleteRecord' || event === 'update') {
-                return false;
-            }
-
-            return this._super();
-        },
-
-
-        /**
-         * Initialize elements from grid
-         *
-         * @param {Array} data
-         *
-         * @returns {Object} Chainable.
-         */
-        initElements: function (data) {
-            var newData = this.getNewData(data);
-
-            if (newData.length) {
-                if (this.insertData().length) {
-                    this.processingAddChild(newData[0], data.length - 1, newData[0][this.identificationProperty]);
-                }
-            }
-
-            return this;
-        },
-
 
         /**
          * Contains old data with new
@@ -580,10 +621,20 @@ define([
             this._super();
             elem.on({
                 'deleteRecord': this.deleteHandler,
-                'update': this.onChildrenUpdate,
                 'addChild': this.setDefaultState
             });
 
+            return this;
+        },
+
+        /**
+         *
+         * @returns {exports}
+         * @private
+         */
+        _updateCollection: function () {
+            this._super();
+            this.elems(this._sort());
             return this;
         },
 
@@ -611,34 +662,6 @@ define([
             }
 
             return this;
-        },
-
-        /**
-         * Handler for update event
-         *
-         * @param {Boolean} state
-         */
-        onChildrenUpdate: function (state) {
-            var changed,
-                dataScope,
-                changedElemDataScope;
-
-            if (state && !this.hasInitialPagesState[this.currentPage()]) {
-                this.setDefaultState();
-                changed = this.getChangedElems(this.elems());
-                dataScope = this.elems()[0].dataScope.split('.');
-                dataScope.splice(dataScope.length - 1, 1);
-                changed.forEach(function (elem) {
-                    changedElemDataScope = elem.dataScope.split('.');
-                    changedElemDataScope.splice(0, dataScope.length);
-                    changedElemDataScope[0] =
-                        (parseInt(changedElemDataScope[0], 10) - this.pageSize * (this.currentPage() - 1)).toString();
-                    this.setValueByPath(
-                        this.defaultPagesState[this.currentPage()],
-                        changedElemDataScope, elem.initialValue
-                    );
-                }, this);
-            }
         },
 
         /**
@@ -1116,10 +1139,13 @@ define([
         /**
          * Sort elems by position property
          */
-        _sort: function () {
-            this.elems(this.elems().sort(function (propOne, propTwo) {
+        _sort: function (elems) {
+            if (!elems) {
+                elems = this.elems();
+            }
+            return elems.sort(function (propOne, propTwo) {
                 return ~~propOne.position - ~~propTwo.position;
-            }));
+            });
         },
 
         /**
