@@ -28,6 +28,7 @@ define([
             parentItem: false,
             isChild: false,
             hasChild: false,
+            isCollapse: false,
             expandTmpl: 'Boolfly_Megamenu/menu/expand',
             collapseTmpl: 'Boolfly_Megamenu/menu/collapse',
             childElems: []
@@ -41,7 +42,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe(['isChild', 'hasChild', 'parentItem'])
+                .observe(['isChild', 'hasChild', 'parentItem', 'isCollapse'])
                 .observe('childElems', []);
 
             return this;
@@ -63,6 +64,14 @@ define([
             }
         },
 
+        /**
+         *
+         * @returns {exports}
+         */
+        toggleChildItems: function () {
+            this.isCollapse(!this.isCollapse());
+            return this;
+        },
         /**
          *
          */

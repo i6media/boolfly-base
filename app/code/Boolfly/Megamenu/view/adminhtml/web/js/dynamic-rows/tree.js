@@ -117,7 +117,7 @@ define([
             recordData: [],
             maxPosition: 0,
             deleteValue: false,
-            showSpinner: true,
+            showSpinner: false,
             isDifferedFromDefault: false,
             defaultState: [],
             defaultPagesState: {},
@@ -136,6 +136,7 @@ define([
                 enabled: false,
                 distinct: true
             },
+            titleField: '',
             itemEditScope: '',
             sourceDataModal: '',
             dndConfig: {
@@ -178,6 +179,7 @@ define([
             recordDataCache: [],
             structureMenu: {},
             menuTmpl: 'Boolfly_Megamenu/menu/li',
+            menuButtonTmpl: 'Boolfly_Megamenu/menu/nestable-menu-button',
             startIndex: 0
         },
 
@@ -186,6 +188,29 @@ define([
          */
         setRecordDataToCache: function (data) {
             this.recordDataCache = data;
+        },
+
+        /**
+         * Show Menu Button
+         *
+         * @returns {boolean}
+         */
+        showMenuButton: function () {
+            return this.elems().length > 0;
+        },
+
+        /**
+         * Expand All Item
+         */
+        expandAll: function () {
+            this.elementNestable.nestable('expandAll');
+        },
+
+        /**
+         * Collapse All Item
+         */
+        collapseAll: function () {
+            this.elementNestable.nestable('collapseAll');
         },
 
         /**
@@ -210,12 +235,10 @@ define([
             if (modalData && modalData[this.itemEditScope]) {
                 itemScope = modalData[this.itemEditScope];
                 delete modalData[this.itemEditScope];
-                $.each(modalData, function(key, value) {
-                    target = registry.get(itemScope + '.' + key);
-                    if (target) {
-                        target.value(value);
-                    }
-                });
+                target = registry.get(itemScope + '.' + this.titleField);
+                if (target && modalData[this.titleField]) {
+                    target.value(modalData[this.titleField]);
+                }
             }
         },
 
@@ -269,7 +292,6 @@ define([
                 }, this));
             }
         },
-
 
         /**
          *
@@ -435,6 +457,9 @@ define([
                 .setInitialProperty();
             this.observe('structureMenu', []);
             this.on('recordData', this.checkDefaultState);
+            this.showSpinner.subscribe(function (value) {
+                debugger;
+            });
 
             return this;
         },
@@ -850,8 +875,7 @@ define([
          * @param {Array} elems
          */
         checkSpinner: function (elems) {
-            this.showSpinner(false);
-            // this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
+            this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
         },
 
 

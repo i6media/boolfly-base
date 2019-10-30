@@ -10,7 +10,10 @@
 -->
 <li class="dd-item"
     repeat="foreach: elems, item: '$record'"
-    attr="'data-component': $record().name, 'data-index': $record().index">
+    attr="
+        'data-component': $record().name,
+        'data-index': $record().index,"
+    css="'dd-collapsed': $record().isCollapse() && $record().hasChild()">
     <render args="$record().collapseTmpl" if="$record().hasChild()"/>
     <render args="$record().expandTmpl" if="$record().hasChild()"/>
     <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->

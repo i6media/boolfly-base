@@ -38,8 +38,8 @@
             </item>
         </argument>
         <settings>
-            <validateUrl path="bannerslider/banner/validate"/>
-            <submitUrl path="bannerslider/banner/save"/>
+            <validateUrl path="megamenu/menu/validate"/>
+            <submitUrl path="megamenu/menu/save"/>
         </settings>
         <dataProvider class="Boolfly\BannerSlider\Model\Banner\DataProvider" name="bf_megamenu_form_data_source">
             <settings>
@@ -48,91 +48,177 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general" sortOrder="5">
+    <fieldset name="general" sortOrder="10">
         <settings>
-            <collapsible>false</collapsible>
-            <label/>
+            <collapsible>true</collapsible>
+            <label>General</label>
         </settings>
-        <dynamicRows name="menu_tree" component="Boolfly_Megamenu/js/dynamic-rows/tree" template="Boolfly_Megamenu/dynamic-rows/tree">
+        <field name="status" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="itemEditScope" xsi:type="string">item_data_scope</item>
-                    <item name="titleScope" xsi:type="string">${ $.name }.menu_title</item>
-                    <item name="sourceDataModal" xsi:type="string">data.menu_modal</item>
-                    <item name="modalName" xsi:type="string">ns = ${ $.ns }, index = menu_modal</item>
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
             <settings>
-                <defaultRecord>false</defaultRecord>
-                <deleteProperty>delete</deleteProperty>
-                <deleteValue>1</deleteValue>
-                <recordTemplate>record</recordTemplate>
-                <columnsHeader>false</columnsHeader>
-                <identificationProperty>record_id</identificationProperty>
-                <addButtonLabel translate="true">Add New</addButtonLabel>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>boolean</dataType>
+                <label translate="true">Enable Menu</label>
             </settings>
-            <container name="record" component="Boolfly_Megamenu/js/dynamic-rows/record">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="isTemplate" xsi:type="boolean">true</item>
-                        <item name="is_collection" xsi:type="boolean">true</item>
-                    </item>
-                </argument>
-                <container name="item" component="Boolfly_Megamenu/js/menu/tree" template="Boolfly_Megamenu/menu/item">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="formElement" xsi:type="string">container</item>
-                            <item name="menuTitle" xsi:type="string">menu_title</item>
-                            <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = menu_modal</item>
-                            <item name="actionName" xsi:type="string">toggleModal</item>
-                            <item name="modalMap" xsi:type="string">data.menu_modal</item>
-                            <item name="itemEditScope" xsi:type="string">item_data_scope</item>
-                            <item name="imports" xsi:type="array">
-                                <item name="visible" xsi:type="string">${ $.dataScope }.menu_title</item>
-                            </item>
-                        </item>
-                    </argument>
-                    <field name="menu_title" formElement="hidden">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="source" xsi:type="string">bf_megamenu</item>
-                                <item name="default" xsi:type="string">New Menu Item</item>
-                            </item>
-                        </argument>
-                        <settings>
-                            <label translate="true">Name</label>
-                            <dataType>text</dataType>
-                            <dataScope>menu_title</dataScope>
-                        </settings>
-                    </field>
-                    <field name="menu_children" formElement="hidden">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="source" xsi:type="string">bf_megamenu</item>
-                                <item name="default" xsi:type="array"/>
-                            </item>
-                        </argument>
-                        <settings>
-                            <label translate="true">Children</label>
-                            <dataType>text</dataType>
-                            <dataScope>menu_children</dataScope>
-                        </settings>
-                    </field>
-                    <field name="position" formElement="hidden">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="source" xsi:type="string">bf_megamenu</item>
-                            </item>
-                        </argument>
-                        <settings>
-                            <label translate="true">Position</label>
-                            <dataType>text</dataType>
-                            <dataScope>position</dataScope>
-                        </settings>
-                    </field>
-                </container>
-            </container>
-        </dynamicRows>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="title" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Menu Title</label>
+                <dataType>text</dataType>
+                <dataScope>title</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="identifier" sortOrder="30" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Identifier</label>
+                <dataType>text</dataType>
+                <dataScope>identifier</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="additional_class" sortOrder="40" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Additional Class</label>
+                <dataType>text</dataType>
+                <dataScope>additional_class</dataScope>
+            </settings>
+        </field>
+        <field name="scroll_to_fixed" sortOrder="50" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>boolean</dataType>
+                <label translate="true">Scroll To Fixed</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="desktop_template" sortOrder="60" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Desktop Template</label>
+                <dataType>text</dataType>
+                <dataScope>desktop_template</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Boolfly\Megamenu\Model\Source\DesktopTemplate"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="store_ids" sortOrder="70" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Store View</label>
+                <dataType>text</dataType>
+                <dataScope>store_ids</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="customer_group_ids" sortOrder="80" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">bf_megamenu</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Customer Groups</label>
+                <dataType>text</dataType>
+                <dataScope>customer_group_ids</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Customer\Model\Customer\Source\Group"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="menu" sortOrder="30">
+        <settings>
+            <collapsible>true</collapsible>
+            <label>Menu Items</label>
+        </settings>
         <container name="menu_container" component="Boolfly_Megamenu/js/group" template="Boolfly_Megamenu/group">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -142,8 +228,89 @@
                     <item name="label" xsi:type="string"/>
                 </item>
             </argument>
+            <dynamicRows name="menu_tree" component="Boolfly_Megamenu/js/dynamic-rows/tree" template="Boolfly_Megamenu/dynamic-rows/tree">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="itemEditScope" xsi:type="string">item_data_scope</item>
+                        <item name="titleField" xsi:type="string">menu_title</item>
+                        <item name="sourceDataModal" xsi:type="string">data.menu_modal</item>
+                        <item name="modalName" xsi:type="string">ns = ${ $.ns }, index = menu_modal</item>
+                    </item>
+                </argument>
+                <settings>
+                    <defaultRecord>false</defaultRecord>
+                    <deleteProperty>delete</deleteProperty>
+                    <deleteValue>1</deleteValue>
+                    <recordTemplate>record</recordTemplate>
+                    <columnsHeader>false</columnsHeader>
+                    <identificationProperty>record_id</identificationProperty>
+                    <addButtonLabel translate="true">Add New</addButtonLabel>
+                </settings>
+                <container name="record" component="Boolfly_Megamenu/js/dynamic-rows/record">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="isTemplate" xsi:type="boolean">true</item>
+                            <item name="is_collection" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
+                    <container name="item" component="Boolfly_Megamenu/js/menu/tree" template="Boolfly_Megamenu/menu/item">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="formElement" xsi:type="string">container</item>
+                                <item name="menuTitle" xsi:type="string">menu_title</item>
+                                <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = menu_modal</item>
+                                <item name="actionName" xsi:type="string">toggleModal</item>
+                                <item name="modalMap" xsi:type="string">data.menu_modal</item>
+                                <item name="itemEditScope" xsi:type="string">item_data_scope</item>
+                                <item name="imports" xsi:type="array">
+                                    <item name="visible" xsi:type="string">${ $.dataScope }.menu_title</item>
+                                </item>
+                            </item>
+                        </argument>
+                        <field name="menu_title" formElement="hidden">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="source" xsi:type="string">bf_megamenu</item>
+                                    <item name="default" xsi:type="string">New Menu Item</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <label translate="true">Name</label>
+                                <dataType>text</dataType>
+                                <dataScope>menu_title</dataScope>
+                            </settings>
+                        </field>
+                        <field name="menu_children" formElement="hidden">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="source" xsi:type="string">bf_megamenu</item>
+                                    <item name="default" xsi:type="array"/>
+                                </item>
+                            </argument>
+                            <settings>
+                                <label translate="true">Children</label>
+                                <dataType>text</dataType>
+                                <dataScope>menu_children</dataScope>
+                            </settings>
+                        </field>
+                        <field name="position" formElement="hidden">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="source" xsi:type="string">bf_megamenu</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <label translate="true">Position</label>
+                                <dataType>text</dataType>
+                                <dataScope>position</dataScope>
+                            </settings>
+                        </field>
+                    </container>
+                </container>
+            </dynamicRows>
         </container>
     </fieldset>
+
     <modal name="menu_modal">
         <settings>
             <dataScope>menu_modal</dataScope>
@@ -199,6 +366,32 @@
                     <dataScope>item_data_scope</dataScope>
                 </settings>
             </field>
+            <field name="status" sortOrder="10" formElement="checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                        <item name="default" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">false</rule>
+                    </validation>
+                    <dataType>boolean</dataType>
+                    <label translate="true">Enable</label>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                            <prefer>toggle</prefer>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
             <field name="menu_title" formElement="input">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -214,6 +407,501 @@
                     </validation>
                 </settings>
             </field>
+            <field name="additional_class" formElement="input">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Additional Class</label>
+                    <dataType>text</dataType>
+                </settings>
+            </field>
+            <field name="link_type" formElement="select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Link Type</label>
+                    <dataType>text</dataType>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Boolfly\Megamenu\Model\Source\LinkType"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="custom_link" formElement="input">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                        <item name="dependValues" xsi:type="string">custom</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Custom Link</label>
+                    <dataType>text</dataType>
+                    <imports>
+                        <link name="updateCustomProperty">ns = ${ $.ns }, index = link_type:value</link>
+                    </imports>
+                </settings>
+            </field>
+            <field name="cms_page_id" formElement="select" component="Magento_Ui/js/form/element/ui-select" template="ui/form/field">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                        <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                        <item name="showCheckbox" xsi:type="boolean">false</item>
+                        <item name="disableLabel" xsi:type="boolean">true</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="multiple" xsi:type="boolean">false</item>
+                        <item name="dependValues" xsi:type="string">cms_page</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">CMS Page</label>
+                    <dataType>text</dataType>
+                    <imports>
+                        <link name="updateCustomProperty">ns = ${ $.ns }, index = link_type:value</link>
+                    </imports>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Cms\Model\Config\Source\Page"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="category_id" formElement="select" component="Magento_Ui/js/form/element/ui-select" template="ui/form/field">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                        <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                        <item name="showCheckbox" xsi:type="boolean">false</item>
+                        <item name="disableLabel" xsi:type="boolean">true</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="multiple" xsi:type="boolean">false</item>
+                        <item name="dependValues" xsi:type="string">category</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Category</label>
+                    <dataType>text</dataType>
+                    <imports>
+                        <link name="updateCustomProperty">ns = ${ $.ns }, index = link_type:value</link>
+                    </imports>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Boolfly\Megamenu\Model\Source\CategoryTree"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="link_target" formElement="select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">bf_megamenu</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Link Target</label>
+                    <dataType>text</dataType>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Boolfly\Megamenu\Model\Source\LinkTarget"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </fieldset>
+
+        <fieldset name="content">
+            <settings>
+                <collapsible>true</collapsible>
+                <label translate="true">Content Settings</label>
+            </settings>
+            <fieldset name="header">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Header</label>
+                </settings>
+                <field name="enable_header" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="head_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">100px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>head_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_header:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_header:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>8</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
+            <fieldset name="main_content">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Main Content</label>
+                </settings>
+                <field name="enable_main_content" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="main_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">300px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>main_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_main_content:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_main_content:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>8</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
+            <fieldset name="left_block">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Left Block</label>
+                </settings>
+                <field name="enable_left" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="left_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">100px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>left_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_left:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_left:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>8</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
+            <fieldset name="main_content">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Main Content</label>
+                </settings>
+                <field name="enable_main_content" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="main_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">300px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>main_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_main_content:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_main_content:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>20</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
+            <fieldset name="right_block">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Right Block</label>
+                </settings>
+                <field name="enable_right" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="right_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">100px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>right_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_right:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_right:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>8</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
+            <fieldset name="bottom_block">
+                <settings>
+                    <collapsible>true</collapsible>
+                    <label translate="true">Bottom Block</label>
+                </settings>
+                <field name="enable_bottom" sortOrder="10" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">false</rule>
+                        </validation>
+                        <dataType>boolean</dataType>
+                        <label translate="true">Enable</label>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <field name="bottom_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="wysiwygConfigData" xsi:type="array">
+                                <item name="height" xsi:type="string">100px</item>
+                                <item name="add_variables" xsi:type="boolean">false</item>
+                                <item name="add_widgets" xsi:type="boolean">true</item>
+                                <item name="add_images" xsi:type="boolean">true</item>
+                                <item name="add_directives" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="source" xsi:type="string">bf_megamenu</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Content</label>
+                        <dataScope>bottom_content</dataScope>
+                        <imports>
+                            <link name="visible">ns = ${ $.ns }, index = enable_bottom:checked</link>
+                            <link name="disabled">!ns = ${ $.ns }, index = enable_bottom:checked</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+                            <settings>
+                                <rows>8</rows>
+                                <wysiwyg>true</wysiwyg>
+                            </settings>
+                        </wysiwyg>
+                    </formElements>
+                </field>
+            </fieldset>
         </fieldset>
     </modal>
 </form>

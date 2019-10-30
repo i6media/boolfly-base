@@ -11,5 +11,5 @@
 <button class="dd-collapse"
         data-action="collapse"
         type="button"
-        data-bind="i18n: 'Collapse'">
+        data-bind="i18n: 'Collapse', click: $record().toggleChildItems.bind($record())">
 </button>

@@ -14,6 +14,11 @@
             </div>
 
             <div class="dd" id="nestable" afterRender="initEventNestable">
+                <!--<menu id="nestable-menu-button">-->
+                    <!--<button type="button" data-action="expand-all">Expand All</button>-->
+                    <!--<button type="button" data-action="collapse-all">Collapse All</button>-->
+                <!--</menu>-->
+                <render args="menuButtonTmpl" if="$data.showMenuButton()"/>
                 <ol class="dd-list"
                     data-bind="template: {
                         name: menuTmpl,

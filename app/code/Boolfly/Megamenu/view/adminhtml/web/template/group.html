@@ -5,10 +5,9 @@
     <legend class="admin__field-label" if="showLabel">
         <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
     </legend>
-
-    <div class="admin__field-control" css="$data.additionalClasses">
-        <each args="getRegion('insideGroup')" render=""/>
+    <div class="admin__field-control">
+        <each args="data: elems, as: 'element'">
+            <render if="hasTemplate()"/>
+        </each>
     </div>
-
-    <each args="getRegion('outsideGroup')" render=""/>
 </fieldset>

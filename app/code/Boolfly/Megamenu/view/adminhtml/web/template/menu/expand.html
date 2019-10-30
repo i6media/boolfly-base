@@ -11,5 +11,5 @@
 <button class="dd-expand"
         data-action="expand"
         type="button"
-        data-bind="i18n: 'Expand'">
+        data-bind="i18n: 'Expand', click: $record().toggleChildItems.bind($record())">
 </button>
