@@ -46,7 +46,7 @@ define([
             this._super()
                 .observe('visible')
                 .observe({
-                    required: !!+this.required
+                    required: !! + this.required
                 });
 
             return this;
@@ -63,7 +63,7 @@ define([
 
             if (_.isString(additional)) {
                 additional = this.additionalClasses.split(' ');
-                classes = this.additionalClasses = {};
+                classes    = this.additionalClasses = {};
 
                 additional.forEach(function (name) {
                     classes[name] = true;

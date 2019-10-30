@@ -72,7 +72,7 @@ define([
                 ])
                 .observe('childElems', [])
                 .observe({
-                    required: !!+this.required
+                    required: !! + this.required
                 });
 
             return this;
@@ -83,7 +83,7 @@ define([
                 child, index, prop;
 
             index = 20;
-            prop = 20;
+            prop  = 20;
 
             _.extend(this.templates.item, {
                 itemId: prop
@@ -111,7 +111,7 @@ define([
 
             if (_.isString(additional)) {
                 additional = this.additionalClasses.split(' ');
-                classes = this.additionalClasses = {};
+                classes    = this.additionalClasses = {};
 
                 additional.forEach(function (name) {
                     classes[name] = true;
@@ -143,7 +143,7 @@ define([
          * Edit Menu Item
          */
         editMenuItem: function () {
-            var data = this.source.get(this.dataScope) || {},
+            var data   = this.source.get(this.dataScope) || {},
                 target,
                 params = [];
             if (this.targetName) {

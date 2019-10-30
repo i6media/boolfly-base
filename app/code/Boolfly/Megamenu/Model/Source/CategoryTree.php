@@ -71,9 +71,9 @@ class CategoryTree implements OptionSourceInterface
                 }
             }
 
-            $categoryById[$category->getId()]['is_active'] = $category->getIsActive();
-            $categoryById[$category->getId()]['label'] = $category->getName();
-            $categoryById[$category->getId()]['__disableTmpl'] = true;
+            $categoryById[$category->getId()]['is_active']        = $category->getIsActive();
+            $categoryById[$category->getId()]['label']            = $category->getName();
+            $categoryById[$category->getId()]['__disableTmpl']    = true;
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
 

@@ -26,7 +26,8 @@ define([
      *
      * @returns {Boolean|*} casted or origin value
      */
-    function castValue(value) {
+    function castValue(value)
+    {
         if (_.isUndefined(value) || value === '' || _.isNull(value)) {
             return false;
         }
@@ -42,8 +43,9 @@ define([
      *
      * @returns {Boolean} result - is current array equal to base array
      */
-    function compareArrays(base, current) {
-        var index = 0,
+    function compareArrays(base, current)
+    {
+        var index  = 0,
             length = base.length;
 
         if (base.length !== current.length) {
@@ -77,7 +79,8 @@ define([
      *
      * @returns {Boolean} result - is current object equal to base object
      */
-    function compareObjects(base, current) {
+    function compareObjects(base, current)
+    {
         var prop;
 
         /*eslint-disable max-depth, eqeqeq*/
@@ -191,7 +194,8 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            _.bindAll(this,
+            _.bindAll(
+                this,
                 'processingDeleteRecord',
                 'checkDefaultState',
                 'deleteHandler'
@@ -218,7 +222,7 @@ define([
 
             if (this.recordData().length && !this.update) {
                 _.each(this.recordData(), function (recordData) {
-                    obj = {};
+                    obj                              = {};
                     obj[this.identificationProperty] = recordData[this.identificationProperty];
                     insertData.push(obj);
                 }, this);
@@ -349,7 +353,7 @@ define([
             var elem, target, position = 0;
             if (Array.isArray(data)) {
                 data.each(function (item) {
-                    elem = registry.get(item.component);
+                    elem   = registry.get(item.component);
                     target = registry.get(item.component + '.item.position');
                     if (elem) {
                         elem.position = position;
@@ -375,7 +379,7 @@ define([
             elem = this.getElementTree(element.data('index'));
             this.updatePositionMenuItem(this.elementNestable.nestable('serialize'));
             if (elem) {
-                parentIndex = this.getNewParentIndex(element);
+                parentIndex   = this.getNewParentIndex(element);
                 oldParentItem = elem.parentItem();
                 if (parentIndex === false && oldParentItem === false) {
                     this.elems(this._sort());
@@ -388,7 +392,7 @@ define([
                     utils.remove(this._elems, elem);
                 } else if (oldParentItem) {
                     this.removeChildElems(elem, oldParentItem);
-                    if (!parentIndex){
+                    if (!parentIndex) {
                         //Move from child to root
                         utils.add(this._elems, elem);
                         elem.parentItem(false);
@@ -464,8 +468,8 @@ define([
          */
         isChildElement: function (elem) {
             if (typeof elem.childElems === 'function') {
-                var recordId = this.source.get(elem.dataScope + '.' + this.identificationProperty);
-                var structureMenu = this.structureMenu(), children = this.source.get(elem.dataScope + '.menu_children');
+                var recordId               = this.source.get(elem.dataScope + '.' + this.identificationProperty);
+                var structureMenu          = this.structureMenu(), children = this.source.get(elem.dataScope + '.menu_children');
                 this.elementTree[recordId] = elem;
                 children.forEach(function (childId) {
                     this.updateStructureMenu(childId, recordId);
@@ -543,9 +547,9 @@ define([
                 data.forEach(function (value) {
                     children.push(value.index);
                     if (value.hasOwnProperty('children')) {
-                        subChild = this.updateDataChildren(value.children);
+                        subChild         = this.updateDataChildren(value.children);
                         currentComponent = registry.get(value.component);
-                        var childElems = [];
+                        var childElems   = [];
                         subChild.forEach(function (index) {
                             childElems.push(this.elementTree[index]);
                         }, this);
@@ -566,7 +570,7 @@ define([
          */
         getNewData: function (data) {
             var changes = [],
-                tmpObj = {};
+                tmpObj  = {};
 
             if (data.length !== this.relatedData.length) {
                 _.each(data, function (obj) {
@@ -674,10 +678,8 @@ define([
                 childItems;
 
             if (!this.hasInitialPagesState[this.currentPage()]) {
-                childItems = this.getChildItems();
-                componentData = childItems.length ?
-                    utils.copy(childItems) :
-                    utils.copy(this.getChildItems(this.recordDataCache));
+                childItems    = this.getChildItems();
+                componentData = childItems.length ? utils.copy(childItems) : utils.copy(this.getChildItems(this.recordDataCache));
                 componentData.forEach(function (dataObj) {
                     if (dataObj.hasOwnProperty('initialize')) {
                         delete dataObj.initialize;
@@ -685,7 +687,7 @@ define([
                 });
 
                 this.hasInitialPagesState[this.currentPage()] = true;
-                this.defaultPagesState[this.currentPage()] = data ? data : this.arrayFilter(componentData);
+                this.defaultPagesState[this.currentPage()]    = data ? data : this.arrayFilter(componentData);
             }
         },
 
@@ -809,7 +811,7 @@ define([
          * @returns {Object} Chainable.
          */
         createHeaderTemplate: function (prop) {
-            var visible = prop.visible !== false,
+            var visible  = prop.visible !== false,
                 disabled = _.isUndefined(prop.disabled) ? this.disabled() : prop.disabled;
 
             return {
@@ -827,7 +829,7 @@ define([
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
-                    data = this.createHeaderTemplate(cell.config);
+                    data                     = this.createHeaderTemplate(cell.config);
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         defaultLabelVisible: data.visible(),
@@ -871,8 +873,7 @@ define([
 
             if (this.elems().filter(function (el) {
                     return el.position || el.position === 0;
-                }).length !== this.getChildItems().length) {
-
+            }).length !== this.getChildItems().length) {
                 return false;
             }
 
@@ -930,10 +931,9 @@ define([
          * @inheritDoc
          */
         setRelatedData: function (data) {
-            this.relatedData = this.deleteProperty ?
-                _.filter(data, function (elem) {
+            this.relatedData = this.deleteProperty ? _.filter(data, function (elem) {
                     return elem && elem[this.deleteProperty] !== this.deleteValue;
-                }, this) : data;
+            }, this) : data;
         },
 
         /**
@@ -992,12 +992,12 @@ define([
         updatePosition: function (collection, position, elemName) {
             var curPos,
                 parsePosition = ~~position,
-                result = _.filter(collection, function (record) {
+                result        = _.filter(collection, function (record) {
                     return ~~record.position === parsePosition;
                 });
 
             if (result[1]) {
-                curPos = parsePosition + 1;
+                curPos                                           = parsePosition + 1;
                 result[0].name === elemName ? result[1].position = curPos : result[0].position = curPos;
                 this.updatePosition(collection, curPos);
             }
@@ -1015,12 +1015,12 @@ define([
                 pos;
 
             this.elems.each(function (record) {
-                pos = ~~record.position;
+                pos             = ~~record.position;
                 pos > max ? max = pos : false;
             });
 
             max < position ? max = position : false;
-            this.maxPosition = max;
+            this.maxPosition     = max;
         },
 
         /**
@@ -1057,7 +1057,7 @@ define([
                 recordsData;
 
             if (this.deleteProperty) {
-                recordsData = this.recordData();
+                recordsData    = this.recordData();
                 recordInstance = this.getElementTree(index);
                 if (recordInstance) {
                     this.deleteChildrenRecord(index, recordsData);
@@ -1082,8 +1082,8 @@ define([
             var structureMenu = this.structureMenu();
             if (structureMenu[index]) {
                 var childElems, parent, parentIndex = structureMenu[index];
-                parent = this.getElementTree(parentIndex);
-                childElems = _.filter(parent.childElems(), function(item) {
+                parent                              = this.getElementTree(parentIndex);
+                childElems                          = _.filter(parent.childElems(), function (item) {
                     return item.index !== index
                 });
                 parent.childElems(childElems);
@@ -1097,9 +1097,9 @@ define([
          * @returns {exports}
          */
         deleteChildrenRecord: function (index, recordsData) {
-            var children, recordData =  _.find(recordsData, function (record) {
+            var children, recordData = _.find(recordsData, function (record) {
                     return record.record_id === index;
-                });
+            });
             if (recordData && recordData.menu_children) {
                 children = recordData.menu_children;
                 children.forEach(function (childIndex) {
@@ -1226,7 +1226,7 @@ define([
             var additional;
 
             if (_.isString(data.additionalClasses)) {
-                additional = data.additionalClasses.split(' ');
+                additional             = data.additionalClasses.split(' ');
                 data.additionalClasses = {};
 
                 additional.forEach(function (name) {
