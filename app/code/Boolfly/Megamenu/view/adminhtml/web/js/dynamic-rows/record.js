@@ -1,10 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * @api
+ * Record
+ *
+ * @copyright Copyright © Boolfly. All rights reserved.
+ * @author    info@boolfly.com
+ * @project   Megamenu
  */
 define([
     'underscore',

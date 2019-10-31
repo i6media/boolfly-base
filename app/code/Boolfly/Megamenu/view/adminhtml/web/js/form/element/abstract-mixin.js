@@ -3,7 +3,7 @@
  *
  * @copyright Copyright © 2019 Boolfly. All rights reserved.
  * @author    info@boolfly.com
- * @project   Banner Slider
+ * @project   Megamenu
  */
 define([
     'jquery'
@@ -22,7 +22,7 @@ define([
              * @returns {Element}
              */
             updateCustomProperty: function (value) {
-                if (this.dependValues) {
+                if (this.dependValues !== false) {
                     if (Array.isArray(this.dependValues)) {
                         this.changeVisibleAndDisable(this.dependValues.indexOf(value) > -1);
                     } else {

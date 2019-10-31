@@ -33,7 +33,7 @@ define([
                 }
             },
             links: {
-                itemTitle: '${ $.name }.menu_title:value'
+                itemTitle: '${ $.name }.title:value'
             },
             itemTitle: '',
             targetName: null,

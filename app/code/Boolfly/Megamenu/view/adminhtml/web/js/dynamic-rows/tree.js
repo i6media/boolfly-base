@@ -1,10 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * @api
+ * Tree
+ *
+ * @copyright Copyright © 2019 Boolfly. All rights reserved.
+ * @author    info@boolfly.com
+ * @project   Megamenu
  */
 define([
     'jquery',
@@ -182,7 +181,7 @@ define([
             recordDataCache: [],
             structureMenu: {},
             menuTmpl: 'Boolfly_Megamenu/menu/li',
-            menuButtonTmpl: 'Boolfly_Megamenu/menu/nestable-menu-button',
+            menuButtonTmpl: 'Boolfly_Megamenu/menu/menu-button',
             startIndex: 0
         },
 
