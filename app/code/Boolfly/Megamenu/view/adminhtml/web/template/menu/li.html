@@ -12,7 +12,7 @@
     repeat="foreach: elems, item: '$record'"
     attr="
         'data-component': $record().name,
-        'data-index': $record().index,"
+        'data-index': $record().recordId,"
     css="'dd-collapsed': $record().isCollapse() && $record().hasChild()">
     <render args="$record().collapseTmpl" if="$record().hasChild()"/>
     <render args="$record().expandTmpl" if="$record().hasChild()"/>

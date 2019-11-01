@@ -14,7 +14,6 @@
         "index": {
             "BF_MEGAMENU_MENU_ID": true,
             "BF_MEGAMENU_IDENTIFIER": true,
-            "BF_MEGAMENU_CREATED_AT": true,
             "BF_MEGAMENU_TITLE_IDENTIFIER": true
         },
         "constraint": {
@@ -41,10 +40,6 @@
             "menu_id": true,
             "customer_group_id": true
         },
-        "index": {
-            "BF_MEGAMENU_CUSTOMER_GROUP_MENU_ID": true,
-            "BF_MEGAMENU_CUSTOMER_GROUP_CUSTOMER_GROUP_ID": true
-        },
         "constraint": {
             "PRIMARY": true,
             "BF_MEGAMENU_CUSTOMER_GROUP_MENU_ID_BF_MEGAMENU_MENU_ID": true,
@@ -55,12 +50,14 @@
         "column": {
             "item_id": true,
             "menu_id": true,
+            "record_id": true,
             "title": true,
             "additional_class": true,
             "link_type": true,
             "custom_link": true,
             "category_id": true,
             "cms_page_id": true,
+            "position": true,
             "link_target": true,
             "status": true,
             "created_at": true,
@@ -68,13 +65,11 @@
         },
         "index": {
             "BF_MEGAMENU_ITEM_ITEM_ID": true,
-            "BF_MEGAMENU_ITEM_MENU_ID": true,
-            "BF_MEGAMENU_ITEM_LINK_TYPE": true,
-            "BF_MEGAMENU_ITEM_LINK_TARGET": true,
-            "BF_MEGAMENU_ITEM_CREATED_AT": true
+            "BF_MEGAMENU_ITEM_MENU_ID": true
         },
         "constraint": {
             "PRIMARY": true,
+            "BF_MEGAMENU_ITEM_RECORD_ID": true,
             "BF_MEGAMENU_ITEM_MENU_ID_BF_MEGAMENU_MENU_ID": true
         }
     },
@@ -90,12 +85,6 @@
             "status": true,
             "created_at": true,
             "updated_at": true
-        },
-        "index": {
-            "BF_MEGAMENU_ITEM_CONTENT_ITEM_ID": true,
-            "BF_MEGAMENU_ITEM_CONTENT_TYPE_ID": true,
-            "BF_MEGAMENU_ITEM_CONTENT_STATUS": true,
-            "BF_MEGAMENU_ITEM_CONTENT_CREATED_AT": true
         },
         "constraint": {
             "PRIMARY": true,

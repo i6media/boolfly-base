@@ -9,7 +9,7 @@ define([
     'underscore',
     'uiCollection',
     'uiRegistry'
-], function (_, Collection, registry) {
+], function (_, Collection) {
     'use strict';
 
     return Collection.extend({

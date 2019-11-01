@@ -55,7 +55,7 @@ define([
             this.hasChild(elems.length > 0);
             var component, children = [];
             elems.forEach(function (elem) {
-                children.push(elem.index);
+                children.push(elem.recordId);
             }, this);
             component = registry.get(this.name + '.item.menu_children');
             if (component) {

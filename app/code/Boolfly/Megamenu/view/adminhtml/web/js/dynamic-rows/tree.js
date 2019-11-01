@@ -18,88 +18,6 @@ define([
 ], function ($, ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
-    /**
-     * Checks value type and cast to boolean if needed
-     *
-     * @param {*} value
-     *
-     * @returns {Boolean|*} casted or origin value
-     */
-    function castValue(value)
-    {
-        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
-            return false;
-        }
-
-        return value;
-    }
-
-    /**
-     * Compares arrays.
-     *
-     * @param {Array} base - array as method bases its decision on first argument.
-     * @param {Array} current - second array
-     *
-     * @returns {Boolean} result - is current array equal to base array
-     */
-    function compareArrays(base, current)
-    {
-        var index  = 0,
-            length = base.length;
-
-        if (base.length !== current.length) {
-            return false;
-        }
-
-        /*eslint-disable max-depth, eqeqeq, no-use-before-define */
-        for (index; index < length; index++) {
-            if (_.isArray(base[index]) && _.isArray(current[index])) {
-                if (!compareArrays(base[index], current[index])) {
-                    return false;
-                }
-            } else if (typeof base[index] === 'object' && typeof current[index] === 'object') {
-                if (!compareObjects(base[index], current[index])) {
-                    return false;
-                }
-            } else if (castValue(base[index]) != castValue(current[index])) {
-                return false;
-            }
-        }/*eslint-enable max-depth, eqeqeq, no-use-before-define */
-
-        return true;
-    }
-
-    /**
-     * Compares objects. Compares only properties from origin object,
-     * if current object has more properties - they are not considered
-     *
-     * @param {Object} base - first object
-     * @param {Object} current - second object
-     *
-     * @returns {Boolean} result - is current object equal to base object
-     */
-    function compareObjects(base, current)
-    {
-        var prop;
-
-        /*eslint-disable max-depth, eqeqeq*/
-        for (prop in base) {
-            if (_.isArray(base[prop]) && _.isArray(current[prop])) {
-                if (!compareArrays(base[prop], current[prop])) {
-                    return false;
-                }
-            } else if (typeof base[prop] === 'object' && typeof current[prop] === 'object') {
-                if (!compareObjects(base[prop], current[prop])) {
-                    return false;
-                }
-            } else if (castValue(base[prop]) != castValue(current[prop])) {
-                return false;
-            }
-        }/*eslint-enable max-depth, eqeqeq */
-
-        return true;
-    }
-
     return uiCollection.extend({
         defaults: {
             dataProvider: '',
@@ -165,7 +83,6 @@ define([
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
                 currentPage: 'changePage',
-                elems: 'checkSpinner',
                 changed: 'updateTrigger',
                 recordData: "initElements setToInsertData setRelatedData"
             },
@@ -242,7 +159,6 @@ define([
 
             return this._super();
         },
-
 
         /**
          * Initialize elements from grid
@@ -343,20 +259,21 @@ define([
                 }
             }
         },
-
         /**
          *
          * @param data
          */
         updatePositionMenuItem: function (data) {
+            data = data || this.elementNestable.nestable('serialize');
             var elem, target, position = 0;
             if (Array.isArray(data)) {
                 data.each(function (item) {
                     elem   = registry.get(item.component);
                     target = registry.get(item.component + '.item.position');
-                    if (elem) {
-                        elem.position = position;
-                    }
+                    // if (elem) {
+                    //     elem.position = position;
+                    // }
+                    //@TODO
                     if (target) {
                         target.set('value', position);
                     }
@@ -365,7 +282,6 @@ define([
                 }, this);
             }
         },
-
 
         /**
          * Update menu after drap & drop
@@ -376,7 +292,7 @@ define([
         updateMenuTree: function (root, element) {
             var elem, parentIndex, oldParentItem;
             elem = this.getElementTree(element.data('index'));
-            this.updatePositionMenuItem(this.elementNestable.nestable('serialize'));
+            this.updatePositionMenuItem();
             if (elem) {
                 parentIndex   = this.getNewParentIndex(element);
                 oldParentItem = elem.parentItem();
@@ -398,7 +314,7 @@ define([
                     }
                 }
                 this.updateParentAndChild(elem, parentIndex);
-                this.updateStructureMenu(elem.index, parentIndex);
+                this.updateStructureMenu(elem.recordId, parentIndex);
                 this._updateCollection();
             }
         },
@@ -420,15 +336,15 @@ define([
 
         /**
          *
-         * @param index
-         * @param parentIndex
+         * @param recordId
+         * @param parentRecordId
          */
-        updateStructureMenu: function (index, parentIndex) {
+        updateStructureMenu: function (recordId, parentRecordId) {
             var structureMenu = this.structureMenu();
-            if (parentIndex === false) {
-                delete structureMenu[index];
+            if (parentRecordId === false) {
+                delete structureMenu[recordId];
             } else {
-                structureMenu[index] = parentIndex;
+                structureMenu[recordId] = parentRecordId;
             }
             this.structureMenu(structureMenu);
         },
@@ -486,18 +402,17 @@ define([
         /**
          *
          * @param {Object} elem
-         * @param {*} parentIndex
+         * @param {*} parentRecordId
          */
-        updateParentAndChild: function (elem, parentIndex) {
-            if (parentIndex) {
-                var parentElement = this.getElementTree(parentIndex);
+        updateParentAndChild: function (elem, parentRecordId) {
+            if (parentRecordId) {
+                var parentElement = this.getElementTree(parentRecordId);
                 if (parentElement) {
                     var childElems = parentElement.childElems();
                     elem.parentItem(parentElement);
                     if (childElems.length < 1 || !this.checkChildElement(childElems, elem.index)) {
                         childElems.push(elem);
-                        childElems = this._sort(childElems);
-                        parentElement.childElems(childElems);
+                        parentElement.childElems(this._sort(childElems));
                     }
                 }
             }
@@ -513,15 +428,6 @@ define([
             return _.find(elems, function (ele) {
                 return ele.index === index;
             })
-        },
-
-        /**
-         *
-         * @param elemId
-         * @returns {*}
-         */
-        getParentElement: function (elemId) {
-            return this.elementTree[elemId];
         },
 
         /**
@@ -869,18 +775,13 @@ define([
             var that = this,
                 sorted,
                 updatedCollection;
+            if (this.elems().length < 1) {
+                return false;
+            }
 
             if (this.elems().filter(function (el) {
                     return el.position || el.position === 0;
             }).length !== this.getChildItems().length) {
-                return false;
-            }
-
-            if (!elem.containers.length) {
-                registry.get(elem.name, function () {
-                    that.sort(position, elem);
-                });
-
                 return false;
             }
 
@@ -908,13 +809,11 @@ define([
          * @return void
          */
         reinitRecordData: function () {
-            var recordData = {}, recordDataArray = _.filter(this.recordData(), function (elem) {
-                return elem && elem[this.deleteProperty] !== this.deleteValue;
-            }, this);
-            recordDataArray.forEach(function (value) {
-                recordData[value[this.identificationProperty]] = value;
-            }, this);
-            this.recordData(recordData);
+            this.recordData(
+                _.filter(this.recordData(), function (elem) {
+                    return elem && elem[this.deleteProperty] !== this.deleteValue;
+                }, this)
+            );
         },
 
         /**
@@ -966,7 +865,6 @@ define([
             this.bubble('addChild', false);
 
             this.addChild(ctx, index, prop);
-            this.showSpinner(false);
         },
 
         /**
@@ -976,7 +874,7 @@ define([
          * @param {Number|String} recordId
          */
         processingDeleteRecord: function (index, recordId) {
-            this.deleteRecord(index, recordId);
+            this.deleteRecord(index, recordId, true);
         },
 
         /**
@@ -1049,25 +947,32 @@ define([
          *
          * @param {Number} index - row index
          * @param {Number} recordId - recordId
+         * @param {Boolean} update
          *
          */
-        deleteRecord: function (index, recordId) {
+        deleteRecord: function (index, recordId, update) {
             var recordInstance,
+                tmpObj = {},
+                recordData,
                 recordsData;
-
+            tmpObj[this.identificationProperty] = recordId;
             if (this.deleteProperty) {
                 recordsData    = this.recordData();
-                recordInstance = this.getElementTree(index);
+                recordInstance = this.getElementTree(recordId);
                 if (recordInstance) {
-                    this.deleteChildrenRecord(index, recordsData);
+                    this.deleteChildrenRecord(recordId, recordsData);
                     recordInstance.destroy();
-                    recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
-                    this.recordData(recordsData);
-                    if (index.toString() === recordId.toString()) {
-                        this.updateParent(index);
+                    recordData = _.findWhere(recordsData, tmpObj);
+                    if (recordData) {
+                        index = _.indexOf(recordsData, recordData);
+                        recordsData[index][this.deleteProperty] = this.deleteValue;
+                        this.recordData(recordsData);
+                    }
+                    delete this.elementTree[recordId];
+                    if (update) {
+                        this.updateParent(recordId);
                         this._updateCollection();
                         this.reinitRecordData();
-                        // this.reload();
                     }
                 }
             }
@@ -1075,15 +980,15 @@ define([
 
         /**
          *
-         * @param index
+         * @param recordId
          */
-        updateParent: function (index) {
+        updateParent: function (recordId) {
             var structureMenu = this.structureMenu();
-            if (structureMenu[index]) {
-                var childElems, parent, parentIndex = structureMenu[index];
-                parent                              = this.getElementTree(parentIndex);
+            if (structureMenu[recordId]) {
+                var childElems, parent, parentRecordId = structureMenu[recordId];
+                parent                              = this.getElementTree(parentRecordId);
                 childElems                          = _.filter(parent.childElems(), function (item) {
-                    return item.index !== index
+                    return item.recordId !== recordId
                 });
                 parent.childElems(childElems);
             }
@@ -1091,34 +996,22 @@ define([
 
         /**
          *
-         * @param index
+         * @param recordId
          * @param recordsData
          * @returns {exports}
          */
-        deleteChildrenRecord: function (index, recordsData) {
+        deleteChildrenRecord: function (recordId, recordsData) {
             var children, recordData = _.find(recordsData, function (record) {
-                    return record.record_id === index;
+                    return record.record_id === recordId;
             });
             if (recordData && recordData.menu_children) {
                 children = recordData.menu_children;
                 children.forEach(function (childIndex) {
-                    this.deleteRecord(childIndex, index);
+                    this.deleteRecord(childIndex, childIndex, false);
                 }, this);
             }
 
             return this;
-        },
-
-        /**
-         * Reduce the number of pages
-         *
-         * @private
-         * @return void
-         */
-        _reducePages: function () {
-            if (this.pages() < ~~this.currentPage()) {
-                this.currentPage(this.pages());
-            }
         },
 
         /**
@@ -1321,9 +1214,9 @@ define([
             var template = this.templates.record,
                 child;
 
-            index = index || _.isNumber(index) ? index : this.getNextIndex();
-            // index = index || _.isNumber(index) ? index : this.recordData().length;
-            prop = prop || _.isNumber(prop) ? prop : index;
+            // index = index || _.isNumber(index) ? index : this.getNextIndex();
+            index = index || _.isNumber(index) ? index : this.recordData().length;
+            prop = prop || _.isNumber(prop) ? prop : this.getNextIndex();
 
             _.extend(this.templates.record, {
                 recordId: prop

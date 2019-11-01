@@ -32,9 +32,6 @@
         <index referenceId="BOOLFLY_MEGA_MENU_IDENTIFIER_FIELD" indexType="btree">
             <column name="identifier"/>
         </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_CREATED_AT" indexType="btree">
-            <column name="created_at"/>
-        </index>
         <index referenceId="BF_MEGAMENU_79B209645FB0D568E4FBA1CC62512ACB" indexType="fulltext">
             <column name="title"/>
             <column name="identifier"/>
@@ -87,12 +84,6 @@
                     table="bf_megamenu_store" column="customer_group_id"
                     referenceTable="customer_group"
                     referenceColumn="customer_group_id" onDelete="CASCADE"/>
-        <index referenceId="BOOLFLY_MEGA_MENU_STORE_MENU_ID" indexType="btree">
-            <column name="menu_id"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_STORE_STORE_ID" indexType="btree">
-            <column name="customer_group_id"/>
-        </index>
     </table>
     <table name="bf_megamenu_item" resource="default" engine="innodb"
            comment="Boolfly Mega Menu item table">
@@ -100,18 +91,23 @@
                 comment="Item Id"/>
         <column xsi:type="int" name="menu_id" padding="11" nullable="false" identity="false"
                 comment="Menu Id"/>
+        <column xsi:type="varchar" name="record_id" nullable="false" length="50" comment="Record Id"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="varchar" name="additional_class" nullable="true" length="100" comment="Additional Class"/>
         <column xsi:type="varchar" name="link_type" nullable="true" length="100" comment="Link Type"/>
         <column xsi:type="varchar" name="custom_link" nullable="true" length="255" comment="Custom Link"/>
         <column xsi:type="int" name="category_id" nullable="true" padding="11" comment="Category ID"/>
         <column xsi:type="int" name="cms_page_id" nullable="true" padding="11" comment="CMS Page Id"/>
+        <column xsi:type="smallint" name="position" nullable="false" padding="5" comment="Position"/>
         <column xsi:type="varchar" name="link_target" nullable="true" length="100" comment="Link Target"/>
         <column xsi:type="smallint" name="status" nullable="false" padding="6" comment="Status"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="BOOLFLY_MEGA_MENU_ITEM_RECORD_ID">
+            <column name="record_id"/>
         </constraint>
         <constraint xsi:type="foreign"
                     referenceId="CSTR_BOOLFLY_MEGA_MENU_ITEM_MENU_ID_TO_ENTITY_ID"
@@ -123,15 +119,6 @@
         </index>
         <index referenceId="BOOLFLY_MEGA_MENU_ITEM_MENU_ID" indexType="btree">
             <column name="menu_id"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_LINK_TYPE" indexType="btree">
-            <column name="link_type"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_LINK_TARGET" indexType="btree">
-            <column name="link_target"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_CREATED_AT" indexType="btree">
-            <column name="created_at"/>
         </index>
     </table>
     <table name="bf_megamenu_item_content" resource="default" engine="innodb"
@@ -157,17 +144,5 @@
                     table="bf_megamenu_item_content" column="item_id"
                     referenceTable="bf_megamenu_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_CONTENT_ENTITY_ID" indexType="btree">
-            <column name="item_id"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_CONTENT_TYPE_ID" indexType="btree">
-            <column name="type_id"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_CONTENT_STATUS" indexType="btree">
-            <column name="status"/>
-        </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_ITEM_CONTENT_CREATED_AT" indexType="btree">
-            <column name="created_at"/>
-        </index>
     </table>
 </schema>
