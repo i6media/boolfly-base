@@ -78,28 +78,6 @@ define([
             return this;
         },
 
-        addChild: function (data) {
-            var template = this.templates.item,
-                child, index, prop;
-
-            index = 20;
-            prop  = 20;
-
-            _.extend(this.templates.item, {
-                itemId: prop
-            });
-
-            child = utils.template(template, {
-                collection: this,
-                index: index
-            });
-
-            layout([child]);
-
-            return this;
-
-        },
-
         /**
          * Extends 'additionalClasses' object.
          *

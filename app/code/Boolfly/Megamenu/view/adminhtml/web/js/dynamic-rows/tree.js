@@ -14,7 +14,7 @@ define([
     'uiCollection',
     'uiRegistry',
     'mage/translate',
-    'nestable'
+    'Boolfly_Base/js/jquery.nestable'
 ], function ($, ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
@@ -264,15 +264,14 @@ define([
          * @param data
          */
         updatePositionMenuItem: function (data) {
-            data = data || this.elementNestable.nestable('serialize');
             var elem, target, position = 0;
             if (Array.isArray(data)) {
                 data.each(function (item) {
                     elem   = registry.get(item.component);
                     target = registry.get(item.component + '.item.position');
-                    // if (elem) {
-                    //     elem.position = position;
-                    // }
+                    if (elem) {
+                        elem.position = position;
+                    }
                     //@TODO
                     if (target) {
                         target.set('value', position);
@@ -292,7 +291,7 @@ define([
         updateMenuTree: function (root, element) {
             var elem, parentIndex, oldParentItem;
             elem = this.getElementTree(element.data('index'));
-            this.updatePositionMenuItem();
+            this.updatePositionMenuItem(this.elementNestable.nestable('serialize'));
             if (elem) {
                 parentIndex   = this.getNewParentIndex(element);
                 oldParentItem = elem.parentItem();
@@ -308,6 +307,10 @@ define([
                 } else if (oldParentItem) {
                     this.removeChildElems(elem, oldParentItem);
                     if (!parentIndex) {
+                        var itemParent = registry.get(elem.name + '.item.parent_id');
+                        if (itemParent) {
+                            itemParent.value('');
+                        }
                         //Move from child to root
                         utils.add(this._elems, elem);
                         elem.parentItem(false);
@@ -377,21 +380,20 @@ define([
         },
 
         /**
+         * Check is Child Item
          *
          * @param elem
          * @returns {boolean}
          */
         isChildElement: function (elem) {
             if (typeof elem.childElems === 'function') {
-                var recordId               = this.source.get(elem.dataScope + '.' + this.identificationProperty);
-                var structureMenu          = this.structureMenu(), children = this.source.get(elem.dataScope + '.menu_children');
+                var recordId = this.source.get(elem.dataScope + '.' + this.identificationProperty);
+                var parentId = this.source.get(elem.dataScope + '.parent_id');
                 this.elementTree[recordId] = elem;
-                children.forEach(function (childId) {
-                    this.updateStructureMenu(childId, recordId);
-                }, this);
-                if (structureMenu[recordId]) {
+                if (parentId) {
+                    this.updateStructureMenu(recordId, parentId);
                     this.initElement(elem);
-                    this.updateParentAndChild(elem, structureMenu[recordId]);
+                    this.updateParentAndChild(elem, parentId);
                     return true;
                 }
             }
@@ -1041,40 +1043,6 @@ define([
         },
 
         /**
-         * Set new data to dataSource,
-         * delete element
-         *
-         * @param {Array} data - record data
-         */
-        _updateData: function (data) {
-            var elems = _.clone(this.elems()),
-                path,
-                dataArr;
-
-            dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
-            dataArr.splice(0, this.pageSize);
-            elems = _.sortBy(this.elems(), function (elem) {
-                return ~~elem.index;
-            });
-
-            data.concat(dataArr).forEach(function (rec, idx) {
-                if (elems[idx]) {
-                    elems[idx].recordId = rec[this.identificationProperty];
-                }
-
-                if (!rec.position) {
-                    rec.position = this.maxPosition;
-                    this.setMaxPosition();
-                }
-
-                path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
-                this.source.set(path, rec);
-            }, this);
-
-            this.elems(elems);
-        },
-
-        /**
          * Rerender dynamic-rows elems
          */
         reload: function () {
@@ -1148,8 +1116,10 @@ define([
          */
         initChildren: function () {
             // this.showSpinner(true);
+            var index = 0;
             this.getChildItems().forEach(function (data, index) {
-                this.addChild(data, data[this.identificationProperty]);
+                this.addChild(data, index, data[this.identificationProperty]);
+                index++;
             }, this);
 
             return this;

@@ -169,7 +169,7 @@
                 </select>
             </formElements>
         </field>
-        <field name="store_ids" sortOrder="70" formElement="multiselect">
+        <field name="store_id" sortOrder="70" formElement="multiselect">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">bf_megamenu</item>
@@ -178,7 +178,7 @@
             <settings>
                 <label translate="true">Store View</label>
                 <dataType>text</dataType>
-                <dataScope>store_ids</dataScope>
+                <dataScope>store_id</dataScope>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
@@ -191,28 +191,28 @@
                 </multiselect>
             </formElements>
         </field>
-        <field name="customer_group_ids" sortOrder="80" formElement="multiselect">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_megamenu</item>
-                </item>
-            </argument>
-            <settings>
-                <label translate="true">Customer Groups</label>
-                <dataType>text</dataType>
-                <dataScope>customer_group_ids</dataScope>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
-            </settings>
-            <formElements>
-                <multiselect>
-                    <settings>
-                        <options class="Magento\Customer\Model\Customer\Source\Group"/>
-                    </settings>
-                </multiselect>
-            </formElements>
-        </field>
+        <!--<field name="customer_group_ids" sortOrder="80" formElement="multiselect">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="source" xsi:type="string">bf_megamenu</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+            <!--<settings>-->
+                <!--<label translate="true">Customer Groups</label>-->
+                <!--<dataType>text</dataType>-->
+                <!--<dataScope>customer_group_ids</dataScope>-->
+                <!--<validation>-->
+                    <!--<rule name="required-entry" xsi:type="boolean">true</rule>-->
+                <!--</validation>-->
+            <!--</settings>-->
+            <!--<formElements>-->
+                <!--<multiselect>-->
+                    <!--<settings>-->
+                        <!--<options class="Magento\Customer\Model\Customer\Source\Group"/>-->
+                    <!--</settings>-->
+                <!--</multiselect>-->
+            <!--</formElements>-->
+        <!--</field>-->
     </fieldset>
     <fieldset name="menu" sortOrder="30">
         <settings>
@@ -267,6 +267,19 @@
                                 </item>
                             </item>
                         </argument>
+                        <field name="item_id" formElement="hidden">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="source" xsi:type="string">bf_megamenu</item>
+                                    <item name="default" xsi:type="string">New Menu Item</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <label translate="true">Item Id</label>
+                                <dataType>text</dataType>
+                                <dataScope>title</dataScope>
+                            </settings>
+                        </field>
                         <field name="title" formElement="hidden">
                             <argument name="data" xsi:type="array">
                                 <item name="config" xsi:type="array">
@@ -280,17 +293,16 @@
                                 <dataScope>title</dataScope>
                             </settings>
                         </field>
-                        <field name="menu_children" formElement="hidden">
+                        <field name="parent_id" formElement="hidden">
                             <argument name="data" xsi:type="array">
                                 <item name="config" xsi:type="array">
                                     <item name="source" xsi:type="string">bf_megamenu</item>
-                                    <item name="default" xsi:type="array"/>
                                 </item>
                             </argument>
                             <settings>
-                                <label translate="true">Children</label>
+                                <label translate="true">Parent Id</label>
                                 <dataType>text</dataType>
-                                <dataScope>menu_children</dataScope>
+                                <dataScope>parent_id</dataScope>
                             </settings>
                         </field>
                         <field name="position" formElement="hidden">
@@ -529,13 +541,15 @@
             <settings>
                 <collapsible>true</collapsible>
                 <label translate="true">Settings</label>
+                <dataScope>content</dataScope>
             </settings>
             <fieldset name="header">
                 <settings>
                     <collapsible>true</collapsible>
                     <label translate="true">Header</label>
+                    <dataScope>header</dataScope>
                 </settings>
-                <field name="enable_header" sortOrder="10" formElement="checkbox">
+                <field name="enable" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -561,7 +575,7 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <field name="head_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                <field name="content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="wysiwygConfigData" xsi:type="array">
@@ -576,10 +590,10 @@
                     </argument>
                     <settings>
                         <label translate="true">Content</label>
-                        <dataScope>head_content</dataScope>
+                        <dataScope>content</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_header:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_header:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -596,8 +610,9 @@
                 <settings>
                     <collapsible>true</collapsible>
                     <label translate="true">Left Block</label>
+                    <dataScope>left_block</dataScope>
                 </settings>
-                <field name="enable_left" sortOrder="10" formElement="checkbox">
+                <field name="enable" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -623,7 +638,7 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <field name="left_width" formElement="input" sortOrder="40">
+                <field name="width" formElement="input" sortOrder="40">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -632,14 +647,14 @@
                     <settings>
                         <label translate="true">Width</label>
                         <dataType>text</dataType>
-                        <dataScope>left_width</dataScope>
+                        <dataScope>width</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_left:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_left:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                 </field>
-                <field name="left_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                <field name="content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="wysiwygConfigData" xsi:type="array">
@@ -654,10 +669,10 @@
                     </argument>
                     <settings>
                         <label translate="true">Content</label>
-                        <dataScope>left_content</dataScope>
+                        <dataScope>content</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_left:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_left:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -674,8 +689,9 @@
                 <settings>
                     <collapsible>true</collapsible>
                     <label translate="true">Main Content</label>
+                    <dataScope>main_content</dataScope>
                 </settings>
-                <field name="enable_main_content" sortOrder="10" formElement="checkbox">
+                <field name="enable" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -701,7 +717,7 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <field name="content_width" formElement="input" sortOrder="40">
+                <field name="width" formElement="input" sortOrder="40">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -710,14 +726,13 @@
                     <settings>
                         <label translate="true">Width</label>
                         <dataType>text</dataType>
-                        <dataScope>content_width</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_main_content:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_main_content:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                 </field>
-                <field name="main_content_type" formElement="select" sortOrder="50">
+                <field name="content_type" formElement="select" sortOrder="50">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -728,9 +743,9 @@
                         <label translate="true">Select Content Type</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_main_content:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_main_content:checked</link>
-                            <link name="clear">!ns = ${ $.ns }, index = enable_main_content:value</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="clear">!name = ${ $.parentName }.enable:value</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -755,7 +770,7 @@
                         <label translate="true">Child Column Style</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="updateCustomProperty">ns = ${ $.ns }, index = main_content_type:value</link>
+                            <link name="updateCustomProperty">name = ${ $.parentName }.content_type:value</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -782,7 +797,7 @@
                         <label translate="true">Parent Category</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="updateCustomProperty">ns = ${ $.ns }, index = main_content_type:value</link>
+                            <link name="updateCustomProperty">name = ${ $.parentName }.content_type:value</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -793,7 +808,7 @@
                         </select>
                     </formElements>
                 </field>
-                <field name="main_content" template="ui/form/field" sortOrder="80" formElement="wysiwyg">
+                <field name="content" template="ui/form/field" sortOrder="80" formElement="wysiwyg">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="wysiwygConfigData" xsi:type="array">
@@ -809,9 +824,9 @@
                     </argument>
                     <settings>
                         <label translate="true">Content</label>
-                        <dataScope>main_content</dataScope>
+                        <dataScope>content</dataScope>
                         <imports>
-                            <link name="updateCustomProperty">ns = ${ $.ns }, index = main_content_type:value</link>
+                            <link name="updateCustomProperty">name = ${ $.parentName }.content_type:value</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -828,8 +843,9 @@
                 <settings>
                     <collapsible>true</collapsible>
                     <label translate="true">Right Block</label>
+                    <dataScope>right_block</dataScope>
                 </settings>
-                <field name="enable_right" sortOrder="10" formElement="checkbox">
+                <field name="enable" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -855,7 +871,7 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <field name="right_width" formElement="input" sortOrder="40">
+                <field name="width" formElement="input" sortOrder="40">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -864,14 +880,13 @@
                     <settings>
                         <label translate="true">Width</label>
                         <dataType>text</dataType>
-                        <dataScope>right_width</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_right:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_right:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                 </field>
-                <field name="right_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                <field name="content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="wysiwygConfigData" xsi:type="array">
@@ -886,10 +901,9 @@
                     </argument>
                     <settings>
                         <label translate="true">Content</label>
-                        <dataScope>right_content</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_right:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_right:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -906,8 +920,9 @@
                 <settings>
                     <collapsible>true</collapsible>
                     <label translate="true">Bottom Block</label>
+                    <dataScope>bottom_block</dataScope>
                 </settings>
-                <field name="enable_bottom" sortOrder="10" formElement="checkbox">
+                <field name="enable" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -933,7 +948,7 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <field name="bottom_content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+                <field name="content" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="wysiwygConfigData" xsi:type="array">
@@ -948,10 +963,9 @@
                     </argument>
                     <settings>
                         <label translate="true">Content</label>
-                        <dataScope>bottom_content</dataScope>
                         <imports>
-                            <link name="visible">ns = ${ $.ns }, index = enable_bottom:checked</link>
-                            <link name="disabled">!ns = ${ $.ns }, index = enable_bottom:checked</link>
+                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
                         </imports>
                     </settings>
                     <formElements>

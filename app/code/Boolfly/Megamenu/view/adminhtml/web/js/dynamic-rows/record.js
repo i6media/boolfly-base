@@ -53,14 +53,13 @@ define([
          */
         updateChildElement: function (elems) {
             this.hasChild(elems.length > 0);
-            var component, children = [];
+            var component;
             elems.forEach(function (elem) {
-                children.push(elem.recordId);
+                component = registry.get(elem.name + '.item.parent_id');
+                if (component) {
+                    component.value(this.recordId);
+                }
             }, this);
-            component = registry.get(this.name + '.item.menu_children');
-            if (component) {
-                component.value(children);
-            }
         },
 
         /**

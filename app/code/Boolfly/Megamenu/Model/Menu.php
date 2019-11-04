@@ -13,6 +13,12 @@ use Boolfly\Megamenu\Api\Data\MenuInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject\IdentityInterface;
 use Boolfly\Megamenu\Model\ResourceModel\Menu as MenuResourceModel;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Boolfly\Megamenu\Model\ResourceModel\Menu\Item\CollectionFactory as ItemCollectionFactory;
+use Boolfly\Megamenu\Model\ResourceModel\Menu\Item\Collection as ItemCollection;
 
 /**
  * Class Menu
@@ -31,6 +37,38 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
      * @var string
      */
     protected $_eventObject = 'megamenu';
+
+    /**
+     * @var ItemCollectionFactory
+     */
+    private $itemCollectionFactory;
+
+    /**
+     * @var
+     */
+    protected $itemCollection;
+
+    /**
+     * Menu constructor.
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param ItemCollectionFactory $itemCollectionFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        ItemCollectionFactory $itemCollectionFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->itemCollectionFactory = $itemCollectionFactory;
+    }
 
     /**
      *
@@ -200,5 +238,19 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     public function getAdditionalClass()
     {
         return $this->_getData(self::ADDITIONAL_CLASS);
+    }
+
+    /**
+     * @return ItemCollection
+     */
+    public function getItemsCollection()
+    {
+        if ($this->itemCollection === null) {
+            $this->itemCollection = $this->itemCollectionFactory->create();
+            $this->itemCollection->setMenu($this);
+            $this->itemCollection->sortAllItems();
+        }
+
+        return $this->itemCollection;
     }
 }

@@ -10,6 +10,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Boolfly\Megamenu\Api\Data\MenuInterface" type="Boolfly\Megamenu\Model\Menu"/>
+    <preference for="Boolfly\Megamenu\Api\Data\ItemInterface" type="Boolfly\Megamenu\Model\Item"/>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

@@ -11,7 +11,8 @@ namespace Boolfly\Megamenu\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
-use Boolfly\BannerSlider\Api\Data\BannerInterfaceFactory;
+use Magento\Backend\App\Action\Context;
+use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
 
 /**
  * Class AbstractMenu
@@ -32,12 +33,30 @@ abstract class AbstractMenu extends Action
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
-     * @var BannerInterfaceFactory
+     * @var MenuInterfaceFactory
      */
-    protected $bannerFactory;
+    protected $menuFactory;
+
+    /**
+     * AbstractMenu constructor.
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param MenuInterfaceFactory $menuFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        MenuInterfaceFactory $menuFactory
+    ) {
+        parent::__construct($context);
+        $this->coreRegistry  = $coreRegistry;
+        $this->menuFactory = $menuFactory;
+    }
+
 
     /**
      * Init action
