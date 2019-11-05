@@ -11,42 +11,55 @@ namespace Boolfly\Megamenu\Model\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+
 /**
- * Class LayoutType
+ * Class CmsPage
  *
  * @package Boolfly\Megamenu\Model\Source
  */
-class LayoutType implements OptionSourceInterface
+class CmsPage implements OptionSourceInterface
 {
 
-    /**@#%
-     *
-     * @const
+    /**
+     * @var array
      */
-    const HEADER = 1;
+    protected $options;
 
-    const LEFT_BLOCK = 2;
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
-    const MAIN_CONTENT = 3;
 
-    const RIGHT_BLOCK = 4;
-
-    const BOTTOM_BLOCK = 5;
+    /**
+     * CmsPage constructor.
+     *
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        CollectionFactory $collectionFactory
+    ) {
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * Retrieve option array
      *
      * @return string[]
      */
-    public static function getOptionArray()
+    public function getOptionArray()
     {
-        return [
-            self::HEADER => __('Header'),
-            self::LEFT_BLOCK => __('Left Block'),
-            self::MAIN_CONTENT => __('Main Content'),
-            self::RIGHT_BLOCK => __('Right Block'),
-            self::BOTTOM_BLOCK => __('Bottom Block')
-        ];
+        if ($this->options === null) {
+            $this->options = [];
+            $collection = $this->collectionFactory->create();
+            /** @var \Magento\Cms\Model\Page $item */
+            foreach ($collection as $item) {
+                $this->options[$item->getId()] = $item->getTitle();
+            }
+        }
+
+        return $this->options;
     }
 
     /**

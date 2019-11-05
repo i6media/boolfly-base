@@ -145,8 +145,6 @@ class Menu extends AbstractDb
         $menuTree = $object->getData('menu_tree');
         $newItemIds = array_column($menuTree, 'item_id');
         $itemDeleted = array_diff($oldItemIds, $newItemIds);
-        print_r($menuTree);
-        exit;
         //Delete Item
         foreach ($itemDeleted as $delId) {
             /** @var AbstractModel $menuItem */

@@ -78,70 +78,16 @@ class DataProvider extends AbstractDataProvider
         if ($id = $model->getId()) {
             $data = $model->getData();
             $itemsCollection = $model->getItemsCollection();
+            $itemsCollection->load();
             if ($itemsCollection->getSize() > 0) {
                 /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
                 foreach ($itemsCollection as $item) {
+                    $item->loadItemContent();
                     $data['menu_tree'][] = $item->getData();
                 }
             }
             $this->loadedData[$id] = $data;
         }
-
-//        //@TODO
-//
-//        //Sample Data To test
-//        $this->loadedData[1] = [
-//            'menu_tree' => [
-//                '9_3' => [
-//                    'record_id' => '9_3',
-//                    'menu_children' => ['10_2', '10_3'],
-//                    'title' => 'Fashion',
-//                    'position' => 2
-//                ],
-//                '10_2' => [
-//                    'record_id' => '10_2',
-//                    'menu_children' => ['11_3', '11_4'],
-//                    'title' => 'Men',
-//                    'position' => 3
-//                ],
-//                '10_3' => [
-//                    'record_id' => '10_3',
-//                    'menu_children' => ['12_1', '12_2', '12_3'],
-//                    'title' => 'Women',
-//                    'position' => 3
-//                ],
-//                '11_3' => [
-//                    'record_id' => '11_3',
-//                    'menu_children' => [],
-//                    'title' => 'Top',
-//                    'position' => 3
-//                ],
-//                '11_4' => [
-//                    'record_id' => '11_3',
-//                    'menu_children' => [],
-//                    'title' => 'Bottom',
-//                    'position' => 3
-//                ],
-//                '12_1' => [
-//                    'record_id' => '12_1',
-//                    'menu_children' => [],
-//                    'title' => 'Shirt',
-//                    'position' => 3
-//                ],
-//                '12_2' => [
-//                    'record_id' => '12_2',
-//                    'menu_children' => [],
-//                    'title' => 'Dress',
-//                    'position' => 3
-//                ],
-//                '12_3' => [
-//                    'record_id' => '12_3',
-//                    'menu_children' => [],
-//                    'title' => 'Jeans',
-//                    'position' => 3
-//                ]
-//            ]
-//        ];
 
         return $this->loadedData;
     }

@@ -369,7 +369,6 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="source" xsi:type="string">bf_megamenu</item>
-                        <item name="default" xsi:type="array"/>
                     </item>
                 </argument>
                 <settings>
@@ -408,6 +407,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="source" xsi:type="string">bf_megamenu</item>
+                        <item name="default" xsi:type="string">New Menu Item</item>
                     </item>
                 </argument>
                 <settings>
@@ -549,7 +549,7 @@
                     <label translate="true">Header</label>
                     <dataScope>header</dataScope>
                 </settings>
-                <field name="enable" sortOrder="10" formElement="checkbox">
+                <field name="status" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -592,8 +592,8 @@
                         <label translate="true">Content</label>
                         <dataScope>content</dataScope>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -612,7 +612,7 @@
                     <label translate="true">Left Block</label>
                     <dataScope>left_block</dataScope>
                 </settings>
-                <field name="enable" sortOrder="10" formElement="checkbox">
+                <field name="status" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -649,8 +649,8 @@
                         <dataType>text</dataType>
                         <dataScope>width</dataScope>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                 </field>
@@ -671,8 +671,8 @@
                         <label translate="true">Content</label>
                         <dataScope>content</dataScope>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -691,7 +691,7 @@
                     <label translate="true">Main Content</label>
                     <dataScope>main_content</dataScope>
                 </settings>
-                <field name="enable" sortOrder="10" formElement="checkbox">
+                <field name="status" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -727,8 +727,8 @@
                         <label translate="true">Width</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                 </field>
@@ -743,9 +743,8 @@
                         <label translate="true">Select Content Type</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
-                            <link name="clear">!name = ${ $.parentName }.enable:value</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -781,7 +780,7 @@
                         </select>
                     </formElements>
                 </field>
-                <field name="parent_category_id" formElement="select" component="Magento_Ui/js/form/element/ui-select" template="ui/form/field" sortOrder="70">
+                <field name="category_id" formElement="select" component="Magento_Ui/js/form/element/ui-select" template="ui/form/field" sortOrder="70">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -845,7 +844,7 @@
                     <label translate="true">Right Block</label>
                     <dataScope>right_block</dataScope>
                 </settings>
-                <field name="enable" sortOrder="10" formElement="checkbox">
+                <field name="status" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -881,8 +880,8 @@
                         <label translate="true">Width</label>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                 </field>
@@ -902,8 +901,8 @@
                     <settings>
                         <label translate="true">Content</label>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>
@@ -922,7 +921,7 @@
                     <label translate="true">Bottom Block</label>
                     <dataScope>bottom_block</dataScope>
                 </settings>
-                <field name="enable" sortOrder="10" formElement="checkbox">
+                <field name="status" sortOrder="10" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bf_megamenu</item>
@@ -964,8 +963,8 @@
                     <settings>
                         <label translate="true">Content</label>
                         <imports>
-                            <link name="visible">name = ${ $.parentName }.enable:checked</link>
-                            <link name="disabled">!name = ${ $.parentName }.enable:checked</link>
+                            <link name="visible">name = ${ $.parentName }.status:checked</link>
+                            <link name="disabled">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>

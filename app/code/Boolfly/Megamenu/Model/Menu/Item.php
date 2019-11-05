@@ -249,4 +249,14 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     {
         return $this->_getData(self::CUSTOM_LINK);
     }
+
+    /**
+     * @return $this
+     */
+    public function loadItemContent()
+    {
+        $this->getResource()->loadContentData($this);
+
+        return $this;
+    }
 }

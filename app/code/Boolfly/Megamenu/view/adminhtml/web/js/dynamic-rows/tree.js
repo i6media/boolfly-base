@@ -22,12 +22,8 @@ define([
         defaults: {
             dataProvider: '',
             defaultRecord: false,
-            columnsHeader: true,
-            columnsHeaderAfterRender: false,
-            columnsHeaderClasses: '',
             labels: [],
             recordTemplate: 'record',
-            collapsibleHeader: false,
             additionalClasses: {},
             visible: true,
             disabled: false,
@@ -39,13 +35,8 @@ define([
             deleteValue: false,
             showSpinner: false,
             isDifferedFromDefault: false,
-            defaultState: [],
-            defaultPagesState: {},
-            pagesChanged: {},
-            hasInitialPagesState: {},
             changed: false,
             map: null,
-            fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             deleteProperty: false,
             positionProvider: 'position',
             dataLength: 0,
@@ -59,13 +50,6 @@ define([
             titleField: '',
             itemEditScope: '',
             sourceDataModal: '',
-            dndConfig: {
-                name: '${ $.name }_dnd',
-                component: 'Magento_Ui/js/dynamic-rows/dnd',
-                template: 'ui/dynamic-rows/cells/dnd',
-                recordsProvider: '${ $.name }',
-                enabled: false
-            },
             templates: {
                 record: {
                     parent: '${ $.$data.collection.name }',
@@ -80,23 +64,17 @@ define([
             listens: {
                 visible: 'setVisible',
                 disabled: 'setDisabled',
-                childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                currentPage: 'changePage',
                 changed: 'updateTrigger',
-                recordData: "initElements setToInsertData setRelatedData"
-            },
-            modules: {
-                dnd: '${ $.dndConfig.name }'
+                recordData: "setToInsertData setRelatedData"
             },
             elementTree: [],
             elementNestable: null,
-            pages: 1,
-            pageSize: 20,
             relatedData: [],
             currentPage: 1,
             recordDataCache: [],
             structureMenu: {},
+            currentIndexRecord: 0,
             menuTmpl: 'Boolfly_Megamenu/menu/li',
             menuButtonTmpl: 'Boolfly_Megamenu/menu/menu-button',
             startIndex: 0
@@ -113,7 +91,6 @@ define([
             _.bindAll(
                 this,
                 'processingDeleteRecord',
-                'checkDefaultState',
                 'deleteHandler'
             );
 
@@ -121,10 +98,8 @@ define([
 
             this._super()
                 .initChildren()
-                .initDefaultRecord()
                 .setInitialProperty();
             this.observe('structureMenu', []);
-            this.on('recordData', this.checkDefaultState);
 
             return this;
         },
@@ -138,9 +113,11 @@ define([
 
             if (this.recordData().length && !this.update) {
                 _.each(this.recordData(), function (recordData) {
-                    obj                              = {};
-                    obj[this.identificationProperty] = recordData[this.identificationProperty];
-                    insertData.push(obj);
+                    if (recordData) {
+                        obj                              = {};
+                        obj[this.identificationProperty] = recordData[this.identificationProperty];
+                        insertData.push(obj);
+                    }
                 }, this);
 
                 if (insertData.length && this.dataProvider) {
@@ -158,25 +135,6 @@ define([
             }
 
             return this._super();
-        },
-
-        /**
-         * Initialize elements from grid
-         *
-         * @param {Array} data
-         *
-         * @returns {Object} Chainable.
-         */
-        initElements: function (data) {
-            var newData = this.getNewData(data);
-
-            if (newData.length) {
-                if (this.insertData().length) {
-                    this.processingAddChild(newData[0], data.length - 1, newData[0][this.identificationProperty]);
-                }
-            }
-
-            return this;
         },
 
 
@@ -272,7 +230,6 @@ define([
                     if (elem) {
                         elem.position = position;
                     }
-                    //@TODO
                     if (target) {
                         target.set('value', position);
                     }
@@ -442,33 +399,6 @@ define([
         },
 
         /**
-         *
-         * @param data
-         * @returns {Array}
-         */
-        updateDataChildren: function (data) {
-            var currentComponent,
-                subChild = [],
-                children = [];
-            if ($.isArray(data)) {
-                data.forEach(function (value) {
-                    children.push(value.index);
-                    if (value.hasOwnProperty('children')) {
-                        subChild         = this.updateDataChildren(value.children);
-                        currentComponent = registry.get(value.component);
-                        var childElems   = [];
-                        subChild.forEach(function (index) {
-                            childElems.push(this.elementTree[index]);
-                        }, this);
-                        currentComponent.childElems(childElems);
-                    }
-
-                }, this);
-            }
-            return children;
-        },
-
-        /**
          * Contains old data with new
          *
          * @param {Array} data
@@ -481,7 +411,7 @@ define([
 
             if (data.length !== this.relatedData.length) {
                 _.each(data, function (obj) {
-                    tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
+                    tmpObj[this.identificationProperty] = obj[this.identificationProperty];
 
                     if (!_.findWhere(this.relatedData, tmpObj)) {
                         changes.push(obj);
@@ -507,12 +437,8 @@ define([
          */
         initObservable: function () {
             this._super()
-                .track('childTemplate')
                 .observe([
-                    'pages',
-                    'currentPage',
                     'recordData',
-                    'columnsHeader',
                     'visible',
                     'disabled',
                     'labels',
@@ -531,8 +457,7 @@ define([
         initElement: function (elem) {
             this._super();
             elem.on({
-                'deleteRecord': this.deleteHandler,
-                'addChild': this.setDefaultState
+                'deleteRecord': this.deleteHandler
             });
 
             return this;
@@ -556,7 +481,6 @@ define([
          * @param {Number|String} id
          */
         deleteHandler: function (index, id) {
-            this.setDefaultState();
             this.processingDeleteRecord(index, id);
         },
 
@@ -573,29 +497,6 @@ define([
             }
 
             return this;
-        },
-
-        /**
-         * Set default dynamic-rows state or state before changing data
-         *
-         * @param {Array} data - defaultState data
-         */
-        setDefaultState: function (data) {
-            var componentData,
-                childItems;
-
-            if (!this.hasInitialPagesState[this.currentPage()]) {
-                childItems    = this.getChildItems();
-                componentData = childItems.length ? utils.copy(childItems) : utils.copy(this.getChildItems(this.recordDataCache));
-                componentData.forEach(function (dataObj) {
-                    if (dataObj.hasOwnProperty('initialize')) {
-                        delete dataObj.initialize;
-                    }
-                });
-
-                this.hasInitialPagesState[this.currentPage()] = true;
-                this.defaultPagesState[this.currentPage()]    = data ? data : this.arrayFilter(componentData);
-            }
         },
 
         /**
@@ -642,44 +543,6 @@ define([
             return changed;
         },
 
-        /**
-         * Checks whether component's state is default or not
-         */
-        checkDefaultState: function () {
-            return true;
-        },
-
-        /**
-         * Filters out deleted items from array
-         *
-         * @param {Array} data
-         *
-         * @returns {Array} filtered array
-         */
-        arrayFilter: function (data) {
-            var prop;
-
-            /*eslint-disable no-loop-func*/
-            data.forEach(function (elem) {
-                for (prop in elem) {
-                    if (_.isArray(elem[prop])) {
-                        elem[prop] = _.filter(elem[prop], function (elemProp) {
-                            return elemProp[this.deleteProperty] !== this.deleteValue;
-                        }, this);
-
-                        elem[prop].forEach(function (elemProp) {
-                            if (_.isArray(elemProp)) {
-                                elem[prop] = this.arrayFilter(elemProp);
-                            }
-                        }, this);
-                    }
-                }
-            }, this);
-
-            /*eslint-enable no-loop-func*/
-
-            return data;
-        },
 
         /**
          * Triggers update event
@@ -698,19 +561,6 @@ define([
         },
 
         /**
-         * Init default record
-         *
-         * @returns Chainable.
-         */
-        initDefaultRecord: function () {
-            if (this.defaultRecord && !this.recordData().length) {
-                this.addChild();
-            }
-
-            return this;
-        },
-
-        /**
          * Create header template
          *
          * @param {Object} prop - instance obj
@@ -725,31 +575,6 @@ define([
                 visible: ko.observable(visible),
                 disabled: ko.observable(disabled)
             };
-        },
-
-        /**
-         * Init header elements
-         */
-        initHeader: function () {
-            var labels = [],
-                data;
-
-            if (!this.labels().length) {
-                _.each(this.childTemplate.children, function (cell) {
-                    data                     = this.createHeaderTemplate(cell.config);
-                    cell.config.labelVisible = false;
-                    _.extend(data, {
-                        defaultLabelVisible: data.visible(),
-                        label: cell.config.label,
-                        name: cell.name,
-                        required: !!cell.config.validation,
-                        columnsHeaderClasses: cell.config.columnsHeaderClasses,
-                        sortOrder: cell.config.sortOrder
-                    });
-                    labels.push(data);
-                }, this);
-                this.labels(_.sortBy(labels, 'sortOrder'));
-            }
         },
 
         /**
@@ -774,8 +599,7 @@ define([
          * @param {Object} elem - instance
          */
         sort: function (position, elem) {
-            var that = this,
-                sorted,
+            var sorted,
                 updatedCollection;
             if (this.elems().length < 1) {
                 return false;
@@ -803,7 +627,6 @@ define([
         checkSpinner: function (elems) {
             this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
         },
-
 
         /**
          * Reinit record data in order to remove deleted values
@@ -834,26 +657,6 @@ define([
             this.relatedData = this.deleteProperty ? _.filter(data, function (elem) {
                     return elem && elem[this.deleteProperty] !== this.deleteValue;
             }, this) : data;
-        },
-
-        /**
-         * Get record count with filtered delete property.
-         *
-         * @returns {Number} count
-         */
-        getRecordCount: function () {
-            return _.filter(this.recordData(), function (record) {
-                return record && record[this.deleteProperty] !== this.deleteValue;
-            }, this).length;
-        },
-
-        /**
-         * Get number of columns
-         *
-         * @returns {Number} columns
-         */
-        getColumnsCount: function () {
-            return this.labels().length + (this.dndConfig.enabled ? 1 : 0);
         },
 
         /**
@@ -1003,9 +806,10 @@ define([
          * @returns {exports}
          */
         deleteChildrenRecord: function (recordId, recordsData) {
-            var children, recordData = _.find(recordsData, function (record) {
-                    return record.record_id === recordId;
-            });
+            var children, tmpObj = {},
+                recordData;
+            tmpObj[this.identificationProperty] = recordId;
+            recordData = _.findWhere(recordsData, tmpObj);
             if (recordData && recordData.menu_children) {
                 children = recordData.menu_children;
                 children.forEach(function (childIndex) {
@@ -1116,10 +920,8 @@ define([
          */
         initChildren: function () {
             // this.showSpinner(true);
-            var index = 0;
             this.getChildItems().forEach(function (data, index) {
-                this.addChild(data, index, data[this.identificationProperty]);
-                index++;
+                this.addChild(data, false, data[this.identificationProperty]);
             }, this);
 
             return this;
@@ -1148,30 +950,6 @@ define([
         },
 
         /**
-         * Set visibility to column
-         *
-         * @param {Number} index - column index
-         * @param {Boolean} state
-         */
-        setVisibilityColumn: function (index, state) {
-            this.elems.each(function (record) {
-                record.setVisibilityColumn(index, state);
-            }, this);
-        },
-
-        /**
-         * Set disabled property to column
-         *
-         * @param {Number} index - column index
-         * @param {Boolean} state
-         */
-        setDisabledColumn: function (index, state) {
-            this.elems.each(function (record) {
-                record.setDisabledColumn(index, state);
-            }, this);
-        },
-
-        /**
          * Add child components
          *
          * @param {Object} data - component data
@@ -1184,9 +962,10 @@ define([
             var template = this.templates.record,
                 child;
 
+
             // index = index || _.isNumber(index) ? index : this.getNextIndex();
-            index = index || _.isNumber(index) ? index : this.recordData().length;
-            prop = prop || _.isNumber(prop) ? prop : this.getNextIndex();
+            index = index || _.isNumber(index) ? index : this.currentIndexRecord;
+            prop = prop || _.isNumber(prop) ? prop : this.getNextRecordId();
 
             _.extend(this.templates.record, {
                 recordId: prop
@@ -1196,13 +975,13 @@ define([
                 collection: this,
                 index: index
             });
-
+            this.currentIndexRecord++;
             layout([child]);
 
             return this;
         },
 
-        getNextIndex: function () {
+        getNextRecordId: function () {
             var timestamp = ~~(Date.now() / 1000);
             return  Math.floor(Math.random() * Math.floor(1000)) + '_' + timestamp;
         },
@@ -1227,6 +1006,5 @@ define([
 
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
         }
-
     });
 });
