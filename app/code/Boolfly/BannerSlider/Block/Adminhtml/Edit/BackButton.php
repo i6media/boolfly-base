@@ -19,8 +19,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class BackButton extends Template implements ButtonProviderInterface
 {
-
-
     /**
      * Save button
      *

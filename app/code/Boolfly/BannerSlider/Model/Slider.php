@@ -224,6 +224,20 @@ class Slider extends AbstractModel implements SliderInterface, IdentityInterface
     }
 
     /**
+     * Get Banner Id
+     *
+     * @return array
+     */
+    public function getBannerIds()
+    {
+        $assignedBanner = $this->getDataByPath('banners/assigned_banners');
+        if (is_array($assignedBanner)) {
+            return array_keys($assignedBanner);
+        }
+        return [];
+    }
+
+    /**
      * Return unique ID(s) for each object in system
      *
      * @return string[]

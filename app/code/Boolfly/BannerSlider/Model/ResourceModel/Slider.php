@@ -123,7 +123,7 @@ class Slider extends AbstractDb
         $select     = $connection->select()
             ->from($this->getBannerSliderTable(), ['banner_id', 'position'])
             ->where('slider_id = ?', $object->getId())
-            ->order('position DESC');
+            ->order('position ASC');
         $bannerData = $connection->fetchPairs($select);
         $object->setData('banners', ['assigned_banners' => $bannerData]);
     }
@@ -239,7 +239,7 @@ class Slider extends AbstractDb
              * Remove CMS Page not used
              */
             $oldData = $this->getConnection()->fetchCol($select);
-            if (!empty($oldData) && !empty($assignedBanners)) {
+            if (!empty($oldData) && !empty($cmsPageIds)) {
                 $pageRemoved = array_diff($oldData, $cmsPageIds);
                 if (!empty($pageRemoved)) {
                     $this->getConnection()->delete(

@@ -1,0 +1,34 @@
+<div class="admin__field" visible="visible" disable="disabled" css="element.setClasses(element)">
+    <label if="element.label" class="admin__field-label" attr="for: element.uid">
+        <span translate="element.label"/>
+    </label>
+
+    <div class="admin__field-control" data-role="grid-wrapper" attr="'data-index': index">
+        <div class="admin__control-table-wrapper">
+            <div data-role="spinner"
+                 class="admin__data-grid-loading-mask"
+                 if="$data.showSpinner">
+                <div class="spinner">
+                    <span repeat="8"/>
+                </div>
+            </div>
+
+            <div class="dd" id="nestable" afterRender="initEventNestable">
+                <render args="menuButtonTmpl" if="$data.showMenuButton()"/>
+                <ol class="dd-list"
+                    data-bind="template: {
+                        name: menuTmpl,
+                        data: {index: '0', template: menuTmpl, elems: $data.elems()}
+                    }">
+                    <li visible="false"></li>
+                </ol>
+                <button if="element.addButton"
+                        attr="{disabled: disabled, 'data-action': 'add_new_row'}"
+                        type="button"
+                        click="processingAddChild.bind($data, false, false, false)">
+                    <span translate="addButtonLabel"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

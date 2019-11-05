@@ -104,7 +104,7 @@ class DataProvider extends AbstractDataProvider
                         $newBannerData[] = [
                             'banner_id' => $banner->getId(),
                             'title' => $banner->getTitle(),
-                            'image_desktop' => $this->helperData->getResizeImage($banner->getData('image_desktop')),
+                            'image_desktop' => $this->helperData->getResizeImage($banner->getData('image_desktop'), null, 50),
                             'banner_link' => $this->urlBuilder->getUrl('bannerslider/banner/edit', ['id' => $banner->getId()]),
                             'position' => $assignedBanners[$banner->getId()],
                         ];

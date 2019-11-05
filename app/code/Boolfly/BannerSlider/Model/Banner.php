@@ -381,6 +381,16 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     }
 
     /**
+     * Check Button
+     *
+     * @return bool
+     */
+    public function hasButton()
+    {
+        return $this->getButtonUrl() || $this->getButtonText();
+    }
+
+    /**
      * Set Align Text
      *
      * @param string $alignText

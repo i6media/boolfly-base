@@ -1,0 +1,94 @@
+{
+    "bf_megamenu": {
+        "column": {
+            "menu_id": true,
+            "title": true,
+            "identifier": true,
+            "additional_class": true,
+            "scroll_fixed": true,
+            "desktop_template": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "BF_MEGAMENU_MENU_ID": true,
+            "BF_MEGAMENU_IDENTIFIER": true,
+            "BF_MEGAMENU_TITLE_IDENTIFIER": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "bf_megamenu_store": {
+        "column": {
+            "menu_id": true,
+            "store_id": true
+        },
+        "index": {
+            "BF_MEGAMENU_STORE_MENU_ID": true,
+            "BF_MEGAMENU_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BF_MEGAMENU_STORE_MENU_ID_BF_MEGAMENU_MENU_ID": true,
+            "BF_MEGAMENU_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "bf_megamenu_customer_group": {
+        "column": {
+            "menu_id": true,
+            "customer_group_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BF_MEGAMENU_CUSTOMER_GROUP_MENU_ID_BF_MEGAMENU_MENU_ID": true,
+            "BF_MEGAMENU_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true
+        }
+    },
+    "bf_megamenu_item": {
+        "column": {
+            "item_id": true,
+            "menu_id": true,
+            "record_id": true,
+            "title": true,
+            "additional_class": true,
+            "link_type": true,
+            "custom_link": true,
+            "category_id": true,
+            "cms_page_id": true,
+            "position": true,
+            "link_target": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "BF_MEGAMENU_ITEM_ITEM_ID": true,
+            "BF_MEGAMENU_ITEM_MENU_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BF_MEGAMENU_ITEM_RECORD_ID": true,
+            "BF_MEGAMENU_ITEM_MENU_ID_BF_MEGAMENU_MENU_ID": true
+        }
+    },
+    "bf_megamenu_item_content": {
+        "column": {
+            "item_id": true,
+            "type_id": true,
+            "width": true,
+            "content_type": true,
+            "content": true,
+            "child_columns": true,
+            "category_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BF_MEGAMENU_ITEM_CONTENT_ITEM_ID_BF_MEGAMENU_ITEM_ITEM_ID": true
+        }
+    }
+}

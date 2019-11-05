@@ -1,0 +1,32 @@
+<!--
+ /************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Mega Menu
+ */
+-->
+<li class="dd-item"
+    repeat="foreach: elems, item: '$record'"
+    attr="
+        'data-component': $record().name,
+        'data-index': $record().recordId,"
+    css="'dd-collapsed': $record().isCollapse() && $record().hasChild()">
+    <render args="$record().collapseTmpl" if="$record().hasChild()"/>
+    <render args="$record().expandTmpl" if="$record().hasChild()"/>
+    <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+    <ol class="dd-list"
+        data-bind="template: {
+            name: template,
+            data: {
+                index: $record().index,
+                template: template,
+                elems: $record().childElems
+            }
+        }">
+    </ol>
+</li>

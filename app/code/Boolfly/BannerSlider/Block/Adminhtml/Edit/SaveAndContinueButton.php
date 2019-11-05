@@ -19,8 +19,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class SaveAndContinueButton extends Template implements ButtonProviderInterface
 {
-
-
     /**
      * Save button
      *

@@ -13,7 +13,8 @@ var config = {
             'jquery/lazy': 'Boolfly_Base/js/jquery.lazy.min',
             'jquery/lazy/plugins': 'Boolfly_Base/js/jquery.lazy.plugins.min',
             lazyload: 'Boolfly_Base/js/verlok/lazyload.min',
-            'intersection-observer': 'Boolfly_Base/js/verlok/intersection-observer.amd.min'
+            'intersection-observer': 'Boolfly_Base/js/verlok/intersection-observer.amd.min',
+            nestable: 'Boolfly_Base/js/jquery.nestable.min'
         }
     },
     shim: {
@@ -34,6 +35,9 @@ var config = {
         },
         'intersection-observer': {
             exports: 'IntersectionObserver'
+        },
+        nestable: {
+            deps: ['jquery']
         }
     }
 };
