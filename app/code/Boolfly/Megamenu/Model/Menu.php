@@ -49,6 +49,11 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     protected $itemCollection;
 
     /**
+     * @var array
+     */
+    protected $menuTree = [];
+
+    /**
      * Menu constructor.
      *
      * @param Context $context
@@ -61,6 +66,7 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     public function __construct(
         Context $context,
         Registry $registry,
+        \Boolfly\Megamenu\Model\Menu\ItemUrl $itemUrl,
         ItemCollectionFactory $itemCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
@@ -252,5 +258,37 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
         }
 
         return $this->itemCollection;
+    }
+
+    /**
+     * Get Menu Tree
+     *
+     * @return array
+     */
+    public function getMenuTree()
+    {
+        if (!isset($this->menuTree[$this->getId()])) {
+            $itemsCollection = $this->getItemsCollection();
+            $itemsCollection->addActiveStatusFilter();
+            $itemsCollection->load();
+            $childrenData = [];
+            $treeData = [];
+            /**
+             * Note: Sorted all children after parent
+             */
+            /** @var Menu\Item $item */
+            foreach ($itemsCollection->getData() as $itemData) {
+                $recordId = $itemData['record_id'];
+                $childrenData[$itemData['record_id']] = $itemData;
+                if (!empty($itemData['parent_id'])) {
+                    $childrenData[$itemData['parent_id']]['children'][] = &$childrenData[$recordId];
+                } else {
+                    $treeData[] = &$childrenData[$recordId];
+                }
+            }
+            $this->menuTree[$this->getId()] =  $treeData;
+        }
+
+        return $this->menuTree[$this->getId()];
     }
 }

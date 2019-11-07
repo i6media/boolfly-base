@@ -43,6 +43,12 @@ interface ItemInterface
 
     const STATUS = 'status';
 
+    const RECORD_ID = 'record_id';
+
+    const PARENT_ID = 'parent_id';
+
+    const LEVEL = 'level';
+
     /**
      * Get Id
      *

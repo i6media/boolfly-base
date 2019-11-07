@@ -97,8 +97,9 @@
         <column xsi:type="varchar" name="additional_class" nullable="true" length="100" comment="Additional Class"/>
         <column xsi:type="varchar" name="link_type" nullable="true" length="100" comment="Link Type"/>
         <column xsi:type="varchar" name="custom_link" nullable="true" length="255" comment="Custom Link"/>
-        <column xsi:type="int" name="category_id" nullable="true" padding="11" comment="Category ID"/>
+        <column xsi:type="int" name="category_id" nullable="true" padding="11" comment="Category Id"/>
         <column xsi:type="int" name="cms_page_id" nullable="true" padding="11" comment="CMS Page Id"/>
+        <column xsi:type="smallint" name="level" nullable="false" default="1" padding="5" comment="Level"/>
         <column xsi:type="smallint" name="position" nullable="false" padding="5" comment="Position"/>
         <column xsi:type="varchar" name="link_target" nullable="true" length="100" comment="Link Target"/>
         <column xsi:type="smallint" name="status" nullable="false" padding="6" comment="Status"/>

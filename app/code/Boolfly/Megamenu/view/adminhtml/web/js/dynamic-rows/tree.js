@@ -217,24 +217,35 @@ define([
                 }
             }
         },
+        
         /**
          *
          * @param data
+         * @param level
          */
-        updatePositionMenuItem: function (data) {
-            var elem, target, position = 0;
+        updatePositionMenuItem: function (data, level) {
+            var elem, positionComponent, levelComponent, position = 0;
+            level = level || 0;
+            level++;
             if (Array.isArray(data)) {
                 data.each(function (item) {
                     elem   = registry.get(item.component);
-                    target = registry.get(item.component + '.item.position');
+                    positionComponent = registry.get(item.component + '.item.position');
+                    levelComponent = registry.get(item.component + '.item.level');
                     if (elem) {
                         elem.position = position;
                     }
-                    if (target) {
-                        target.set('value', position);
+                    if (positionComponent) {
+                        positionComponent.set('value', position);
+                    }
+                    if (levelComponent) {
+                        levelComponent.set('value', level);
                     }
                     position++;
-                    this.updatePositionMenuItem(item.children);
+
+                    if (item.children && item.children.length > 0) {
+                        this.updatePositionMenuItem(item.children, level);
+                    }
                 }, this);
             }
         },
@@ -248,7 +259,7 @@ define([
         updateMenuTree: function (root, element) {
             var elem, parentIndex, oldParentItem;
             elem = this.getElementTree(element.data('index'));
-            this.updatePositionMenuItem(this.elementNestable.nestable('serialize'));
+            this.updatePositionMenuItem(this.elementNestable.nestable('serialize'), 0);
             if (elem) {
                 parentIndex   = this.getNewParentIndex(element);
                 oldParentItem = elem.parentItem();

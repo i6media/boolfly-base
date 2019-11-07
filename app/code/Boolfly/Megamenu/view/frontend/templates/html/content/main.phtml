@@ -1,0 +1,34 @@
+<?php
+/************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+/** @var \Boolfly\Megamenu\Block\Html\Item $block */
+//@TODO Add Category Tree Template
+$item = $block->getItem();
+$groupChildren = $block->groupChildren();
+$type = 'main_content';
+?>
+<?php if ($block->isEnableBlock($type)):?>
+    <div class="main-content-wrapper">
+        <?php if($block->showMainContentHtml()):?>
+            <?= /* @escapeNotVerified */ $block->getMainContentHtml();?>
+        <?php elseif ($groupChildren):?>
+            <div class="nav-dropdown <?= /* @escapeNotVerified */ $block->getAdditionalClass();?>">
+                <?php foreach ($groupChildren as $children):?>
+                        <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $item->getLevel()?>">
+                            <?php foreach ($children as $child):?>
+                                <div class="nav-item level-<?= /* @escapeNotVerified */ $item->getLevel()?>">
+                                    <?= /* @escapeNotVerified */ $block->getRecursiveContentHtml($child);?>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                <?php endforeach;?>
+            </div>
+        <?php endif;?>
+    </div>
+<?php endif;?>

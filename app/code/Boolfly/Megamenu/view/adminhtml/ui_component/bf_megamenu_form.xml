@@ -305,6 +305,18 @@
                                 <dataScope>parent_id</dataScope>
                             </settings>
                         </field>
+                        <field name="level" formElement="hidden">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="source" xsi:type="string">bf_megamenu</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <label translate="true">Level</label>
+                                <dataType>text</dataType>
+                                <dataScope>level</dataScope>
+                            </settings>
+                        </field>
                         <field name="position" formElement="hidden">
                             <argument name="data" xsi:type="array">
                                 <item name="config" xsi:type="array">

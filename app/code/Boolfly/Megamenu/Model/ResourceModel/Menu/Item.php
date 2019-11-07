@@ -146,7 +146,7 @@ class Item extends AbstractDb
     /**
      * @return array|null
      */
-    protected function getLayoutType()
+    public function getLayoutType()
     {
         if ($this->layoutType === null) {
             $this->layoutType = [];

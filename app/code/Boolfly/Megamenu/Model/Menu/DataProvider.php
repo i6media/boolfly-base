@@ -88,7 +88,7 @@ class DataProvider extends AbstractDataProvider
             }
             $this->loadedData[$id] = $data;
         }
-
+        
         return $this->loadedData;
     }
 }

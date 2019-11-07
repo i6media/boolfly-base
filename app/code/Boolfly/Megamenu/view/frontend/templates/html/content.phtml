@@ -1,0 +1,28 @@
+<?php
+/************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+/** @var \Boolfly\Megamenu\Block\Html\Topmenu $block */
+/** @var \Boolfly\Megamenu\Model\Menu\Item $item */
+$item = $block->getItem();
+?>
+<a href="<?= /* @escapeNotVerified */ $item->getItemUrl()?>"
+   target="<?= /* @escapeNotVerified */ __($item->getLinkTarget())?>"
+   title="<?= /* @escapeNotVerified */ $block->escapeHtml(__($item->getTitle()))?>"
+   class="mega-menu-link">
+    <span><?= /* @escapeNotVerified */ __($item->getTitle())?></span>
+    <span class="caret"></span>
+    <span class="opener"></span>
+</a>
+<div class="child-content">
+    <div class="child-inner">
+        <div class="content-wrapper">
+            <?= $block->getContentHtml();?>
+        </div>
+    </div>
+</div>

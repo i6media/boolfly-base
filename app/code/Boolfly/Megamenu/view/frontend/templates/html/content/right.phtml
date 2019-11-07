@@ -1,0 +1,18 @@
+<?php
+/************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+?>
+<?php
+$type = 'right_block';
+?>
+<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
+    <div class="right-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
+        <?= /* @escapeNotVerified */ $html;?>
+    </div>
+<?php endif;?>
