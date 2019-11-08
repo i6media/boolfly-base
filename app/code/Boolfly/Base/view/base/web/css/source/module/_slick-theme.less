@@ -11,7 +11,7 @@
 @slick-arrow-background-hover: @slick-rgba-color1;
 @slick-arrow-color: #fff;
 @slick-banner-content-background: @slick-rgba-color2;
-@slick-banner-content-color: #fff;
+@slick-banner-content-color: #000;
 @slick-dot-color: #d2d2d2;
 @slick-dot-color-active: #606da6;
 @slick-prev-character: "<";
@@ -41,7 +41,7 @@
     background-color: @slick-arrow-background;
     background: @slick-arrow-background;
     color: @slick-arrow-background;
-    top: 50%;
+    top: 45%;
     -webkit-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     transform: translate(0, -50%);
@@ -50,8 +50,10 @@
     outline: none;
     z-index: 201;
     border-radius: 20px;
+    box-shadow: 1px 1px 1px #CDCDCD;
     &:hover {
         outline: none;
+        border: 1px #fff;
         background-color: @slick-arrow-background-hover;
         background: @slick-arrow-background-hover;
         color: @slick-arrow-background-hover;
@@ -59,6 +61,13 @@
             opacity: @slick-opacity-on-hover;
             color: #000;
         }
+    }
+
+    &:focus, &:active {
+        background-color: @slick-arrow-background;
+        background: @slick-arrow-background;
+        color: @slick-arrow-background;
+        box-shadow: 1px 1px 1px #CDCDCD;
     }
     &.slick-disabled:before {
         opacity: @slick-opacity-not-active;
@@ -121,7 +130,7 @@
 
 .slick-dots {
     position: absolute;
-    bottom: 0;
+    bottom: 12%;
     list-style: none;
     display: block;
     text-align: center;
@@ -149,6 +158,7 @@
             padding: 5px;
             cursor: pointer;
             border-radius: 10px;
+            box-shadow: 1px 1px 1px #fff;
             &:hover, &:focus {
                 outline: none;
                 &:before {
@@ -165,13 +175,15 @@
 
 .banner-content {
     position: absolute;
-    bottom: 0;
-    background: @slick-banner-content-background;
-    display: block;
+    bottom: 40%;
     width: 100%;
     color: @slick-banner-content-color;
     &.left {
         text-align: left;
+        .banner-title, .banner-inner, .banner-button {
+            padding-left: 15%;
+        }
+
     }
 
     &.center {
@@ -180,9 +192,32 @@
 
     &.right {
         text-align: right;
+        .banner-title, .banner-inner, .banner-button {
+            padding-right: 15%;
+        }
     }
 
     .banner-title {
         font-weight: bold ;
+    }
+
+    .banner-button {
+        margin-top: 18px;
+        a {
+            font-size: 1.8rem;
+            background: rgb(228,228,228);
+            background: linear-gradient(34deg, rgba(228,228,228,1) 0%, rgba(238,238,238,1) 59%, rgba(243,243,243,1) 100%);
+            color: #000;
+            border-radius: 4px;
+            max-width: 160px;
+            box-shadow:  0px 1px 3px 0px rgba(2, 2, 2, 0.3);
+            padding: 10px;
+            font-weight: bold;
+            &:hover {
+                color: #fff;
+                background: rgb(146,146,146);
+                background: linear-gradient(122deg, rgba(146,146,146,1) 0%, rgba(197,197,197,1) 54%, rgba(209,209,209,1) 100%);
+            }
+        }
     }
 }
