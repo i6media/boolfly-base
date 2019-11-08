@@ -14,12 +14,12 @@ use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
 
 /**
- * Html page top menu block
+ * Menu block
  *
  * @api
  * @since 100.0.2
  */
-class Topmenu extends Template implements IdentityInterface
+class Menu extends Template implements IdentityInterface
 {
 
     /**
@@ -51,13 +51,23 @@ class Topmenu extends Template implements IdentityInterface
     /**
      *
      */
-    public function getMenuItems()
+    public function getMenu()
     {
         /** @var \Boolfly\Megamenu\Model\Menu $menu */
         $menu = $this->menuFactory->create();
         $menu->load(8);
 
-        return $menu->getMenuTree();
+        return $menu;
+    }
+
+    /**
+     * Menu Tree
+     *
+     * @return array
+     */
+    public function getMenuTree()
+    {
+        return $this->getMenu()->getMenuTree();
     }
 
     /**
@@ -103,7 +113,6 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        // TODO: Implement getIdentities() method.
         return [];
     }
 

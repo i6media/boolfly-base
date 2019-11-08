@@ -26,6 +26,13 @@ use Boolfly\Megamenu\Model\Source\MainContentType;
 class Item extends Template implements IdentityInterface
 {
 
+    /**@#+
+     * Cache Tag
+     *
+     * @const
+     */
+    const CACHE_TAG = 'megamenu_item';
+
     /**
      * @var MenuInterfaceFactory
      */
@@ -45,6 +52,11 @@ class Item extends Template implements IdentityInterface
      * @var FilterProvider
      */
     private $filterProvider;
+
+    /**
+     * @var SubCategories
+     */
+    private $subCategoryBlock;
 
     /**
      * Item constructor.
@@ -114,6 +126,29 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
+     * @return SubCategories|\Magento\Framework\View\Element\BlockInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getSubCategoryBlock()
+    {
+        if ($this->subCategoryBlock === null) {
+            $this->subCategoryBlock = $this->getLayout()->createBlock(SubCategories::class);
+        }
+
+        return $this->subCategoryBlock;
+    }
+
+    /**
+     * Get Sub Categories Html
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getSubCategoriesHtml()
+    {
+        return $this->getSubCategoryBlock()->setItem($this->getItem())->toHtml();
+    }
+
+    /**
      * List Layout Template
      *
      * @return array
@@ -136,31 +171,37 @@ class Item extends Template implements IdentityInterface
      */
     public function groupChildren()
     {
-        if ($children = $this->getItem()->getChildren()) {
+        if (($children = $this->getItem()->getChildren())
+            && $this->getContentType() == MainContentType::CHILD_ITEM_TYPE
+        ) {
             $groupChildren = [];
-            $contentType = (int)$this->getItem()->getData('main_content_content_type');
-            $col = (int)$this->getItem()->getData('main_content_child_columns');
-
-            if ($contentType !== MainContentType::CONTENT_TYPE) {
-                if (!$col) {
-                    $col = 1;
+            $childCols = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
+            $totals = count($children);
+            $col = (int)ceil($totals / $childCols);
+            $remainder = $totals % $childCols;
+            $temp = $remainder > 0 ? $col + 1 : $col;
+            $group = 0;
+            foreach ($children as $child) {
+                if ($temp == 0) {
+                    $remainder--;
+                    $temp = $remainder > 0 ? $col + 1 : $col;
+                    $group++;
                 }
-                $numberCol = (int)ceil(count($children) / $col);
-                $temp = $numberCol;
-                $group = 0;
-                foreach ($children as $child) {
-                    if ($temp == 0) {
-                        $temp = $numberCol;
-                        $group++;
-                    }
-                    $groupChildren[$group][] = $child;
-                    $temp--;
-                }
-                return $groupChildren;
+                $groupChildren[$group][] = $child;
+                $temp--;
             }
+            return $groupChildren;
         }
 
         return false;
+    }
+
+    /**
+     * @return int
+     */
+    private function getContentType()
+    {
+        return (int)$this->getItem()->getData('main_content_content_type');
     }
 
     /**
@@ -170,12 +211,22 @@ class Item extends Template implements IdentityInterface
      */
     public function showMainContentHtml()
     {
-        $contentType = (int)$this->getItem()->getData('main_content_content_type');
-
-        return $contentType === MainContentType::CONTENT_TYPE;
+        return $this->getContentType() === MainContentType::CONTENT_TYPE;
     }
 
     /**
+     * Show Subcategories
+     *
+     * @return bool
+     */
+    public function showSubCategories()
+    {
+        return $this->getContentType() === MainContentType::SUB_CATEGORIES_TYPE;
+    }
+
+    /**
+     * Get Wysiwyg Content Html
+     *
      * @param $type
      * @return string
      */
@@ -196,6 +247,8 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
+     * Get Width Style
+     *
      * @param $type
      * @return string
      */
@@ -205,11 +258,12 @@ class Item extends Template implements IdentityInterface
         if ($width = trim($this->getItem()->getData($key))) {
             return 'width: '. rtrim($width, '%') . '%;';
         }
+
         return '';
     }
 
     /**
-     * Is Enable Block
+     * Check Enable
      *
      * @param $type
      * @return bool
@@ -220,15 +274,19 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
+     * Additional class for item
+     *
      * @return string
      */
     public function getAdditionalClass()
     {
         $item = $this->getItem();
-        $level = 'level' . $item->getLevel();
-        $colClass = 'bf-column-' . $item->getData('main_content_child_columns');
+        $additionalClass = [
+            'level' . $item->getLevel(),
+            'bf-column-' . $item->getData('main_content_child_columns')
+        ];
 
-        return $level . ' ' . $colClass . ' ';
+        return implode(' ', $additionalClass);
     }
 
     /**
@@ -242,7 +300,6 @@ class Item extends Template implements IdentityInterface
         return $this->toHtml();
     }
 
-
     /**
      * Return unique ID(s) for each object in system
      *
@@ -250,8 +307,9 @@ class Item extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        // TODO: Implement getIdentities() method.
-        return [];
+        return [
+            self::CACHE_TAG,
+            $this->getItem()->getId()
+        ];
     }
-
 }

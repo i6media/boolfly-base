@@ -13,6 +13,8 @@ $type = 'right_block';
 ?>
 <?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
     <div class="right-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
-        <?= /* @escapeNotVerified */ $html;?>
+        <div class="bf-menu right-content">
+            <?= /* @escapeNotVerified */ $html;?>
+        </div>
     </div>
 <?php endif;?>

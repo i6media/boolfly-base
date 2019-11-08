@@ -1,0 +1,46 @@
+<?php
+/************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+/** @var \Boolfly\Megamenu\Block\Html\SubCategories $block */
+?>
+<?php
+$groupCategory = $block->getGroupCategory();
+$item = $block->getItem();
+$level = $block->getLevel();
+?>
+<?php $i = 1;?>
+<?php foreach ($groupCategory as $categories):?>
+    <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $level?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
+        <?php /** @var \Magento\Catalog\Model\Category $category */?>
+        <?php foreach ($categories as $category):?>
+            <?php $html = $block->setCurrentCategory($category)->setLevel($level + 1)->getContentHtml();?>
+            <div id="boolfly-menu-item-category<?= /* @escapeNotVerified */ $category->getId()?>"
+                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?>">
+                <a href="<?= /* @escapeNotVerified */ $category->getUrl()?>"
+                   target="<?= /* @escapeNotVerified */ $item->getLinkTarget()?:'_self';?>"
+                   title="<?= /* @escapeNotVerified */ $block->escapeHtml(__($category->getName()))?>"
+                   class="mega-menu-link">
+                    <span><?= /* @escapeNotVerified */ __($category->getName())?></span>
+                    <span class="caret"></span>
+                    <span class="opener"></span>
+                </a>
+                <?php if ($html):?>
+                    <div class="boolfly-content child-content">
+                        <div class="child-inner">
+                            <div class="content-wrapper">
+                                <?= /* @escapeNotVerified */ $html;?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif;?>
+            </div>
+        <?php endforeach;?>
+        <?php $i++;?>
+    </div>
+<?php endforeach;?>

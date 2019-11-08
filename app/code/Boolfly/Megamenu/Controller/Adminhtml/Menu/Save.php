@@ -38,6 +38,7 @@ class Save extends AbstractMenu
                     throw new LocalizedException(__('Wrong Menu ID: %1.', $data['menu_id']));
                 }
             }
+            unset($data['menu_id']);
             $model->addData($data);
             $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($model->getData());
             try {

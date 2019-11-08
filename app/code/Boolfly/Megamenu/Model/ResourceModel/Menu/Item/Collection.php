@@ -127,7 +127,6 @@ class Collection extends AbstractCollection
             if ($item->isDeleted()) {
                 $item->delete();
             } else if ($item->hasDataChanges()) {
-                $item->loadItemContent();
                 $item->save();
             }
         }

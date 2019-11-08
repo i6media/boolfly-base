@@ -7,7 +7,7 @@
  *  * @author    info@boolfly.com
  * *  @project   Megamenu
  */
-/** @var \Boolfly\Megamenu\Block\Html\Topmenu $block */
+/** @var \Boolfly\Megamenu\Block\Html\Item $block */
 /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
 $item = $block->getItem();
 ?>
@@ -19,10 +19,10 @@ $item = $block->getItem();
     <span class="caret"></span>
     <span class="opener"></span>
 </a>
-<div class="child-content">
+<div class="boolfly-content child-content">
     <div class="child-inner">
         <div class="content-wrapper">
-            <?= $block->getContentHtml();?>
+            <?= /* @escapeNotVerified */ $block->getContentHtml();?>
         </div>
     </div>
 </div>

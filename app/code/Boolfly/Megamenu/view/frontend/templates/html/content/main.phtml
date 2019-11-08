@@ -8,27 +8,31 @@
  * *  @project   Megamenu
  */
 /** @var \Boolfly\Megamenu\Block\Html\Item $block */
-//@TODO Add Category Tree Template
 $item = $block->getItem();
 $groupChildren = $block->groupChildren();
 $type = 'main_content';
 ?>
 <?php if ($block->isEnableBlock($type)):?>
-    <div class="main-content-wrapper">
-        <?php if($block->showMainContentHtml()):?>
-            <?= /* @escapeNotVerified */ $block->getMainContentHtml();?>
-        <?php elseif ($groupChildren):?>
-            <div class="nav-dropdown <?= /* @escapeNotVerified */ $block->getAdditionalClass();?>">
+    <div class="main-content-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
+        <div class="bf-menu-content main-content nav-dropdown <?= /* @escapeNotVerified */ $block->getAdditionalClass();?>">
+            <?php if ($block->showMainContentHtml()):?>
+                <?= /* @escapeNotVerified */ $block->getMainContentHtml();?>
+            <?php elseif ($block->showSubCategories()):?>
+                <?= /* @escapeNotVerified */ $block->getSubCategoriesHtml();?>
+            <?php elseif ($groupChildren):?>
+                <?php $i = 1;?>
                 <?php foreach ($groupChildren as $children):?>
-                        <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $item->getLevel()?>">
-                            <?php foreach ($children as $child):?>
-                                <div class="nav-item level-<?= /* @escapeNotVerified */ $item->getLevel()?>">
-                                    <?= /* @escapeNotVerified */ $block->getRecursiveContentHtml($child);?>
-                                </div>
-                            <?php endforeach;?>
-                        </div>
+                    <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $item->getLevel()?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
+                        <?php foreach ($children as $child):?>
+                            <div id="boolfly-menu-item-<?= /* @escapeNotVerified */ $child['record_id']?>"
+                                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $item->getLevel()?>">
+                                <?= /* @escapeNotVerified */ $block->getRecursiveContentHtml($child);?>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                    <?php $i++;?>
                 <?php endforeach;?>
-            </div>
-        <?php endif;?>
+            <?php endif;?>
+        </div>
     </div>
 <?php endif;?>

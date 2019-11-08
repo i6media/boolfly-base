@@ -14,6 +14,8 @@ $type = 'bottom_block';
 ?>
 <?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
     <div class="bottom-wrapper">
-        <?= /* @escapeNotVerified */ $html;?>
+        <div class="bf-menu-content bottom">
+            <?= /* @escapeNotVerified */ $html;?>
+        </div>
     </div>
 <?php endif;?>

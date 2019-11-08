@@ -333,4 +333,14 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
 
         return $this;
     }
+
+    /**
+     * Get Level
+     *
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->_getData(self::LEVEL);
+    }
 }

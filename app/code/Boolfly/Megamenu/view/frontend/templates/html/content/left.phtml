@@ -14,6 +14,8 @@ $type = 'left_block';
 ?>
 <?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
     <div class="left-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
-        <?= /* @escapeNotVerified */ $html;?>
+        <div class="bf-menu-content left">
+            <?= /* @escapeNotVerified */ $html;?>
+        </div>
     </div>
 <?php endif;?>

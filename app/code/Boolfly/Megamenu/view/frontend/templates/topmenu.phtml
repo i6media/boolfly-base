@@ -13,6 +13,6 @@
  * @var $block \Magento\Theme\Block\Html\Topmenu
  */
 ?>
-<nav class="navigation" data-action="navigation">
-
+<nav class="navigation" data-action="navigation" role="navigation">
+    <?= /* @escapeNotVerified */ $block->getChildHtml();?>
 </nav>
