@@ -11,7 +11,7 @@
 <?php
 $type = 'right_block';
 ?>
-<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
+<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))) :?>
     <div class="right-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
         <div class="bf-menu right-content">
             <?= /* @escapeNotVerified */ $html;?>

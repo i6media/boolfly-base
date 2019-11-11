@@ -63,7 +63,6 @@ class LinkTarget implements OptionSourceInterface
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }

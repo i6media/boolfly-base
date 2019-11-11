@@ -9,9 +9,14 @@
  */
 namespace Boolfly\Megamenu\Block\Html;
 
+use Boolfly\Megamenu\Model\Menu as MenuModel;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
+use Magento\Theme\Block\Html\Topmenu as TopmenuDefault;
+use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\Data\TreeFactory;
+use Boolfly\Megamenu\Model\Config as MenuConfig;
 
 /**
  * Html page top menu block
@@ -19,7 +24,7 @@ use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
  * @api
  * @since 100.0.2
  */
-class Topmenu extends Template implements IdentityInterface
+class Topmenu extends TopmenuDefault implements IdentityInterface
 {
 
     /**
@@ -33,34 +38,82 @@ class Topmenu extends Template implements IdentityInterface
     private $itemBlock;
 
     /**
+     * @var MenuConfig
+     */
+    private $menuConfig;
+
+    /**
+     * @var MenuModel
+     */
+    protected $menuModel;
+
+    /**
      * Topmenu constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context     $context
      * @param MenuInterfaceFactory $menuFactory
-     * @param array $data
+     * @param NodeFactory          $nodeFactory
+     * @param MenuConfig           $menuConfig
+     * @param TreeFactory          $treeFactory
+     * @param array                $data
      */
     public function __construct(
         Template\Context $context,
         MenuInterfaceFactory $menuFactory,
+        NodeFactory $nodeFactory,
+        MenuConfig $menuConfig,
+        TreeFactory $treeFactory,
         array $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, $nodeFactory, $treeFactory, $data);
         $this->menuFactory = $menuFactory;
+        $this->menuConfig  = $menuConfig;
     }
 
     /**
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if ($this->menuConfig->isEnable() && $this->getMenuModel()->getId()) {
+            $this->setTemplate('Boolfly_Megamenu::topmenu.phtml');
+            /** @var Menu $childBlock */
+            $childBlock = $this->getChildBlock('megamenu_topnav');
+            if ($childBlock) {
+                $childBlock->setMenu($this->getMenuModel());
+            }
+        } else {
+            $this->setTemplate('Magento_Theme::html/topmenu.phtml');
+        }
+        return parent::_toHtml();
+    }
+
+    /**
+     * @return \Boolfly\Megamenu\Api\Data\MenuInterface|MenuModel
+     */
+    public function getMenuModel()
+    {
+        if ($this->menuModel === null) {
+            $this->menuModel = $this->menuFactory->create();
+            $this->menuModel->load($this->menuConfig->getDefaultBannerId());
+        }
+
+        return $this->menuModel;
+    }
+
+    /**
+     * Get Menu Items
      *
+     * @return array
      */
     public function getMenuItems()
     {
-        /** @var \Boolfly\Megamenu\Model\Menu $menu */
-        $menu = $this->menuFactory->create();
-        $menu->load(8);
-
-        return $menu->getMenuTree();
+        return $this->getMenuModel()->getMenuTree();
     }
 
     /**
+     * Get Item Block
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getItemBlock()
@@ -70,18 +123,6 @@ class Topmenu extends Template implements IdentityInterface
         }
 
         return $this->itemBlock;
-    }
-
-    /**
-     * @param $item
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getLinkHtml($item)
-    {
-        return $this->getItemBlock()
-            ->setItem($item)
-            ->setTemplate('Boolfly_Megamenu::html/link.phtml')->toHtml();
     }
 
     /**
@@ -103,8 +144,10 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        // TODO: Implement getIdentities() method.
-        return [];
-    }
+        if ($this->menuConfig->isEnable()) {
+            return $this->getMenuModel()->getIdentities();
+        }
 
+        return parent::getIdentities();
+    }
 }

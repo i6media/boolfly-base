@@ -14,7 +14,6 @@ use Boolfly\Megamenu\Model\ResourceModel\Menu\Item as MenuItemResourceModel;
 use Boolfly\Megamenu\Model\Menu\Item;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Boolfly\Megamenu\Model\Source\Status;
-use Boolfly\Megamenu\Model\Source\LayoutType;
 
 /**
  * Class Collection
@@ -45,7 +44,6 @@ class Collection extends AbstractCollection
         $this->_init(Item::class, MenuItemResourceModel::class);
     }
 
-
     /**
      * @return mixed
      */
@@ -61,13 +59,13 @@ class Collection extends AbstractCollection
     private function joinContentTable()
     {
         /** @var MenuItemResourceModel $resource */
-        $resource = $this->getResource();
+        $resource   = $this->getResource();
         $layoutType = $resource->getLayoutType();
 
         $select = $this->getSelect();
         foreach ($layoutType as $type => $typeId) {
-            $alias = $type . '_content';
-            $cols = $this->getContentColumnByAlias($type, $alias);
+            $alias     = $type . '_content';
+            $cols      = $this->getContentColumnByAlias($type, $alias);
             $condition = $this->getConditionToJoinContent($typeId, $alias);
             $select->joinLeft([
                 $alias => $this->getTable('bf_megamenu_item_content')
@@ -91,8 +89,8 @@ class Collection extends AbstractCollection
         ];
         if ($type == 'main_content') {
             $cols['main_content_child_columns'] = $alias. '.child_columns';
-            $cols['main_content_content_type'] = $alias. '.content_type';
-            $cols['main_content_category_id'] = $alias. '.category_id';
+            $cols['main_content_content_type']  = $alias. '.content_type';
+            $cols['main_content_category_id']   = $alias. '.category_id';
         }
 
         return $cols;
@@ -105,7 +103,7 @@ class Collection extends AbstractCollection
      */
     private function getConditionToJoinContent($typeId, $alias)
     {
-        $connection = $this->getConnection();
+        $connection     = $this->getConnection();
         $conditionArray = [
             $connection->quoteIdentifier('main_table.item_id') . ' = '. $connection->quoteIdentifier($alias .'.item_id'),
             $this->getConnection()->quoteInto($alias . '.type_id = ?', $typeId)
@@ -126,7 +124,7 @@ class Collection extends AbstractCollection
         foreach ($items as $item) {
             if ($item->isDeleted()) {
                 $item->delete();
-            } else if ($item->hasDataChanges()) {
+            } elseif ($item->hasDataChanges()) {
                 $item->save();
             }
         }
@@ -153,9 +151,9 @@ class Collection extends AbstractCollection
      */
     public function sortAllItems()
     {
-        $this->addOrder('level','ASC');
-        $this->addOrder('position','ASC');
-        $this->addOrder('parent_id','ASC');
+        $this->addOrder('level', 'ASC');
+        $this->addOrder('position', 'ASC');
+        $this->addOrder('parent_id', 'ASC');
         return $this;
     }
 

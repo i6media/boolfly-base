@@ -25,7 +25,6 @@ class CategoryTree implements OptionSourceInterface
      */
     private $collectionFactory;
 
-
     /**
      * CategoryTree constructor.
      *
@@ -53,10 +52,7 @@ class CategoryTree implements OptionSourceInterface
     public function getAllOptions()
     {
         $collection = $this->collectionFactory->create();
-
-        $collection
-            ->addAttributeToSelect(['name', 'is_active', 'parent_id']);
-
+        $collection->addAttributeToSelect(['name', 'is_active', 'parent_id']);
         $categoryById = [
             CategoryModel::TREE_ROOT_ID => [
                 'value' => CategoryModel::TREE_ROOT_ID,
@@ -70,7 +66,6 @@ class CategoryTree implements OptionSourceInterface
                     $categoryById[$categoryId] = ['value' => $categoryId];
                 }
             }
-
             $categoryById[$category->getId()]['is_active']        = $category->getIsActive();
             $categoryById[$category->getId()]['label']            = $category->getName();
             $categoryById[$category->getId()]['__disableTmpl']    = true;
@@ -78,18 +73,5 @@ class CategoryTree implements OptionSourceInterface
         }
 
         return $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
-    }
-
-    /**
-     * Retrieve option text by option value
-     *
-     * @param string $optionId
-     * @return string
-     */
-    public function getOptionText($optionId)
-    {
-        $options = self::getOptionArray();
-
-        return isset($options[$optionId]) ? $options[$optionId] : null;
     }
 }

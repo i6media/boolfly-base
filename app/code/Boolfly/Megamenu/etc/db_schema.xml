@@ -64,27 +64,6 @@
             <column name="store_id"/>
         </index>
     </table>
-    <!--<table name="bf_megamenu_customer_group" resource="default" engine="innodb"-->
-           <!--comment="Boolfly mega menu customer group table">-->
-        <!--<column xsi:type="int" name="menu_id" padding="11" nullable="false" unsigned="false" identity="false"-->
-                <!--comment="Menu ID"/>-->
-        <!--<column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"-->
-                <!--comment="Customer Group ID"/>-->
-        <!--<constraint xsi:type="primary" referenceId="PRIMARY">-->
-            <!--<column name="menu_id"/>-->
-            <!--<column name="customer_group_id"/>-->
-        <!--</constraint>-->
-        <!--<constraint xsi:type="foreign"-->
-                    <!--referenceId="CSTR_BOOLFLY_MEGA_MENU_CUSTOMER_GROUP_MENU_ID_TO_MENU_ID"-->
-                    <!--table="bf_megamenu_customer_group" column="menu_id"-->
-                    <!--referenceTable="bf_megamenu"-->
-                    <!--referenceColumn="menu_id" onDelete="CASCADE"/>-->
-        <!--<constraint xsi:type="foreign"-->
-                    <!--referenceId="CSTR_BOOLFLY_MEGA_MENU_CUSTOMER_GROUP_CUSTOMER_GROUP_TO_CUSTOMER_GROUP_ID"-->
-                    <!--table="bf_megamenu_customer_group" column="customer_group_id"-->
-                    <!--referenceTable="customer_group"-->
-                    <!--referenceColumn="customer_group_id" onDelete="CASCADE"/>-->
-    <!--</table>-->
     <table name="bf_megamenu_item" resource="default" engine="innodb"
            comment="Boolfly Mega Menu item table">
         <column xsi:type="int" name="item_id" padding="11" nullable="false" unsigned="false" identity="true"

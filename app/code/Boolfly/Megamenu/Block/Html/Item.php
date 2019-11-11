@@ -61,11 +61,11 @@ class Item extends Template implements IdentityInterface
     /**
      * Item constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context     $context
      * @param MenuInterfaceFactory $menuFactory
-     * @param FilterProvider $filterProvider
-     * @param ItemInterface $menuItem
-     * @param array $data
+     * @param FilterProvider       $filterProvider
+     * @param ItemInterface        $menuItem
+     * @param array                $data
      */
     public function __construct(
         Template\Context $context,
@@ -75,8 +75,8 @@ class Item extends Template implements IdentityInterface
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->menuFactory = $menuFactory;
-        $this->menuItem = $menuItem;
+        $this->menuFactory    = $menuFactory;
+        $this->menuItem       = $menuItem;
         $this->filterProvider = $filterProvider;
     }
 
@@ -167,7 +167,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Group children by config columns
      *
-     * @return array|bool
+     * @return array|boolean
      */
     public function groupChildren()
     {
@@ -175,12 +175,12 @@ class Item extends Template implements IdentityInterface
             && $this->getContentType() == MainContentType::CHILD_ITEM_TYPE
         ) {
             $groupChildren = [];
-            $childCols = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
-            $totals = count($children);
-            $col = (int)ceil($totals / $childCols);
-            $remainder = $totals % $childCols;
-            $temp = $remainder > 0 ? $col + 1 : $col;
-            $group = 0;
+            $childCols     = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
+            $totals        = count($children);
+            $col           = (int)floor($totals / $childCols);
+            $remainder     = $totals % $childCols;
+            $temp          = $remainder > 0 ? $col + 1 : $col;
+            $group         = 0;
             foreach ($children as $child) {
                 if ($temp == 0) {
                     $remainder--;
@@ -197,7 +197,7 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
-     * @return int
+     * @return integer
      */
     private function getContentType()
     {
@@ -207,7 +207,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Show Content Html
      *
-     * @return bool
+     * @return boolean
      */
     public function showMainContentHtml()
     {
@@ -217,7 +217,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Show Subcategories
      *
-     * @return bool
+     * @return boolean
      */
     public function showSubCategories()
     {
@@ -266,7 +266,7 @@ class Item extends Template implements IdentityInterface
      * Check Enable
      *
      * @param $type
-     * @return bool
+     * @return boolean
      */
     public function isEnableBlock($type)
     {
@@ -280,7 +280,7 @@ class Item extends Template implements IdentityInterface
      */
     public function getAdditionalClass()
     {
-        $item = $this->getItem();
+        $item            = $this->getItem();
         $additionalClass = [
             'level' . $item->getLevel(),
             'bf-column-' . $item->getData('main_content_child_columns')

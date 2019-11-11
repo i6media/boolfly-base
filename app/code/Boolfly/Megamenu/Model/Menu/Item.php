@@ -44,12 +44,12 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     /**
      * Item constructor.
      *
-     * @param Context $context
-     * @param Registry $registry
-     * @param ItemUrl $itemUrl
+     * @param Context               $context
+     * @param Registry              $registry
+     * @param ItemUrl               $itemUrl
      * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      */
     public function __construct(
         Context $context,

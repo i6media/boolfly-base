@@ -16,7 +16,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Boolfly\Megamenu\Model\Source\MainContentType;
 use Magento\Catalog\Model\CategoryFactory;
 
 /**
@@ -81,13 +80,13 @@ class SubCategories extends Template implements IdentityInterface
     /**
      * SubCategories constructor.
      *
-     * @param Template\Context $context
-     * @param MenuInterfaceFactory $menuFactory
-     * @param FilterProvider $filterProvider
-     * @param ItemInterface $menuItem
+     * @param Template\Context          $context
+     * @param MenuInterfaceFactory      $menuFactory
+     * @param FilterProvider            $filterProvider
+     * @param ItemInterface             $menuItem
      * @param CategoryCollectionFactory $collectionFactory
-     * @param CategoryFactory $categoryFactory
-     * @param array $data
+     * @param CategoryFactory           $categoryFactory
+     * @param array                     $data
      */
     public function __construct(
         Template\Context $context,
@@ -99,11 +98,11 @@ class SubCategories extends Template implements IdentityInterface
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->menuFactory = $menuFactory;
-        $this->menuItem = $menuItem;
-        $this->filterProvider = $filterProvider;
+        $this->menuFactory       = $menuFactory;
+        $this->menuItem          = $menuItem;
+        $this->filterProvider    = $filterProvider;
         $this->collectionFactory = $collectionFactory;
-        $this->categoryFactory = $categoryFactory;
+        $this->categoryFactory   = $categoryFactory;
     }
 
     /**
@@ -113,8 +112,8 @@ class SubCategories extends Template implements IdentityInterface
     public function setItem($item)
     {
         $this->menuItem = $item;
-        $this->level = $item->getLevel();
-        $category = $this->categoryFactory->create();
+        $this->level    = $item->getLevel();
+        $category       = $this->categoryFactory->create();
         $category->load((int)$item->getData('main_content_category_id'));
         if ($category->getId()) {
             $this->setCurrentCategory($category);
@@ -126,7 +125,7 @@ class SubCategories extends Template implements IdentityInterface
     /**
      * Get Level
      *
-     * @return int
+     * @return integer
      */
     public function getLevel()
     {
@@ -154,7 +153,7 @@ class SubCategories extends Template implements IdentityInterface
     }
 
     /**
-     * @return bool|int
+     * @return boolean|integer
      */
     private function getCategoryId()
     {
@@ -235,7 +234,7 @@ class SubCategories extends Template implements IdentityInterface
     /**
      * Group children by config columns
      *
-     * @return array|bool
+     * @return array|boolean
      */
     public function getGroupCategory()
     {
@@ -243,19 +242,19 @@ class SubCategories extends Template implements IdentityInterface
         if ($groupCategory && $this->getCurrentCategory()) {
             $catId = $this->getCurrentCategory()->getId();
             if (is_array($groupCategory) && !empty($groupCategory[$catId])) {
-                $categories = $groupCategory[$catId];
-                $totals = count($categories);
+                $categories    = $groupCategory[$catId];
+                $totals        = count($categories);
                 $groupChildren = [];
-                $childCols = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
+                $childCols     = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
 
                 //Set Child Column Sub-categories always = 1
                 if ($this->getCategoryId() != $catId) {
                     $childCols = 1;
                 }
-                $col = (int) floor($totals / $childCols);
+                $col       = (int) floor($totals / $childCols);
                 $remainder = $totals % $childCols;
-                $temp = $remainder > 0 ? $col + 1 : $col;
-                $group = 0;
+                $temp      = $remainder > 0 ? $col + 1 : $col;
+                $group     = 0;
 
                 //Calculator Item By Group
                 foreach ($categories as $category) {

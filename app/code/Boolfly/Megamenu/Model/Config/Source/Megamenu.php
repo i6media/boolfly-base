@@ -7,41 +7,56 @@
  *  * @author    info@boolfly.com
  * *  @project   Megamenu
  */
-namespace Boolfly\Megamenu\Model\Source;
+namespace Boolfly\Megamenu\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use Boolfly\Megamenu\Model\ResourceModel\Menu\CollectionFactory;
 
 /**
- * Class LinkType
+ * Class Megamenu
  *
- * @package Boolfly\Megamenu\Model\Source
+ * @package Boolfly\Megamenu\Model\Config\Source
  */
-class LinkType implements OptionSourceInterface
+class Megamenu implements OptionSourceInterface
 {
-
-    /**@#%
-     *
-     * @const
+    /**
+     * @var array
      */
-    const CUSTOM_LINK = 'custom';
+    protected $options;
 
-    const CATEGORY_LINK = 'category';
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
-    const CMS_PAGE_LINK = 'cms_page';
-
+    /**
+     * Megamenu constructor.
+     *
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        CollectionFactory $collectionFactory
+    ) {
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * Retrieve option array
      *
      * @return string[]
      */
-    public static function getOptionArray()
+    public function getOptionArray()
     {
-        return [
-            self::CUSTOM_LINK => __('Custom Link'),
-            self::CATEGORY_LINK => __('Category Link'),
-            self::CMS_PAGE_LINK => __('CMS Page Link')
-        ];
+        if ($this->options === null) {
+            $this->options = [];
+            $collection    = $this->collectionFactory->create();
+            /** @var \Boolfly\Megamenu\Model\Menu $item */
+            foreach ($collection as $item) {
+                $this->options[$item->getId()] = $item->getTitle();
+            }
+        }
+
+        return $this->options;
     }
 
     /**
@@ -76,7 +91,6 @@ class LinkType implements OptionSourceInterface
     public function getOptionText($optionId)
     {
         $options = self::getOptionArray();
-
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
 }

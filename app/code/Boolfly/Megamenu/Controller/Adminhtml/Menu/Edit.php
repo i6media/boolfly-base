@@ -18,7 +18,6 @@ use Boolfly\Megamenu\Controller\Adminhtml\AbstractMenu;
  */
 class Edit extends AbstractMenu
 {
-
     /**
      * New Menu action
      *
@@ -42,7 +41,6 @@ class Edit extends AbstractMenu
         if (!empty($data)) {
             $model->addData($data);
         }
-
 
         $this->_initAction();
         $this->_addBreadcrumb(

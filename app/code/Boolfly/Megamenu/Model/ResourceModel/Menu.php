@@ -87,7 +87,7 @@ class Menu extends AbstractDb
         $select     = $connection->select()
             ->from($this->getMenuStoreTable(), ['store_id'])
             ->where('menu_id = ?', $object->getId());
-        $storeIds = $connection->fetchCol($select);
+        $storeIds   = $connection->fetchCol($select);
         $object->setData('store_id', $storeIds);
     }
 
@@ -141,10 +141,10 @@ class Menu extends AbstractDb
     protected function saveItemsCollection($object)
     {
         $itemsCollection = $object->getItemsCollection();
-        $oldItemIds = $itemsCollection->getAllIds();
-        $menuTree = $object->getData('menu_tree');
-        $newItemIds = array_column($menuTree, 'item_id');
-        $itemDeleted = array_diff($oldItemIds, $newItemIds);
+        $oldItemIds      = $itemsCollection->getAllIds();
+        $menuTree        = $object->getData('menu_tree');
+        $newItemIds      = array_column($menuTree, 'item_id');
+        $itemDeleted     = array_diff($oldItemIds, $newItemIds);
         //Delete Item
         foreach ($itemDeleted as $delId) {
             /** @var AbstractModel $menuItem */
@@ -159,7 +159,7 @@ class Menu extends AbstractDb
                  * Add New Empty Item
                  */
                 if (empty($item['item_id'])) {
-                    $newItem = $itemsCollection->getNewEmptyItem();
+                    $newItem         = $itemsCollection->getNewEmptyItem();
                     $item['menu_id'] = $object->getId();
                     if ($item['parent_id'] === '') {
                         $item['parent_id'] = null;
@@ -198,15 +198,14 @@ class Menu extends AbstractDb
      */
     private function processMenuStoreTable(AbstractModel $model)
     {
-        $storeIds         = $model->getData('store_id');
+        $storeIds       = $model->getData('store_id');
         $menuStoreTable = $this->getMenuStoreTable();
         if ($model->getId() && is_array($storeIds) && !empty($storeIds)) {
             $importData = [];
-            $select            = $this->getConnection()
+            $select     = $this->getConnection()
                 ->select()
                 ->from($menuStoreTable, ['store_id'])
                 ->where('store_id = ?', $model->getId());
-
             /**
              * Remove store unselected
              */

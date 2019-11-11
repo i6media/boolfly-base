@@ -27,7 +27,6 @@ use Boolfly\Megamenu\Model\ResourceModel\Menu\Item\Collection as ItemCollection;
  */
 class Menu extends AbstractModel implements MenuInterface, IdentityInterface
 {
-
     /**#@-*/
     protected $_eventPrefix = 'boolfly_megamenu';
 
@@ -56,17 +55,16 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     /**
      * Menu constructor.
      *
-     * @param Context $context
-     * @param Registry $registry
+     * @param Context               $context
+     * @param Registry              $registry
      * @param ItemCollectionFactory $itemCollectionFactory
      * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        \Boolfly\Megamenu\Model\Menu\ItemUrl $itemUrl,
         ItemCollectionFactory $itemCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
@@ -272,13 +270,13 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
             $itemsCollection->addActiveStatusFilter();
             $itemsCollection->load();
             $childrenData = [];
-            $treeData = [];
+            $treeData     = [];
             /**
              * Note: Sorted all children after parent
              */
             /** @var Menu\Item $item */
             foreach ($itemsCollection->getData() as $itemData) {
-                $recordId = $itemData['record_id'];
+                $recordId                             = $itemData['record_id'];
                 $childrenData[$itemData['record_id']] = $itemData;
                 if (!empty($itemData['parent_id'])) {
                     $childrenData[$itemData['parent_id']]['children'][] = &$childrenData[$recordId];
@@ -286,7 +284,7 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
                     $treeData[] = &$childrenData[$recordId];
                 }
             }
-            $this->menuTree[$this->getId()] =  $treeData;
+            $this->menuTree[$this->getId()] = $treeData;
         }
 
         return $this->menuTree[$this->getId()];

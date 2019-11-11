@@ -72,11 +72,10 @@ class DataProvider extends AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-
         /** @var \Boolfly\Megamenu\Model\Menu $model */
         $model = $this->coreRegistry->registry('current_megamenu');
         if ($id = $model->getId()) {
-            $data = $model->getData();
+            $data            = $model->getData();
             $itemsCollection = $model->getItemsCollection();
             $itemsCollection->load();
             if ($itemsCollection->getSize() > 0) {
@@ -88,7 +87,7 @@ class DataProvider extends AbstractDataProvider
             }
             $this->loadedData[$id] = $data;
         }
-        
+
         return $this->loadedData;
     }
 }

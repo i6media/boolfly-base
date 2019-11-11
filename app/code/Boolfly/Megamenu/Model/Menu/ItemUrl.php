@@ -59,8 +59,8 @@ class ItemUrl
      * ItemUrl constructor.
      *
      * @param CategoryCollectionFactory $categoryCollectionFactory
-     * @param PageCollectionFactory $pageCollectionFactory
-     * @param UrlInterface $urlBuilder
+     * @param PageCollectionFactory     $pageCollectionFactory
+     * @param UrlInterface              $urlBuilder
      */
     public function __construct(
         CategoryCollectionFactory $categoryCollectionFactory,
@@ -68,8 +68,8 @@ class ItemUrl
         UrlInterface $urlBuilder
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->pageCollectionFactory = $pageCollectionFactory;
-        $this->urlBuilder = $urlBuilder;
+        $this->pageCollectionFactory     = $pageCollectionFactory;
+        $this->urlBuilder                = $urlBuilder;
     }
 
     /**
@@ -138,9 +138,9 @@ class ItemUrl
                 if ($category && $category->getId()) {
                     return $category->getUrl();
                 }
-            } else if ($linkType == LinkType::CUSTOM_LINK && $item->getCustomLink()) {
+            } elseif ($linkType == LinkType::CUSTOM_LINK && $item->getCustomLink()) {
                 return $item->getCustomLink();
-            } else if ($linkType == LinkType::CMS_PAGE_LINK && $item->getCmsPageId()) {
+            } elseif ($linkType == LinkType::CMS_PAGE_LINK && $item->getCmsPageId()) {
                 /** @var \Magento\Cms\Model\Page $cmsPage */
                 $cmsPage = $this->getPageCollection()->getItemById((int)$item->getCmsPageId());
                 if ($cmsPage && $cmsPage->getIdentifier()) {

@@ -7,9 +7,10 @@
  *  * @author    info@boolfly.com
  * *  @project   Megamenu
  */
+/** @var \Boolfly\Megamenu\Block\Html\Menu $block */
 ?>
 <ul class="bf-megamenu menu-hover bf-vertical-left">
-    <?php foreach ($block->getMenuTree() as $item):?>
+    <?php foreach ($block->getMenuTree() as $item) :?>
         <li id="boolfly-menu-item-<?= /* @escapeNotVerified */ $item['record_id'];?>"
             class="menu-item level-top menu-dropdown nav-0">
             <?= $block->getChildContentHtml($item);?>

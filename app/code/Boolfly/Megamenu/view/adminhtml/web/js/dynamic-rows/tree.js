@@ -217,21 +217,21 @@ define([
                 }
             }
         },
-        
-        /**
+
+                /**
          *
          * @param data
          * @param level
          */
         updatePositionMenuItem: function (data, level) {
             var elem, positionComponent, levelComponent, position = 0;
-            level = level || 0;
+            level                                                 = level || 0;
             level++;
             if (Array.isArray(data)) {
                 data.each(function (item) {
-                    elem   = registry.get(item.component);
+                    elem              = registry.get(item.component);
                     positionComponent = registry.get(item.component + '.item.position');
-                    levelComponent = registry.get(item.component + '.item.level');
+                    levelComponent    = registry.get(item.component + '.item.level');
                     if (elem) {
                         elem.position = position;
                     }
@@ -355,8 +355,8 @@ define([
          */
         isChildElement: function (elem) {
             if (typeof elem.childElems === 'function') {
-                var recordId = this.source.get(elem.dataScope + '.' + this.identificationProperty);
-                var parentId = this.source.get(elem.dataScope + '.parent_id');
+                var recordId               = this.source.get(elem.dataScope + '.' + this.identificationProperty);
+                var parentId               = this.source.get(elem.dataScope + '.parent_id');
                 this.elementTree[recordId] = elem;
                 if (parentId) {
                     this.updateStructureMenu(recordId, parentId);
@@ -768,7 +768,7 @@ define([
          */
         deleteRecord: function (index, recordId, update) {
             var recordInstance,
-                tmpObj = {},
+                tmpObj                          = {},
                 recordData,
                 recordsData;
             tmpObj[this.identificationProperty] = recordId;
@@ -780,7 +780,7 @@ define([
                     recordInstance.destroy();
                     recordData = _.findWhere(recordsData, tmpObj);
                     if (recordData) {
-                        index = _.indexOf(recordsData, recordData);
+                        index                                   = _.indexOf(recordsData, recordData);
                         recordsData[index][this.deleteProperty] = this.deleteValue;
                         this.recordData(recordsData);
                     }
@@ -802,8 +802,8 @@ define([
             var structureMenu = this.structureMenu();
             if (structureMenu[recordId]) {
                 var childElems, parent, parentRecordId = structureMenu[recordId];
-                parent                              = this.getElementTree(parentRecordId);
-                childElems                          = _.filter(parent.childElems(), function (item) {
+                parent                                 = this.getElementTree(parentRecordId);
+                childElems                             = _.filter(parent.childElems(), function (item) {
                     return item.recordId !== recordId
                 });
                 parent.childElems(childElems);
@@ -817,10 +817,10 @@ define([
          * @returns {exports}
          */
         deleteChildrenRecord: function (recordId, recordsData) {
-            var children, tmpObj = {},
+            var children, tmpObj                = {},
                 recordData;
             tmpObj[this.identificationProperty] = recordId;
-            recordData = _.findWhere(recordsData, tmpObj);
+            recordData                          = _.findWhere(recordsData, tmpObj);
             if (recordData && recordData.menu_children) {
                 children = recordData.menu_children;
                 children.forEach(function (childIndex) {
@@ -976,7 +976,7 @@ define([
 
             // index = index || _.isNumber(index) ? index : this.getNextIndex();
             index = index || _.isNumber(index) ? index : this.currentIndexRecord;
-            prop = prop || _.isNumber(prop) ? prop : this.getNextRecordId();
+            prop  = prop || _.isNumber(prop) ? prop : this.getNextRecordId();
 
             _.extend(this.templates.record, {
                 recordId: prop
