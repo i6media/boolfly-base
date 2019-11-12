@@ -21,7 +21,7 @@ $level = $block->getLevel();
         <?php foreach ($categories as $category) :?>
             <?php $html = $block->setCurrentCategory($category)->setLevel($level + 1)->getContentHtml();?>
             <div id="boolfly-menu-item<?= /* @escapeNotVerified */ $item->getRecordId();?>-category<?= /* @escapeNotVerified */ $category->getId()?>"
-                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?>">
+                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?> <?= $html ? 'has-children' : ''?>">
                 <a href="<?= /* @escapeNotVerified */ $category->getUrl()?>"
                    target="<?= /* @escapeNotVerified */ $item->getLinkTarget()?:'_self';?>"
                    title="<?= /* @escapeNotVerified */ $block->escapeHtml(__($category->getName()))?>"

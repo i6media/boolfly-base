@@ -303,18 +303,15 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     {
         $firstChildren = reset($parent);
         $lastChildren  = end($parent);
-        foreach ($parent as $children) {
-            $children['first']        = false;
-            $children['last']         = false;
-            $children['has_children'] = false;
+        foreach ($parent as &$children) {
             if ($children == $firstChildren) {
                 $children['first'] = true;
             } elseif ($children == $lastChildren) {
                 $children['last'] = true;
             }
-            if (!empty($parent['children'])) {
+            if (!empty($children['children'])) {
                 $children['has_children'] = true;
-                $this->addPropertyToTree($parent['children']);
+                $this->addPropertyToTree($children['children']);
             }
         }
 

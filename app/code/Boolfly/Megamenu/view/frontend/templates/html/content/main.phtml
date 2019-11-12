@@ -25,7 +25,7 @@ $type = 'main_content';
                     <div class="boolfly-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $item->getLevel()?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
                         <?php foreach ($children as $child) :?>
                             <div id="boolfly-menu-item-<?= /* @escapeNotVerified */ $child['record_id']?>"
-                                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $item->getLevel()?> <?= /* @escapeNotVerified */ $block->getContentAdditionalClass();?>">
+                                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $item->getLevel()?> <?= /* @escapeNotVerified */ $block->getAdditionalClasses($child);?>">
                                 <?= /* @escapeNotVerified */ $block->getRecursiveContentHtml($child);?>
                             </div>
                         <?php endforeach;?>

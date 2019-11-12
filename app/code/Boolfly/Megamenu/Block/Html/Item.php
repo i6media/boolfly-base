@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
 use Boolfly\Megamenu\Model\Source\LayoutType;
 use Boolfly\Megamenu\Model\Source\MainContentType;
+use Magento\Framework\DataObject;
 
 /**
  * Item block
@@ -59,17 +60,24 @@ class Item extends Template implements IdentityInterface
     private $subCategoryBlock;
 
     /**
+     * @var DataObject
+     */
+    private $dataObject;
+
+    /**
      * Item constructor.
      *
-     * @param Template\Context     $context
+     * @param Template\Context $context
      * @param MenuInterfaceFactory $menuFactory
-     * @param FilterProvider       $filterProvider
-     * @param ItemInterface        $menuItem
-     * @param array                $data
+     * @param DataObject $dataObject
+     * @param FilterProvider $filterProvider
+     * @param ItemInterface $menuItem
+     * @param array $data
      */
     public function __construct(
         Template\Context $context,
         MenuInterfaceFactory $menuFactory,
+        DataObject $dataObject,
         FilterProvider $filterProvider,
         ItemInterface $menuItem,
         array $data = []
@@ -78,6 +86,7 @@ class Item extends Template implements IdentityInterface
         $this->menuFactory    = $menuFactory;
         $this->menuItem       = $menuItem;
         $this->filterProvider = $filterProvider;
+        $this->dataObject = $dataObject;
     }
 
     /**
@@ -280,15 +289,23 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
-     * Get Additional Class
+     * Get Additional Classes
      *
+     * @param array||null $item
      * @return string
      */
-    public function getAdditionalClasses()
+    public function getAdditionalClasses($item = null)
     {
         /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
-        $item  = $this->getItem();
+        if ($item === null) {
+            $item  = $this->getItem();
+        } else {
+            $item = $this->getItemObject($item);
+        }
         $class = [];
+        if ($item->getAdditionalClass()) {
+            $class[] = $item->getAdditionalClass();
+        }
         if ($item->getData('first')) {
             $class[] = 'first';
         }
@@ -303,6 +320,16 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
+     * @param $item
+     * @return DataObject
+     */
+    protected function getItemObject($item)
+    {
+        $this->dataObject->setData($item);
+        return $this->dataObject;
+    }
+
+    /**
      * Additional class for content
      *
      * @return string
@@ -312,7 +339,7 @@ class Item extends Template implements IdentityInterface
         $item            = $this->getItem();
         $additionalClass = [
             'level' . $item->getLevel(),
-            'boolfly-column-' . $item->getData('main_content_child_columns')
+            'boolfly-column-' . $item->getData('main_content_child_columns')?:0
         ];
 
         return implode(' ', $additionalClass);

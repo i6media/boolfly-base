@@ -152,6 +152,10 @@ class Menu extends Template implements IdentityInterface
         /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
         $item  = $this->getItemObject($item);
         $class = [];
+        if ($item->getAdditionalClass()) {
+            $class[] = $item->getAdditionalClass();
+        }
+
         if ($item->getData('first')) {
             $class[] = 'first';
         }
@@ -197,6 +201,5 @@ class Menu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->getMenu()->getIdentities();
-        ;
     }
 }
