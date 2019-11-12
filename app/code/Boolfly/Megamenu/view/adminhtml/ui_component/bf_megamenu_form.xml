@@ -191,28 +191,6 @@
                 </multiselect>
             </formElements>
         </field>
-        <!--<field name="customer_group_ids" sortOrder="80" formElement="multiselect">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="source" xsi:type="string">bf_megamenu</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-            <!--<settings>-->
-                <!--<label translate="true">Customer Groups</label>-->
-                <!--<dataType>text</dataType>-->
-                <!--<dataScope>customer_group_ids</dataScope>-->
-                <!--<validation>-->
-                    <!--<rule name="required-entry" xsi:type="boolean">true</rule>-->
-                <!--</validation>-->
-            <!--</settings>-->
-            <!--<formElements>-->
-                <!--<multiselect>-->
-                    <!--<settings>-->
-                        <!--<options class="Magento\Customer\Model\Customer\Source\Group"/>-->
-                    <!--</settings>-->
-                <!--</multiselect>-->
-            <!--</formElements>-->
-        <!--</field>-->
     </fieldset>
     <fieldset name="menu" sortOrder="30">
         <settings>
@@ -552,7 +530,7 @@
         <fieldset name="content">
             <settings>
                 <collapsible>true</collapsible>
-                <label translate="true">Settings</label>
+                <label translate="true">Content</label>
                 <dataScope>content</dataScope>
             </settings>
             <fieldset name="header">
@@ -699,7 +677,7 @@
             </fieldset>
             <fieldset name="main_content">
                 <settings>
-                    <collapsible>true</collapsible>
+                    <collapsible>false</collapsible>
                     <label translate="true">Main Content</label>
                     <dataScope>main_content</dataScope>
                 </settings>
@@ -757,6 +735,7 @@
                         <imports>
                             <link name="visible">name = ${ $.parentName }.status:checked</link>
                             <link name="disabled">!name = ${ $.parentName }.status:checked</link>
+                            <link name="clear">!name = ${ $.parentName }.status:checked</link>
                         </imports>
                     </settings>
                     <formElements>

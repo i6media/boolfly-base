@@ -35,17 +35,6 @@
             "BF_MEGAMENU_STORE_STORE_ID_STORE_STORE_ID": true
         }
     },
-    "bf_megamenu_customer_group": {
-        "column": {
-            "menu_id": true,
-            "customer_group_id": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "BF_MEGAMENU_CUSTOMER_GROUP_MENU_ID_BF_MEGAMENU_MENU_ID": true,
-            "BF_MEGAMENU_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true
-        }
-    },
     "bf_megamenu_item": {
         "column": {
             "item_id": true,

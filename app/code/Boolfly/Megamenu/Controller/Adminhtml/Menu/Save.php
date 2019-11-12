@@ -50,6 +50,9 @@ class Save extends AbstractMenu
                 }
 
                 return $resultRedirect->setPath('*/*/');
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving the menu.'));
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e->getMessage());

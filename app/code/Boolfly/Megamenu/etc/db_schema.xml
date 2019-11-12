@@ -26,6 +26,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="menu_id"/>
         </constraint>
+        <constraint xsi:type="unique" referenceId="BOOLFLY_MEGA_MENU_IDENTIFIER_FIELD">
+            <column name="identifier"/>
+        </constraint>
         <index referenceId="BOOLFLY_MEGA_MENU_MENU_ID" indexType="btree">
             <column name="menu_id"/>
         </index>

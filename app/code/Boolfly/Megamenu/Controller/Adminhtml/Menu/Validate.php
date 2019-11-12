@@ -15,7 +15,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class Edit
+ * Class Validate
  *
  * @package Boolfly\Megamenu\Controller\Adminhtml\Menu
  */
@@ -48,6 +48,24 @@ class Validate extends AbstractMenu
             $menuTree = $this->getRequest()->getParam('menu_tree', false);
             if (!is_array($menuTree) || empty($menuTree)) {
                 throw new LocalizedException(__('You should add least a menu item.'));
+            }
+            $menuId = $this->getRequest()->getParam('menu_id', false);
+            $identifier = $this->getRequest()->getParam('identifier', false);
+            /** @var \Boolfly\Megamenu\Model\Menu $menu */
+            $menu = $this->menuFactory->create();
+            if ($menuId) {
+                $menu->load($menuId);
+                if ($menuId != $menu->checkIdentifier($identifier)) {
+                    throw new LocalizedException(
+                        __('The identifier of menu must be unique.')
+                    );
+                }
+            } else {
+                if ($menu->checkIdentifier($identifier)) {
+                    throw new LocalizedException(
+                        __('The identifier of menu must be unique.')
+                    );
+                }
             }
         } catch (LocalizedException $e) {
             $error      = true;

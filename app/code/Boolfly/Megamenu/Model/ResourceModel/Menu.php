@@ -9,12 +9,13 @@
   */
 namespace Boolfly\Megamenu\Model\ResourceModel;
 
-use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Boolfly\Megamenu\Model\Menu as MenuModel;
+use Zend_Db_Select;
 
 /**
  * Class Menu
@@ -91,18 +92,39 @@ class Menu extends AbstractDb
     }
 
     /**
-     * Before save
-     *
      * @param AbstractModel $object
      * @return mixed
+     * @throws LocalizedException
      */
     protected function _beforeSave(AbstractModel $object)
     {
         $gmtDate = $this->dateTime->gmtDate();
+        $isUniqueIdentifier = $this->checkIdentifier($object->getData('identifier'));
         if ($object->isObjectNew()) {
             $object->setData('created_at', $gmtDate);
+            if ($isUniqueIdentifier) {
+                throw new LocalizedException(
+                    __('The identifier of menu must be unique.')
+                );
+            }
+        } else {
+            if ($isUniqueIdentifier != $object->getId()) {
+                throw new LocalizedException(
+                    __('The identifier of menu must be unique.')
+                );
+            }
         }
         $object->setData('updated_at', $gmtDate);
+        if (!$this->isValidIdentifier($object)) {
+            throw new LocalizedException(
+                __('The identifier contains capital letters or disallowed symbols.')
+            );
+        }
+        if ($this->isNumericIdentifier($object)) {
+            throw new LocalizedException(
+                __('The identifier key cannot be made of only numbers.')
+            );
+        }
 
         return parent::_beforeSave($object);
     }
@@ -187,6 +209,54 @@ class Menu extends AbstractDb
         $this->processMenuStoreTable($object);
 
         return $this;
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return false|int
+     */
+    protected function isValidIdentifier(AbstractModel $object)
+    {
+        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+    }
+    /**
+     *  Check whether post url key is numeric
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    protected function isNumericIdentifier(AbstractModel $object)
+    {
+        return preg_match('/^[0-9]+$/', $object->getData('identifier'));
+    }
+
+    /**
+     * @param $identifier
+     * @return string
+     * @throws LocalizedException
+     */
+    public function checkIdentifier($identifier)
+    {
+        $select = $this->getLoadByIdentifierSelect($identifier);
+        $select->reset(Zend_Db_Select::COLUMNS)->columns('menu.menu_id')->limit(1);
+        return $this->getConnection()->fetchOne($select);
+    }
+
+    /**
+     * @param $identifier
+     * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
+     */
+    protected function getLoadByIdentifierSelect($identifier)
+    {
+        $select = $this->getConnection()->select()->from(
+            ['menu' => $this->getMainTable()]
+        )->where(
+            'menu.identifier = ?',
+            $identifier
+        );
+
+        return $select;
     }
 
     /**

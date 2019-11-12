@@ -173,6 +173,18 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
     }
 
     /**
+     * Check Identifier is unique
+     *
+     * @param $identifier
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function checkIdentifier($identifier)
+    {
+        return $this->_getResource()->checkIdentifier($identifier);
+    }
+
+    /**
      * Set Scroll To Fixed
      *
      * @param string $scrollToFixed
