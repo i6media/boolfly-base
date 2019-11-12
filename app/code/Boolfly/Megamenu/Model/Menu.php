@@ -274,7 +274,6 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
             /**
              * Note: Sorted all children after parent
              */
-            /** @var Menu\Item $item */
             foreach ($itemsCollection->getData() as $itemData) {
                 $recordId                             = $itemData['record_id'];
                 $childrenData[$itemData['record_id']] = $itemData;
@@ -284,9 +283,41 @@ class Menu extends AbstractModel implements MenuInterface, IdentityInterface
                     $treeData[] = &$childrenData[$recordId];
                 }
             }
+            if (!empty($treeData)) {
+                $treeData = $this->addPropertyToTree($treeData);
+            }
+
             $this->menuTree[$this->getId()] = $treeData;
         }
 
         return $this->menuTree[$this->getId()];
+    }
+
+    /**
+     * Add first - last - has_children property
+     *
+     * @param $parent
+     * @return mixed
+     */
+    private function addPropertyToTree(&$parent)
+    {
+        $firstChildren = reset($parent);
+        $lastChildren  = end($parent);
+        foreach ($parent as $children) {
+            $children['first']        = false;
+            $children['last']         = false;
+            $children['has_children'] = false;
+            if ($children == $firstChildren) {
+                $children['first'] = true;
+            } elseif ($children == $lastChildren) {
+                $children['last'] = true;
+            }
+            if (!empty($parent['children'])) {
+                $children['has_children'] = true;
+                $this->addPropertyToTree($parent['children']);
+            }
+        }
+
+        return $parent;
     }
 }

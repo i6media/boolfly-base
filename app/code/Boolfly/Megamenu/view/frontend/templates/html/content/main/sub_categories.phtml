@@ -16,11 +16,11 @@ $level = $block->getLevel();
 ?>
 <?php $i = 1;?>
 <?php foreach ($groupCategory as $categories) :?>
-    <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $level?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
+    <div class="boolfly-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $level?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
         <?php /** @var \Magento\Catalog\Model\Category $category */?>
         <?php foreach ($categories as $category) :?>
             <?php $html = $block->setCurrentCategory($category)->setLevel($level + 1)->getContentHtml();?>
-            <div id="boolfly-menu-item-category<?= /* @escapeNotVerified */ $category->getId()?>"
+            <div id="boolfly-menu-item<?= /* @escapeNotVerified */ $item->getRecordId();?>-category<?= /* @escapeNotVerified */ $category->getId()?>"
                  class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?>">
                 <a href="<?= /* @escapeNotVerified */ $category->getUrl()?>"
                    target="<?= /* @escapeNotVerified */ $item->getLinkTarget()?:'_self';?>"

@@ -141,11 +141,17 @@ class Item extends Template implements IdentityInterface
     /**
      * Get Sub Categories Html
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return string
      */
     public function getSubCategoriesHtml()
     {
-        return $this->getSubCategoryBlock()->setItem($this->getItem())->toHtml();
+        try {
+            return $this->getSubCategoryBlock()
+                ->setItem($this->getItem())
+                ->toHtml();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**
@@ -274,16 +280,39 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
-     * Additional class for item
+     * Get Additional Class
      *
      * @return string
      */
-    public function getAdditionalClass()
+    public function getAdditionalClasses()
+    {
+        /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
+        $item  = $this->getItem();
+        $class = [];
+        if ($item->getData('first')) {
+            $class[] = 'first';
+        }
+        if ($item->getData('last')) {
+            $class[] = 'last';
+        }
+        if ($item->getChildren()) {
+            $class[] = 'has-children';
+        }
+
+        return join(' ', $class);
+    }
+
+    /**
+     * Additional class for content
+     *
+     * @return string
+     */
+    public function getContentAdditionalClass()
     {
         $item            = $this->getItem();
         $additionalClass = [
             'level' . $item->getLevel(),
-            'bf-column-' . $item->getData('main_content_child_columns')
+            'boolfly-column-' . $item->getData('main_content_child_columns')
         ];
 
         return implode(' ', $additionalClass);
@@ -307,9 +336,6 @@ class Item extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        return [
-            self::CACHE_TAG,
-            $this->getItem()->getId()
-        ];
+        return $this->getItem()->getIdentities();
     }
 }

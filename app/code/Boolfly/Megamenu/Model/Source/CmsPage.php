@@ -31,7 +31,6 @@ class CmsPage implements OptionSourceInterface
      */
     private $collectionFactory;
 
-
     /**
      * CmsPage constructor.
      *

@@ -126,18 +126,6 @@ class Topmenu extends TopmenuDefault implements IdentityInterface
     }
 
     /**
-     * @param $item
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getChildContentHtml($item)
-    {
-        return $this->getItemBlock()
-            ->setItem($item)
-            ->setTemplate('Boolfly_Megamenu::html/content.phtml')->toHtml();
-    }
-
-    /**
      * Return unique ID(s) for each object in system
      *
      * @return string[]
@@ -145,7 +133,9 @@ class Topmenu extends TopmenuDefault implements IdentityInterface
     public function getIdentities()
     {
         if ($this->menuConfig->isEnable()) {
-            return $this->getMenuModel()->getIdentities();
+            $identities   = $this->getMenuModel()->getIdentities();
+            $identities[] = 'TOP_MENU';
+            return $identities;
         }
 
         return parent::getIdentities();

@@ -29,7 +29,6 @@ class LinkType implements OptionSourceInterface
 
     const CMS_PAGE_LINK = 'cms_page';
 
-
     /**
      * Retrieve option array
      *

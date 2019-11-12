@@ -137,7 +137,6 @@ define([
             return this._super();
         },
 
-
         /**
          * Sets record data to cache
          */
@@ -553,7 +552,6 @@ define([
 
             return changed;
         },
-
 
         /**
          * Triggers update event
@@ -972,11 +970,8 @@ define([
         addChild: function (data, index, prop) {
             var template = this.templates.record,
                 child;
-
-
-            // index = index || _.isNumber(index) ? index : this.getNextIndex();
-            index = index || _.isNumber(index) ? index : this.currentIndexRecord;
-            prop  = prop || _.isNumber(prop) ? prop : this.getNextRecordId();
+            index        = index || _.isNumber(index) ? index : this.currentIndexRecord;
+            prop         = prop || _.isNumber(prop) ? prop : this.getNextRecordId();
 
             _.extend(this.templates.record, {
                 recordId: prop

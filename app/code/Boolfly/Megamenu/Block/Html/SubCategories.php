@@ -45,7 +45,7 @@ class SubCategories extends Template implements IdentityInterface
     /**
      * @var string
      */
-    protected $_template = 'Boolfly_Megamenu::html/content/sub_categories.phtml';
+    protected $_template = 'Boolfly_Megamenu::html/content/main/sub_categories.phtml';
 
     /**
      * @var FilterProvider
@@ -286,7 +286,7 @@ class SubCategories extends Template implements IdentityInterface
         }
         $additionalClass = [
             'level' . $this->getLevel(),
-            'bf-column-' . $childCols
+            'boolfly-column-' . $childCols
         ];
 
         return implode(' ', $additionalClass);

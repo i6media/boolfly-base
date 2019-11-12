@@ -19,10 +19,13 @@ $item = $block->getItem();
     <span class="caret"></span>
     <span class="opener"></span>
 </a>
-<div class="boolfly-content child-content">
-    <div class="child-inner">
-        <div class="content-wrapper">
-            <?= /* @escapeNotVerified */ $block->getContentHtml();?>
+<?php $contentHtml = $block->getContentHtml();?>
+<?php if ($contentHtml) :?>
+    <div class="boolfly-content child-content">
+        <div class="child-inner">
+            <div class="content-wrapper">
+                <?= /* @escapeNotVerified */ $contentHtml;?>
+            </div>
         </div>
     </div>
-</div>
+<?php endif;?>

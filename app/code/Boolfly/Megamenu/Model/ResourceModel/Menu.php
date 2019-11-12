@@ -75,7 +75,6 @@ class Menu extends AbstractDb
         $this->getStoreLink($object);
     }
 
-
     /**
      * Get Banner Link
      *
@@ -90,7 +89,6 @@ class Menu extends AbstractDb
         $storeIds   = $connection->fetchCol($select);
         $object->setData('store_id', $storeIds);
     }
-
 
     /**
      * Before save
