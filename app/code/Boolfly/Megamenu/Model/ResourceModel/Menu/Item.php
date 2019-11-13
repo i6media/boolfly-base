@@ -56,7 +56,7 @@ class Item extends AbstractDb
      */
     public function _construct()
     {
-        $this->_init('bf_megamenu_item', 'item_id');
+        $this->_init('boolfly_megamenu_item', 'item_id');
     }
 
     /**
@@ -64,7 +64,7 @@ class Item extends AbstractDb
      */
     public function getMenuItemContentTable()
     {
-        return $this->getTable('bf_megamenu_item_content');
+        return $this->getTable('boolfly_megamenu_item_content');
     }
 
     /**

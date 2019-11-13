@@ -38,11 +38,11 @@ class MassStatus extends AbstractMenu
     /**
      * MassDelete constructor.
      *
-     * @param Context $context
-     * @param Registry $coreRegistry
+     * @param Context              $context
+     * @param Registry             $coreRegistry
      * @param MenuInterfaceFactory $menuFactory
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
+     * @param Filter               $filter
+     * @param CollectionFactory    $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -53,7 +53,7 @@ class MassStatus extends AbstractMenu
     ) {
         parent::__construct($context, $coreRegistry, $menuFactory);
         $this->collectionFactory = $collectionFactory;
-        $this->filter = $filter;
+        $this->filter            = $filter;
     }
 
     /**

@@ -36,12 +36,12 @@ class Edit extends AbstractMenu
                 $this->_redirect('megamenu/menu/*');
                 return;
             }
+        } else {
+            $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+            if (!empty($data)) {
+                $model->addData($data);
+            }
         }
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
-        if (!empty($data)) {
-            $model->addData($data);
-        }
-
         $this->_initAction();
         $this->_addBreadcrumb(
             $id ? __('Edit Menu') : __('New Menu'),

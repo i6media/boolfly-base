@@ -1,5 +1,5 @@
 {
-    "bf_megamenu": {
+    "boolfly_megamenu": {
         "column": {
             "menu_id": true,
             "title": true,
@@ -12,30 +12,30 @@
             "updated_at": true
         },
         "index": {
-            "BF_MEGAMENU_MENU_ID": true,
-            "BF_MEGAMENU_IDENTIFIER": true,
-            "BF_MEGAMENU_TITLE_IDENTIFIER": true
+            "boolfly_MEGAMENU_MENU_ID": true,
+            "boolfly_MEGAMENU_IDENTIFIER": true,
+            "boolfly_MEGAMENU_TITLE_IDENTIFIER": true
         },
         "constraint": {
             "PRIMARY": true
         }
     },
-    "bf_megamenu_store": {
+    "boolfly_megamenu_store": {
         "column": {
             "menu_id": true,
             "store_id": true
         },
         "index": {
-            "BF_MEGAMENU_STORE_MENU_ID": true,
-            "BF_MEGAMENU_STORE_STORE_ID": true
+            "boolfly_MEGAMENU_STORE_MENU_ID": true,
+            "boolfly_MEGAMENU_STORE_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
-            "BF_MEGAMENU_STORE_MENU_ID_BF_MEGAMENU_MENU_ID": true,
-            "BF_MEGAMENU_STORE_STORE_ID_STORE_STORE_ID": true
+            "boolfly_MEGAMENU_STORE_MENU_ID_boolfly_MEGAMENU_MENU_ID": true,
+            "boolfly_MEGAMENU_STORE_STORE_ID_STORE_STORE_ID": true
         }
     },
-    "bf_megamenu_item": {
+    "boolfly_megamenu_item": {
         "column": {
             "item_id": true,
             "menu_id": true,
@@ -53,16 +53,16 @@
             "updated_at": true
         },
         "index": {
-            "BF_MEGAMENU_ITEM_ITEM_ID": true,
-            "BF_MEGAMENU_ITEM_MENU_ID": true
+            "boolfly_MEGAMENU_ITEM_ITEM_ID": true,
+            "boolfly_MEGAMENU_ITEM_MENU_ID": true
         },
         "constraint": {
             "PRIMARY": true,
-            "BF_MEGAMENU_ITEM_RECORD_ID": true,
-            "BF_MEGAMENU_ITEM_MENU_ID_BF_MEGAMENU_MENU_ID": true
+            "boolfly_MEGAMENU_ITEM_RECORD_ID": true,
+            "boolfly_MEGAMENU_ITEM_MENU_ID_boolfly_MEGAMENU_MENU_ID": true
         }
     },
-    "bf_megamenu_item_content": {
+    "boolfly_megamenu_item_content": {
         "column": {
             "item_id": true,
             "type_id": true,
@@ -77,7 +77,7 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "BF_MEGAMENU_ITEM_CONTENT_ITEM_ID_BF_MEGAMENU_ITEM_ITEM_ID": true
+            "boolfly_MEGAMENU_ITEM_CONTENT_ITEM_ID_boolfly_MEGAMENU_ITEM_ITEM_ID": true
         }
     }
 }

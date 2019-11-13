@@ -19,7 +19,6 @@ define([
                 disabled: 'setDisabled',
                 recordTemplate: 'onUpdateRecordTemplate',
                 recordData: 'setDifferedFromDefault setRecordDataToCache',
-                currentPage: 'changePage',
                 elems: 'checkSpinner',
                 changed: 'updateTrigger',
                 childElems: 'updateChildElement'
@@ -28,8 +27,8 @@ define([
             isChild: false,
             hasChild: false,
             isCollapse: false,
-            expandTmpl: 'Boolfly_Megamenu/menu/expand',
-            collapseTmpl: 'Boolfly_Megamenu/menu/collapse',
+            expandTmpl: 'Boolfly_Megamenu/menu/button/expand',
+            collapseTmpl: 'Boolfly_Megamenu/menu/button/collapse',
             childElems: []
         },
 
@@ -70,6 +69,7 @@ define([
             this.isCollapse(!this.isCollapse());
             return this;
         },
+
         /**
          *
          */
@@ -80,6 +80,5 @@ define([
 
             this._super();
         }
-
     });
 });

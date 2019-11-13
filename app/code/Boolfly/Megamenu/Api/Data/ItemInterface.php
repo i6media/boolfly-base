@@ -20,7 +20,7 @@ interface ItemInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_megamenu_item';
+    const CACHE_TAG = 'boolfly_megamenu_item';
 
     /**#@+
      * Constants defined for keys of data array

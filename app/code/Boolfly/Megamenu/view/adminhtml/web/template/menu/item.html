@@ -8,10 +8,25 @@
  * *  @project   Mega Menu
  */
 -->
-<div class="dd-handle" text="itemTitle"></div>
-<render args="buttonTmpl"/>
-<div class="dd3-content" visible="false">
-    <each args="data: elems, as: 'element'">
-        <render if="hasTemplate()"/>
-    </each>
-</div>
+<li class="dd-item"
+    repeat="foreach: elems, item: '$record'"
+    attr="
+        'data-component': $record().name,
+        'data-index': $record().recordId,"
+    css="'dd-collapsed': $record().isCollapse() && $record().hasChild()">
+    <render args="$record().collapseTmpl" if="$record().hasChild()"/>
+    <render args="$record().expandTmpl" if="$record().hasChild()"/>
+    <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+    <ol class="dd-list"
+        data-bind="template: {
+            name: template,
+            data: {
+                index: $record().index,
+                template: template,
+                elems: $record().childElems
+            }
+        }">
+    </ol>
+</li>

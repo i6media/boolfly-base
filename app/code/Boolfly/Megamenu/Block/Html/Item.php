@@ -67,12 +67,12 @@ class Item extends Template implements IdentityInterface
     /**
      * Item constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context     $context
      * @param MenuInterfaceFactory $menuFactory
-     * @param DataObject $dataObject
-     * @param FilterProvider $filterProvider
-     * @param ItemInterface $menuItem
-     * @param array $data
+     * @param DataObject           $dataObject
+     * @param FilterProvider       $filterProvider
+     * @param ItemInterface        $menuItem
+     * @param array                $data
      */
     public function __construct(
         Template\Context $context,
@@ -86,7 +86,7 @@ class Item extends Template implements IdentityInterface
         $this->menuFactory    = $menuFactory;
         $this->menuItem       = $menuItem;
         $this->filterProvider = $filterProvider;
-        $this->dataObject = $dataObject;
+        $this->dataObject     = $dataObject;
     }
 
     /**
@@ -298,7 +298,7 @@ class Item extends Template implements IdentityInterface
     {
         /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
         if ($item === null) {
-            $item  = $this->getItem();
+            $item = $this->getItem();
         } else {
             $item = $this->getItemObject($item);
         }
@@ -339,7 +339,7 @@ class Item extends Template implements IdentityInterface
         $item            = $this->getItem();
         $additionalClass = [
             'level' . $item->getLevel(),
-            'boolfly-column-' . $item->getData('main_content_child_columns')?:0
+            'boolfly-column-' . $item->getData('main_content_child_columns') ?: 0
         ];
 
         return implode(' ', $additionalClass);

@@ -11,7 +11,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="bf_megamenu" resource="default" engine="innodb"
+    <table name="boolfly_megamenu" resource="default" engine="innodb"
            comment="Boolfly mega menu table">
         <column xsi:type="int" name="menu_id" padding="11" nullable="false" unsigned="false" identity="true"
                 comment="Entity Id"/>
@@ -32,15 +32,12 @@
         <index referenceId="BOOLFLY_MEGA_MENU_MENU_ID" indexType="btree">
             <column name="menu_id"/>
         </index>
-        <index referenceId="BOOLFLY_MEGA_MENU_IDENTIFIER_FIELD" indexType="btree">
-            <column name="identifier"/>
-        </index>
-        <index referenceId="BF_MEGAMENU_79B209645FB0D568E4FBA1CC62512ACB" indexType="fulltext">
+        <index referenceId="boolfly_MEGAMENU_79B209645FB0D568E4FBA1CC62512ACB" indexType="fulltext">
             <column name="title"/>
             <column name="identifier"/>
         </index>
     </table>
-    <table name="bf_megamenu_store" resource="default" engine="innodb"
+    <table name="boolfly_megamenu_store" resource="default" engine="innodb"
            comment="Boolfly mega menu store table">
         <column xsi:type="int" name="menu_id" padding="11" nullable="false" unsigned="false" identity="false"
                 comment="Menu ID"/>
@@ -52,12 +49,12 @@
         </constraint>
         <constraint xsi:type="foreign"
                     referenceId="CSTR_BOOLFLY_MEGA_MENU_STORE_MENU_ID_TO_MENU_ID"
-                    table="bf_megamenu_store" column="menu_id"
-                    referenceTable="bf_megamenu"
+                    table="boolfly_megamenu_store" column="menu_id"
+                    referenceTable="boolfly_megamenu"
                     referenceColumn="menu_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign"
                     referenceId="CSTR_BOOLFLY_MEGA_MENU_STORE_STORE_ID_TO_STORE_ID"
-                    table="bf_megamenu_store" column="store_id"
+                    table="boolfly_megamenu_store" column="store_id"
                     referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
         <index referenceId="BOOLFLY_MEGA_MENU_STORE_MENU_ID" indexType="btree">
@@ -67,7 +64,7 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="bf_megamenu_item" resource="default" engine="innodb"
+    <table name="boolfly_megamenu_item" resource="default" engine="innodb"
            comment="Boolfly Mega Menu item table">
         <column xsi:type="int" name="item_id" padding="11" nullable="false" unsigned="false" identity="true"
                 comment="Item Id"/>
@@ -95,8 +92,8 @@
         </constraint>
         <constraint xsi:type="foreign"
                     referenceId="CSTR_BOOLFLY_MEGA_MENU_ITEM_MENU_ID_TO_ENTITY_ID"
-                    table="bf_megamenu_item" column="menu_id"
-                    referenceTable="bf_megamenu"
+                    table="boolfly_megamenu_item" column="menu_id"
+                    referenceTable="boolfly_megamenu"
                     referenceColumn="menu_id" onDelete="CASCADE"/>
         <index referenceId="BOOLFLY_MEGA_MENU_ITEM_ITEM_ID" indexType="btree">
             <column name="item_id"/>
@@ -105,7 +102,7 @@
             <column name="menu_id"/>
         </index>
     </table>
-    <table name="bf_megamenu_item_content" resource="default" engine="innodb"
+    <table name="boolfly_megamenu_item_content" resource="default" engine="innodb"
            comment="Boolfly Mega Menu Item Content table">
         <column xsi:type="int" name="item_id" padding="11" nullable="false" identity="false"
                 comment="Item Id"/>
@@ -125,8 +122,8 @@
         </constraint>
         <constraint xsi:type="foreign"
                     referenceId="CSTR_BOOLFLY_MEGA_MENU_ITEM_CONTENT_ITEM_ID_TO_ITEM_ID"
-                    table="bf_megamenu_item_content" column="item_id"
-                    referenceTable="bf_megamenu_item"
+                    table="boolfly_megamenu_item_content" column="item_id"
+                    referenceTable="boolfly_megamenu_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
     </table>
 </schema>

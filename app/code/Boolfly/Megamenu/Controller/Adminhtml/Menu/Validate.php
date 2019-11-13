@@ -49,13 +49,13 @@ class Validate extends AbstractMenu
             if (!is_array($menuTree) || empty($menuTree)) {
                 throw new LocalizedException(__('You should add least a menu item.'));
             }
-            $menuId = $this->getRequest()->getParam('menu_id', false);
+            $menuId     = $this->getRequest()->getParam('menu_id', false);
             $identifier = $this->getRequest()->getParam('identifier', false);
             /** @var \Boolfly\Megamenu\Model\Menu $menu */
             $menu = $this->menuFactory->create();
             if ($menuId) {
                 $menu->load($menuId);
-                if ($menuId != $menu->checkIdentifier($identifier)) {
+                if ($menu->checkIdentifier($identifier) && $menuId != $menu->checkIdentifier($identifier)) {
                     throw new LocalizedException(
                         __('The identifier of menu must be unique.')
                     );

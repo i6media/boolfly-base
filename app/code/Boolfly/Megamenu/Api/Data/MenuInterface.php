@@ -20,7 +20,7 @@ interface MenuInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_megamenu';
+    const CACHE_TAG = 'boolfly_megamenu';
 
     /**#@+
      * Constants defined for keys of data array

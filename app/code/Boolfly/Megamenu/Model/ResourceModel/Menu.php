@@ -53,7 +53,7 @@ class Menu extends AbstractDb
      */
     public function _construct()
     {
-        $this->_init('bf_megamenu', 'menu_id');
+        $this->_init('boolfly_megamenu', 'menu_id');
     }
 
     /**
@@ -98,7 +98,7 @@ class Menu extends AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        $gmtDate = $this->dateTime->gmtDate();
+        $gmtDate            = $this->dateTime->gmtDate();
         $isUniqueIdentifier = $this->checkIdentifier($object->getData('identifier'));
         if ($object->isObjectNew()) {
             $object->setData('created_at', $gmtDate);
@@ -108,7 +108,7 @@ class Menu extends AbstractDb
                 );
             }
         } else {
-            if ($isUniqueIdentifier != $object->getId()) {
+            if ($isUniqueIdentifier && $isUniqueIdentifier != $object->getId()) {
                 throw new LocalizedException(
                     __('The identifier of menu must be unique.')
                 );
@@ -120,6 +120,7 @@ class Menu extends AbstractDb
                 __('The identifier contains capital letters or disallowed symbols.')
             );
         }
+
         if ($this->isNumericIdentifier($object)) {
             throw new LocalizedException(
                 __('The identifier key cannot be made of only numbers.')
@@ -136,7 +137,7 @@ class Menu extends AbstractDb
      */
     public function getMenuStoreTable()
     {
-        return $this->getTable('bf_megamenu_store');
+        return $this->getTable('boolfly_megamenu_store');
     }
 
     /**
@@ -213,7 +214,7 @@ class Menu extends AbstractDb
 
     /**
      * @param AbstractModel $object
-     * @return false|int
+     * @return false|integer
      */
     protected function isValidIdentifier(AbstractModel $object)
     {
@@ -223,7 +224,7 @@ class Menu extends AbstractDb
      *  Check whether post url key is numeric
      *
      * @param AbstractModel $object
-     * @return bool
+     * @return boolean
      */
     protected function isNumericIdentifier(AbstractModel $object)
     {
@@ -260,7 +261,7 @@ class Menu extends AbstractDb
     }
 
     /**
-     * Save data to bf_megamenu_store
+     * Save data to boolfly_megamenu_store
      *
      * @param AbstractModel $model
      */

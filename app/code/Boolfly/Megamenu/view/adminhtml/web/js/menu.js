@@ -75,7 +75,7 @@ define([
             recordDataCache: [],
             structureMenu: {},
             currentIndexRecord: 0,
-            menuTmpl: 'Boolfly_Megamenu/menu/li',
+            menuItemTmpl: 'Boolfly_Megamenu/menu/item',
             menuButtonTmpl: 'Boolfly_Megamenu/menu/menu-button',
             startIndex: 0
         },

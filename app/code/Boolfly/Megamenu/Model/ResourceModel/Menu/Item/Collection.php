@@ -68,7 +68,7 @@ class Collection extends AbstractCollection
             $cols      = $this->getContentColumnByAlias($type, $alias);
             $condition = $this->getConditionToJoinContent($typeId, $alias);
             $select->joinLeft([
-                $alias => $this->getTable('bf_megamenu_item_content')
+                $alias => $this->getTable('boolfly_megamenu_item_content')
             ], $condition, $cols);
         }
 
