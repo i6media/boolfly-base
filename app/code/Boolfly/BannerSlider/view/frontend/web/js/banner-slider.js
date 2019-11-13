@@ -46,11 +46,18 @@ define([
                             arrows: false,
                             dots: true
                         }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings:{
+                            dots: false
+                        }
                     }
                 ]
             });
             var parent = element.parent();
             $(this.element).on('lazyLoaded', function () {
+                $('.slick-slider').get(0).slick.setPosition();
                 element.removeClass('no-display');
                 parent.find('[data-role=loader]').remove();
             })
