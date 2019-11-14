@@ -127,6 +127,7 @@ class Slider extends Template
                 /** @var SliderCollection $sliderCollection */
                 $sliderCollection = $this->sliderCollectionFactory->create();
                 $sliderCollection->addCmsPageToFilter($pageId);
+                $sliderCollection->addActiveStatusFilter();
                 if ($sliderCollection->getSize() > 0) {
                     $this->slider = $sliderCollection->getFirstItem();
                 }

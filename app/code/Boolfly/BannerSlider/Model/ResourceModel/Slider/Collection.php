@@ -12,6 +12,7 @@ namespace Boolfly\BannerSlider\Model\ResourceModel\Slider;
 use Boolfly\BannerSlider\Model\ResourceModel\Slider as SliderResourceModel;
 use Boolfly\BannerSlider\Model\Slider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Boolfly\BannerSlider\Model\Source\Status;
 
 /**
  * Class Collection
@@ -47,6 +48,17 @@ class Collection extends AbstractCollection
     {
         return parent::getResource();
     }
+
+    /**
+     * Only get enable banner
+     *
+     * @return Collection
+     */
+    public function addActiveStatusFilter()
+    {
+        return $this->addFieldToFilter('status', Status::STATUS_ENABLED);
+    }
+
 
     /**
      * @param $pageId
