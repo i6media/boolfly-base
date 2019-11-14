@@ -14,6 +14,9 @@
         <observer name="processingImageUpload" instance="Boolfly\BannerSlider\Observer\ProcessingImageUpload"/>
     </event>
     <event name="boolfly_banner_delete_commit_after">
-        <observer name="checkingImageUpload" instance="Boolfly\BannerSlider\Observer\CheckingImageUploaded"/>
+        <observer name="deleteImageUpload" instance="Boolfly\BannerSlider\Observer\CheckImageUploaded"/>
+    </event>
+    <event name="boolfly_banner_save_commit_after">
+        <observer name="checkingRedundantImageUpload" instance="Boolfly\BannerSlider\Observer\CheckImageUploaded"/>
     </event>
 </config>

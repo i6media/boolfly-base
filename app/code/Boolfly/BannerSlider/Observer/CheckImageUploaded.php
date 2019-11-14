@@ -12,24 +12,19 @@ namespace Boolfly\BannerSlider\Observer;
 use Boolfly\BannerSlider\Api\Data\BannerInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Boolfly\BannerSlider\Model\ImageUploader;
 use Boolfly\BannerSlider\Model\ImageField;
 use Boolfly\BannerSlider\Helper\RedundantImageChecker;
 
 /**
- * Class CheckingImageUploaded
+ * Class CheckImageUploaded
  *
  * @package Boolfly\BannerSlider\Observer
  *
  * @event boolfly_banner_delete_commit_after
+ * @event boolfly_banner_save_commit_after
  */
-class CheckingImageUploaded implements ObserverInterface
+class CheckImageUploaded implements ObserverInterface
 {
-    /**
-     * @var ImageUploader
-     */
-    private $imageUploader;
-
     /**
      * @var RedundantImageChecker
      */
@@ -38,19 +33,16 @@ class CheckingImageUploaded implements ObserverInterface
     /**
      * CheckingImageUploaded constructor.
      *
-     * @param ImageUploader $imageUploader
      * @param RedundantImageChecker $redundantImageChecker
      */
     public function __construct(
-        ImageUploader $imageUploader,
         RedundantImageChecker $redundantImageChecker
     ) {
-        $this->imageUploader = $imageUploader;
         $this->redundantImageChecker = $redundantImageChecker;
     }
 
     /**
-     * Dispatch event `boolfly_banner_delete_commit_after`
+     * Dispatch event
      *
      * @param Observer $observer
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -60,23 +52,7 @@ class CheckingImageUploaded implements ObserverInterface
         $banner = $observer->getEvent()->getData('banner');
         if ($banner && $banner instanceof BannerInterface) {
             foreach (ImageField::getField() as $field) {
-                $this->deleteFile($banner, $field);
-            }
-        }
-    }
-
-    /**
-     * Delete File
-     *
-     * @param \Boolfly\BannerSlider\Model\Banner|BannerInterface $object
-     * @param $key
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    protected function deleteFile(BannerInterface $object, $key)
-    {
-        if ($image = $object->getData($key)) {
-            if ($this->redundantImageChecker->checkImageUnused($image)) {
-                $this->imageUploader->deleteImageFile($image);
+                $this->redundantImageChecker->process($banner->getOrigData($field));
             }
         }
     }

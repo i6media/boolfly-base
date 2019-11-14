@@ -34,7 +34,7 @@ class Save extends AbstractBanner
             if (!empty($data['banner_id'])) {
                 $model->load($data['banner_id']);
                 if ($data['banner_id'] != $model->getId()) {
-                    throw new LocalizedException(__('Wrong banner ID: %1.', $data['banner_id']));
+                    throw new LocalizedException(__('Wrong banner Id: %1.', $data['banner_id']));
                 }
             }
             $model->addData($data);

@@ -12,6 +12,7 @@ namespace Boolfly\BannerSlider\Helper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Boolfly\BannerSlider\Model\ImageField;
+use Boolfly\BannerSlider\Model\ImageUploader;
 
 /**
  * Class RedundantImageChecker
@@ -31,24 +32,45 @@ class RedundantImageChecker
     private $connection;
 
     /**
+     * @var ImageUploader
+     */
+    private $imageUploader;
+
+    /**
      * RedundantImageChecker constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param ImageUploader $imageUploader
      */
     public function __construct(
-         ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ImageUploader $imageUploader
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->connection = $resourceConnection->getConnection();
+        $this->imageUploader = $imageUploader;
+    }
+
+    /**
+     * Delete the image un-used
+     *
+     * @param $image
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function process($image)
+    {
+        if ($image && is_string($image) && $this->isRedundant($image)) {
+            $this->imageUploader->deleteImageFile($image);
+        }
     }
 
     /**
      * Checking Image Unused
      *
-     * @param $image
+     * @param string $image
      * @return boolean
      */
-    public function checkImageUnused($image)
+    private function isRedundant($image)
     {
         $connection = $this->connection;
         $conditionArray = [];

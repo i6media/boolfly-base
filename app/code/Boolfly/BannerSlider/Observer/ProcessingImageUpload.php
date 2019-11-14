@@ -14,6 +14,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Boolfly\BannerSlider\Model\ImageUploader;
 use Boolfly\BannerSlider\Model\ImageField;
+use Boolfly\BannerSlider\Helper\RedundantImageChecker;
 
 /**
  * Class ProcessingImageUpload
@@ -28,14 +29,22 @@ class ProcessingImageUpload implements ObserverInterface
     private $imageUploader;
 
     /**
+     * @var RedundantImageChecker
+     */
+    private $redundantImageChecker;
+
+    /**
      * ProcessingImageUpload constructor.
      *
      * @param ImageUploader $imageUploader
+     * @param RedundantImageChecker $redundantImageChecker
      */
     public function __construct(
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
+        RedundantImageChecker $redundantImageChecker
     ) {
         $this->imageUploader = $imageUploader;
+        $this->redundantImageChecker = $redundantImageChecker;
     }
 
     /**
