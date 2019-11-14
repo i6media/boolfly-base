@@ -37,8 +37,6 @@ class Save extends AbstractBanner
                     throw new LocalizedException(__('Wrong banner ID: %1.', $data['banner_id']));
                 }
             }
-            print_r($data);
-            exit;
             $model->addData($data);
             $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($model->getData());
             try {
