@@ -45,8 +45,8 @@ class Validate extends AbstractSlider
         $messages = [];
         $response = new DataObject();
         try {
-            $banners = $this->getRequest()->getParam('banners');
-            if (!($banners && isset($banners['assigned_banners']))) {
+            $banners = $this->getRequest()->getParam('assigned_banners');
+            if (!($banners && !empty($banners))) {
                 throw new LocalizedException(__('You should assign least a banner.'));
             }
         } catch (LocalizedException $e) {

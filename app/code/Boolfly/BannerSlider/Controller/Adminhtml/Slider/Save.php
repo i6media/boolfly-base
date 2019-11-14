@@ -49,7 +49,8 @@ class Save extends AbstractSlider
 
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(__('Something went wrong while saving the banner.'));
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the slider.'));
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e->getMessage());
                 return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
             }

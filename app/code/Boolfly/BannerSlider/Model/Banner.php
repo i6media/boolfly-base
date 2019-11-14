@@ -383,7 +383,7 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     /**
      * Check Button
      *
-     * @return bool
+     * @return boolean
      */
     public function hasButton()
     {

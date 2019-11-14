@@ -40,15 +40,15 @@ class RedundantImageChecker
      * RedundantImageChecker constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param ImageUploader $imageUploader
+     * @param ImageUploader      $imageUploader
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         ImageUploader $imageUploader
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->connection = $resourceConnection->getConnection();
-        $this->imageUploader = $imageUploader;
+        $this->connection         = $resourceConnection->getConnection();
+        $this->imageUploader      = $imageUploader;
     }
 
     /**
@@ -72,13 +72,13 @@ class RedundantImageChecker
      */
     private function isRedundant($image)
     {
-        $connection = $this->connection;
+        $connection     = $this->connection;
         $conditionArray = [];
         foreach (ImageField::getField() as $field) {
             $conditionArray[] = $connection->quoteInto($field . ' = ?', $image);
         }
         $conditions = join(' OR ', $conditionArray);
-        $select = $connection->select()
+        $select     = $connection->select()
             ->from($connection->getTableName('bf_banner'), 'banner_id')
             ->where($conditions)
             ->limit(1);

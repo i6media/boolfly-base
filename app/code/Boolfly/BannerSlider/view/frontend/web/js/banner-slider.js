@@ -46,13 +46,13 @@ define([
                             arrows: false,
                             dots: true
                         }
-                    },
+                },
                     {
                         breakpoint: 768,
                         settings:{
                             dots: false
                         }
-                    }
+                }
                 ]
             });
             var parent = element.parent();

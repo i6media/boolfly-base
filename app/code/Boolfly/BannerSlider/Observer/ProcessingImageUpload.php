@@ -36,14 +36,14 @@ class ProcessingImageUpload implements ObserverInterface
     /**
      * ProcessingImageUpload constructor.
      *
-     * @param ImageUploader $imageUploader
+     * @param ImageUploader         $imageUploader
      * @param RedundantImageChecker $redundantImageChecker
      */
     public function __construct(
         ImageUploader $imageUploader,
         RedundantImageChecker $redundantImageChecker
     ) {
-        $this->imageUploader = $imageUploader;
+        $this->imageUploader         = $imageUploader;
         $this->redundantImageChecker = $redundantImageChecker;
     }
 

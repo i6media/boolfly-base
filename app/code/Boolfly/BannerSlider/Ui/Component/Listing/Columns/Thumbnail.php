@@ -72,7 +72,7 @@ class Thumbnail extends Column
                     continue;
                 }
                 $imageName                      = $item[$fieldName];
-                $item[$fieldName . '_src']      = $this->helperData->getResizeImage($imageName);
+                $item[$fieldName . '_src']      = $this->helperData->getResizeImage($imageName, null, 50);
                 $item[$fieldName . '_alt']      = $item['image_alt'];
                 $item[$fieldName . '_link']     = $this->urlBuilder->getUrl(
                     'bannerslider/banner/edit',

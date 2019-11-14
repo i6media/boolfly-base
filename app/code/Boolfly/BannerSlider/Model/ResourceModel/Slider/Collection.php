@@ -68,7 +68,8 @@ class Collection extends AbstractCollection
     {
         if ($pageId && is_numeric($pageId)) {
             $conditions = $this->getConnection()->quoteInto(
-                'main_table.slider_id = cms_page.slider_id AND cms_page.page_id = ?', $pageId
+                'main_table.slider_id = cms_page.slider_id AND cms_page.page_id = ?',
+                $pageId
             );
             $this->getSelect()->joinInner(
                 ['cms_page' => $this->getResource()->getSliderCmsPageTable()],

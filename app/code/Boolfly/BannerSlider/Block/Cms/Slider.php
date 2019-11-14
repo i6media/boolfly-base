@@ -59,12 +59,12 @@ class Slider extends Template
     /**
      * Slider constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context        $context
      * @param BannerCollectionFactory $bannerCollectionFactory
      * @param SliderCollectionFactory $sliderCollectionFactory
-     * @param PageFactory $pageFactory
-     * @param Json $serializer
-     * @param array $data
+     * @param PageFactory             $pageFactory
+     * @param Json                    $serializer
+     * @param array                   $data
      */
     public function __construct(
         Template\Context $context,
@@ -77,14 +77,14 @@ class Slider extends Template
         parent::__construct($context, $data);
         $this->bannerCollectionFactory = $bannerCollectionFactory;
         $this->sliderCollectionFactory = $sliderCollectionFactory;
-        $this->serializer = $serializer;
-        $this->pageFactory = $pageFactory;
+        $this->serializer              = $serializer;
+        $this->pageFactory             = $pageFactory;
     }
 
     /**
      * Get banner collection
      *
-     * @return bool|Collection
+     * @return boolean|Collection
      */
     public function getBannerCollection()
     {
@@ -116,13 +116,13 @@ class Slider extends Template
     /**
      * Get Slider
      *
-     * @return bool|\Boolfly\BannerSlider\Model\Slider
+     * @return boolean|\Boolfly\BannerSlider\Model\Slider
      */
     public function getSlider()
     {
         if ($this->slider === null) {
             $this->slider = false;
-            $pageId = $this->getPageId();
+            $pageId       = $this->getPageId();
             if ($pageId) {
                 /** @var SliderCollection $sliderCollection */
                 $sliderCollection = $this->sliderCollectionFactory->create();
@@ -160,14 +160,14 @@ class Slider extends Template
         $config = [
             'fade' => $this->isFadeEffect(),
             'autoplay' => $this->getSlider()->isAutoPlay(),
-            'autoplaySpeed' => $this->getSlider()->getSpeed()?: 5000,
+            'autoplaySpeed' => $this->getSlider()->getSpeed() ?: 5000,
         ];
 
         return $this->serializer->serialize($config);
     }
 
     /**
-     * @return bool|string
+     * @return boolean|string
      */
     protected function isFadeEffect()
     {
@@ -178,7 +178,7 @@ class Slider extends Template
     /**
      * Check is homepage
      *
-     * @return bool
+     * @return boolean
      */
     public function isHomepage()
     {
