@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © Boolfly. All rights reserved.
+ *  * Copyright © 2019 Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -14,13 +14,16 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Boolfly\BannerSlider\Model\ImageUploader;
 use Boolfly\BannerSlider\Model\ImageField;
+use Boolfly\BannerSlider\Helper\RedundantImageChecker;
 
 /**
- * Class ProcessingImageUpload
+ * Class CheckingImageUploaded
  *
  * @package Boolfly\BannerSlider\Observer
+ *
+ * @event boolfly_banner_delete_commit_after
  */
-class ProcessingImageUpload implements ObserverInterface
+class CheckingImageUploaded implements ObserverInterface
 {
     /**
      * @var ImageUploader
@@ -28,17 +31,27 @@ class ProcessingImageUpload implements ObserverInterface
     private $imageUploader;
 
     /**
-     * ProcessingImageUpload constructor.
+     * @var RedundantImageChecker
+     */
+    private $redundantImageChecker;
+
+    /**
+     * CheckingImageUploaded constructor.
      *
      * @param ImageUploader $imageUploader
+     * @param RedundantImageChecker $redundantImageChecker
      */
     public function __construct(
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
+        RedundantImageChecker $redundantImageChecker
     ) {
         $this->imageUploader = $imageUploader;
+        $this->redundantImageChecker = $redundantImageChecker;
     }
 
     /**
+     * Dispatch event `boolfly_banner_delete_commit_after`
+     *
      * @param Observer $observer
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -47,39 +60,24 @@ class ProcessingImageUpload implements ObserverInterface
         $banner = $observer->getEvent()->getData('banner');
         if ($banner && $banner instanceof BannerInterface) {
             foreach (ImageField::getField() as $field) {
-                $this->processFile($banner, $field);
+                $this->deleteFile($banner, $field);
             }
         }
     }
 
     /**
-     * Process File
+     * Delete File
      *
      * @param \Boolfly\BannerSlider\Model\Banner|BannerInterface $object
      * @param $key
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function processFile(BannerInterface $object, $key)
+    protected function deleteFile(BannerInterface $object, $key)
     {
-        $files = $object->getData($key);
-        $object->unsetData($key);
-        if (is_array($files) && !empty($files)) {
-            foreach ($files as $file) {
-                if (is_array($file) && empty($file['name'])) {
-                    continue;
-                }
-                $name = $file['name'];
-                // Upload New File
-                if (isset($file['type']) && $file['tmp_name']) {
-                    $this->imageUploader->moveFileFromTmp($name);
-                } elseif (!empty($file['delete'])) {
-                    $name = null;
-                }
-                $object->setData($key, $name);
+        if ($image = $object->getData($key)) {
+            if ($this->redundantImageChecker->checkImageUnused($image)) {
+                $this->imageUploader->deleteImageFile($image);
             }
         }
-
-        return $this;
     }
 }

@@ -175,6 +175,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
@@ -206,6 +207,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
@@ -235,6 +237,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
