@@ -31,7 +31,6 @@ class LinkTarget implements OptionSourceInterface
 
     const TOP_TYPE = '_top';
 
-
     /**
      * Retrieve option array
      *
@@ -63,7 +62,6 @@ class LinkTarget implements OptionSourceInterface
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }
@@ -80,7 +78,6 @@ class LinkTarget implements OptionSourceInterface
     public function getOptionText($optionId)
     {
         $options = self::getOptionArray();
-
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
 }

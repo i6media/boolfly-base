@@ -34,6 +34,29 @@ define([
             },
 
             /**
+             * Set Custom Visible
+             *
+             * @param value
+             */
+            setCustomVisibleProperty: function (value) {
+                if (value) {
+                    this.hide();
+                    this.disable();
+                }
+            },
+
+            /**
+             * Trigger Update Value
+             *
+             * @param value
+             */
+            forceUpdateValue:function (value) {
+                if (value) {
+                    this.value.valueHasMutated();
+                }
+            },
+
+            /**
              * Change Visible And Disable property
              *
              * @param value

@@ -45,6 +45,73 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * @return mixed
+     */
+    protected function _afterLoad()
+    {
+        $this->joinContentTable();
+        return parent::_afterLoad();
+    }
+
+    /**
+     * @return $this
+     */
+    private function joinContentTable()
+    {
+        /** @var MenuItemResourceModel $resource */
+        $resource   = $this->getResource();
+        $layoutType = $resource->getLayoutType();
+
+        $select = $this->getSelect();
+        foreach ($layoutType as $type => $typeId) {
+            $alias     = $type . '_content';
+            $cols      = $this->getContentColumnByAlias($type, $alias);
+            $condition = $this->getConditionToJoinContent($typeId, $alias);
+            $select->joinLeft([
+                $alias => $this->getTable('boolfly_megamenu_item_content')
+            ], $condition, $cols);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $type
+     * @param $alias
+     * @return array
+     */
+    private function getContentColumnByAlias($type, $alias)
+    {
+        $cols = [
+            $type .'_status' => $alias. '.status',
+            $type .'_width' => $alias. '.width',
+            $type .'_content' => $alias. '.content',
+        ];
+        if ($type == 'main_content') {
+            $cols['main_content_child_columns'] = $alias. '.child_columns';
+            $cols['main_content_content_type']  = $alias. '.content_type';
+            $cols['main_content_category_id']   = $alias. '.category_id';
+        }
+
+        return $cols;
+    }
+
+    /**
+     * @param $typeId
+     * @param $alias
+     * @return string
+     */
+    private function getConditionToJoinContent($typeId, $alias)
+    {
+        $connection     = $this->getConnection();
+        $conditionArray = [
+            $connection->quoteIdentifier('main_table.item_id') . ' = '. $connection->quoteIdentifier($alias .'.item_id'),
+            $this->getConnection()->quoteInto($alias . '.type_id = ?', $typeId)
+        ];
+        return join(' AND ', $conditionArray);
+    }
+
+    /**
      * Save Item Collection
      *
      * @return $this
@@ -57,8 +124,7 @@ class Collection extends AbstractCollection
         foreach ($items as $item) {
             if ($item->isDeleted()) {
                 $item->delete();
-            } else if ($item->hasDataChanges()) {
-                $item->loadItemContent();
+            } elseif ($item->hasDataChanges()) {
                 $item->save();
             }
         }
@@ -85,8 +151,9 @@ class Collection extends AbstractCollection
      */
     public function sortAllItems()
     {
-        $this->addOrder('parent_id','ASC');
-        $this->addOrder('position','ASC');
+        $this->addOrder('level', 'ASC');
+        $this->addOrder('position', 'ASC');
+        $this->addOrder('parent_id', 'ASC');
         return $this;
     }
 
@@ -107,6 +174,6 @@ class Collection extends AbstractCollection
      */
     public function addActiveStatusFilter()
     {
-        return $this->addFieldToFilter('status', Status::STATUS_ENABLED);
+        return $this->addFieldToFilter('main_table.status', Status::STATUS_ENABLED);
     }
 }

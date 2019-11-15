@@ -17,8 +17,8 @@
                 <render args="menuButtonTmpl" if="$data.showMenuButton()"/>
                 <ol class="dd-list"
                     data-bind="template: {
-                        name: menuTmpl,
-                        data: {index: '0', template: menuTmpl, elems: $data.elems()}
+                        name: menuItemTmpl,
+                        data: {index: '0', template: menuItemTmpl, elems: $data.elems()}
                     }">
                     <li visible="false"></li>
                 </ol>

@@ -20,7 +20,7 @@ interface ItemInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_megamenu_item';
+    const CACHE_TAG = 'boolfly_megamenu_item';
 
     /**#@+
      * Constants defined for keys of data array
@@ -42,6 +42,12 @@ interface ItemInterface
     const LINK_TARGET = 'link_target';
 
     const STATUS = 'status';
+
+    const RECORD_ID = 'record_id';
+
+    const PARENT_ID = 'parent_id';
+
+    const LEVEL = 'level';
 
     /**
      * Get Id

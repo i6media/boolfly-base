@@ -56,7 +56,7 @@ class Item extends AbstractDb
      */
     public function _construct()
     {
-        $this->_init('bf_megamenu_item', 'item_id');
+        $this->_init('boolfly_megamenu_item', 'item_id');
     }
 
     /**
@@ -64,7 +64,7 @@ class Item extends AbstractDb
      */
     public function getMenuItemContentTable()
     {
-        return $this->getTable('bf_megamenu_item_content');
+        return $this->getTable('boolfly_megamenu_item_content');
     }
 
     /**
@@ -84,13 +84,13 @@ class Item extends AbstractDb
      */
     public function loadContentData(AbstractModel $object)
     {
-        $connection = $this->getConnection();
-        $select     = $connection->select()
+        $connection  = $this->getConnection();
+        $select      = $connection->select()
             ->from($this->getMenuItemContentTable())
             ->where('item_id = ?', $object->getId());
         $contentData = $connection->fetchAll($select);
         if (!empty($contentData)) {
-            $data = [];
+            $data       = [];
             $layoutType = array_flip($this->getLayoutType());
             foreach ($contentData as $row) {
                 $typeId = $row['type_id'];
@@ -108,13 +108,12 @@ class Item extends AbstractDb
      * Remove all empty strings to null values, as
      *
      * @param $value
-     * @return bool
+     * @return boolean
      */
     protected function filterNullValue($value)
     {
         return $value !== null && $value !== '';
     }
-
 
     /**
      * Before save
@@ -146,13 +145,13 @@ class Item extends AbstractDb
     /**
      * @return array|null
      */
-    protected function getLayoutType()
+    public function getLayoutType()
     {
         if ($this->layoutType === null) {
             $this->layoutType = [];
-            $layoutType = LayoutType::getOptionArray();
-            $layoutType = array_map('strtolower', $layoutType);
-            $layoutType = array_flip(array_map([$this, 'replaceSpace'], $layoutType));
+            $layoutType       = LayoutType::getOptionArray();
+            $layoutType       = array_map('strtolower', $layoutType);
+            $layoutType       = array_flip(array_map([$this, 'replaceSpace'], $layoutType));
             $this->layoutType = $layoutType;
         }
 
@@ -166,17 +165,17 @@ class Item extends AbstractDb
      */
     private function saveItemContent(AbstractModel $object)
     {
-        $content = $object->getData('content');
+        $content     = $object->getData('content');
         $dataChanges = [];
         if (is_array($content) && !empty($content)) {
-            $gmtDate = $this->dateTime->gmtDate();
+            $gmtDate    = $this->dateTime->gmtDate();
             $layoutType = $this->getLayoutType();
             foreach ($content as $key => $value) {
                 if (!empty($layoutType[$key]) && is_array($value)) {
-                    $value['item_id'] = $object->getId();
-                    $value['type_id'] = $layoutType[$key];
+                    $value['item_id']    = $object->getId();
+                    $value['type_id']    = $layoutType[$key];
                     $value['updated_at'] = $gmtDate;
-                    $dataChanges[] = array_replace_recursive($this->getDefaultData(), $value);
+                    $dataChanges[]       = array_replace_recursive($this->getDefaultData(), $value);
                 }
             }
         }

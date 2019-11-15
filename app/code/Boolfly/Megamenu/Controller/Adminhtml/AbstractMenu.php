@@ -43,8 +43,8 @@ abstract class AbstractMenu extends Action
     /**
      * AbstractMenu constructor.
      *
-     * @param Context $context
-     * @param Registry $coreRegistry
+     * @param Context              $context
+     * @param Registry             $coreRegistry
      * @param MenuInterfaceFactory $menuFactory
      */
     public function __construct(
@@ -53,10 +53,9 @@ abstract class AbstractMenu extends Action
         MenuInterfaceFactory $menuFactory
     ) {
         parent::__construct($context);
-        $this->coreRegistry  = $coreRegistry;
-        $this->menuFactory = $menuFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->menuFactory  = $menuFactory;
     }
-
 
     /**
      * Init action
@@ -72,6 +71,7 @@ abstract class AbstractMenu extends Action
             __('Manage Menu'),
             __('Manage Menu')
         );
+
         return $this;
     }
 }

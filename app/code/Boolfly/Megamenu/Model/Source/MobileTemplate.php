@@ -23,8 +23,6 @@ class MobileTemplate implements OptionSourceInterface
      *
      * @const
      */
-
-
     /**
      * Retrieve option array
      *

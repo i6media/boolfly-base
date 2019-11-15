@@ -42,8 +42,8 @@ define([
             itemEditScope: 'item_data_scope',
             childElems: [],
             menuTitle: null,
-            elementTmpl: 'Boolfly_Megamenu/menu/item',
-            buttonTmpl: 'Boolfly_Megamenu/menu/button',
+            elementTmpl: 'Boolfly_Megamenu/menu/element',
+            buttonTmpl: 'Boolfly_Megamenu/menu/action/button',
             additionalClasses: {}
         },
 

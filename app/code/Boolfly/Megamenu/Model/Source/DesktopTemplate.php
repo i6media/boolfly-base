@@ -23,12 +23,11 @@ class DesktopTemplate implements OptionSourceInterface
      *
      * @const
      */
-    const VERTICAL_LEFT = 'vertical_left';
+    const VERTICAL_LEFT = 'vertical-left';
 
-    const VERTICAL_RIGHT = 'vertical_right';
+    const VERTICAL_RIGHT = 'vertical-right';
 
     const HORIZONTAL = 'horizontal';
-
 
     /**
      * Retrieve option array

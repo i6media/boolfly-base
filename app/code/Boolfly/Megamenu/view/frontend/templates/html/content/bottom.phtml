@@ -1,0 +1,21 @@
+<?php
+/************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+/** @var \Boolfly\Megamenu\Block\Html\Item $block */
+?>
+<?php
+$type = 'bottom_block';
+?>
+<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))) :?>
+    <div class="bottom-wrapper">
+        <div class="boolfly-menu-content bottom">
+            <?= /* @escapeNotVerified */ $html;?>
+        </div>
+    </div>
+<?php endif;?>

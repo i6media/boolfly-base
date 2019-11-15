@@ -13,6 +13,10 @@ use Boolfly\Megamenu\Api\Data\ItemInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject\IdentityInterface;
 use Boolfly\Megamenu\Model\ResourceModel\Menu\Item as ItemResourceModel;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class Item
@@ -31,6 +35,33 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
      * @var string
      */
     protected $_eventObject = 'megamenu_item';
+
+    /**
+     * @var ItemUrl
+     */
+    private $itemUrl;
+
+    /**
+     * Item constructor.
+     *
+     * @param Context               $context
+     * @param Registry              $registry
+     * @param ItemUrl               $itemUrl
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        ItemUrl $itemUrl,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->itemUrl = $itemUrl;
+    }
 
     /**
      *
@@ -251,6 +282,49 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     }
 
     /**
+     * Get Record Id
+     *
+     * @return mixed
+     */
+    public function getRecordId()
+    {
+        return $this->_getData(self::RECORD_ID);
+    }
+
+    /**
+     * Get Parent Record Id
+     *
+     * @return mixed
+     */
+    public function getParentId()
+    {
+        return $this->_getData(self::PARENT_ID);
+    }
+
+    /**
+     * Get Item Children
+     *
+     * @return array|boolean
+     */
+    public function getChildren()
+    {
+        $children = $this->_getData('children');
+        if (is_array($children) && !empty($children)) {
+            return $children;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemUrl()
+    {
+        return $this->itemUrl->getItemUrl();
+    }
+
+    /**
      * @return $this
      */
     public function loadItemContent()
@@ -258,5 +332,15 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
         $this->getResource()->loadContentData($this);
 
         return $this;
+    }
+
+    /**
+     * Get Level
+     *
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->_getData(self::LEVEL);
     }
 }

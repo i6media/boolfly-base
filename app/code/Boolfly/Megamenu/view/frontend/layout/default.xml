@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Mega Menu
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="store.menu">
+            <referenceBlock class="Boolfly\Megamenu\Block\Html\Topmenu" name="catalog.topnav" template="Boolfly_Megamenu::topmenu.phtml">
+                <block class="Boolfly\Megamenu\Block\Html\Menu" name="boolfly.megamenu.topnav" as="megamenu_topnav" template="Boolfly_Megamenu::html/menu.phtml"/>
+            </referenceBlock>
+        </referenceBlock>
+    </body>
+</page>
