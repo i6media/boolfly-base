@@ -35,6 +35,8 @@ interface SliderInterface
 
     const MODE = 'mode';
 
+    const CATEGORY_ID = 'category_id';
+
     const ANIMATION_EFFECT = 'animation_effect';
 
     const AUTO_PLAY = 'auto_play';
@@ -122,6 +124,24 @@ interface SliderInterface
      * @since 1.0.0
      */
     public function setMode($mode);
+
+    /**
+     * Get Category Ids
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getCategoryIds();
+
+    /**
+     * Set Category Ids
+     *
+     * @param array $categoryIds
+     *
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCategoryIds($categoryIds);
 
     /**
      * Get Animation Effect

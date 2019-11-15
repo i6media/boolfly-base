@@ -109,56 +109,77 @@ class DataProvider extends AbstractDataProvider
         /** @var BannerInterface | \Boolfly\BannerSlider\Model\Slider $slider */
         $slider = $this->coreRegistry->registry('current_slider');
         if ($slider->getId()) {
-            $assignedBanners = $slider->getData('assigned_banners');
-            if (is_array($assignedBanners) && !empty($assignedBanners)) {
-                $bannerIds = array_keys($assignedBanners);
-                if (!empty($bannerIds)) {
-                    $bannerCollection = $this->bannerCollectionFactory->create();
-                    $bannerCollection->addFieldToFilter('banner_id', ['in' => $bannerIds]);
-                    $newBannerData = [];
-                    /** @var \Boolfly\BannerSlider\Model\Banner $banner */
-                    foreach ($bannerCollection as $banner) {
-                        $newBannerData[] = [
-                            'banner_id' => $banner->getId(),
-                            'title' => $banner->getTitle(),
-                            'image_desktop' => $this->helperData->getResizeImage($banner->getData('image_desktop'), null, 50),
-                            'image_tablet' => $this->helperData->getResizeImage($banner->getData('image_tablet'), null, 50),
-                            'image_mobile' => $this->helperData->getResizeImage($banner->getData('image_mobile'), null, 50),
-                            'position' => $assignedBanners[$banner->getId()],
-                            'status' => (string) $this->status->getOptionText((int)$banner->getStatus())
-                        ];
-                    }
-                    usort($newBannerData, function ($a, $b) {
-                        return $a['position'] <=> $b['position'];
-                    });
-                    $slider->setData('assigned_banners', $newBannerData);
-                }
-            }
-
-            $cmsPageIds = $slider->getData('cms_pages');
-            if (is_array($assignedBanners) && !empty($assignedBanners)) {
-                $pageCollection = $this->pageCollectionFactory->create();
-                $pageCollection->addFieldToFilter('page_id', $cmsPageIds);
-                $newCmsPageData = [];
-                /** @var \Magento\Cms\Model\Page $page */
-                foreach ($pageCollection as $page) {
-                    $status           = $page->getAvailableStatuses();
-                    $isActiveText     = (string)$status[(int)$page->getData('is_active')];
-                    $newCmsPageData[] = [
-                        'page_id' => $page->getId(),
-                        'title' => $page->getTitle(),
-                        'identifier' => $page->getIdentifier(),
-                        'is_active' => $isActiveText
-                    ];
-                }
-                $slider->setData('cms_pages', $newCmsPageData);
-            }
+            $this->prepareBannerData($slider);
+            $this->prepareCmsPageData($slider);
 
             $sliderData                         = $slider->getData();
             $this->loadedData[$slider->getId()] = $sliderData;
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * Prepare Banner Data
+     *
+     * @param \Boolfly\BannerSlider\Model\Slider $slider
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function prepareBannerData($slider)
+    {
+        $assignedBanners = $slider->getData('assigned_banners');
+        if (is_array($assignedBanners) && !empty($assignedBanners)) {
+            $bannerIds = array_keys($assignedBanners);
+            if (!empty($bannerIds)) {
+                $bannerCollection = $this->bannerCollectionFactory->create();
+                $bannerCollection->addFieldToFilter('banner_id', ['in' => $bannerIds]);
+                $newBannerData = [];
+                /** @var \Boolfly\BannerSlider\Model\Banner $banner */
+                foreach ($bannerCollection as $banner) {
+                    $newBannerData[] = [
+                        'banner_id' => $banner->getId(),
+                        'title' => $banner->getTitle(),
+                        'image_desktop' => $this->helperData->getResizeImage($banner->getData('image_desktop'), null, 50),
+                        'image_tablet' => $this->helperData->getResizeImage($banner->getData('image_tablet'), null, 50),
+                        'image_mobile' => $this->helperData->getResizeImage($banner->getData('image_mobile'), null, 50),
+                        'position' => $assignedBanners[$banner->getId()],
+                        'status' => (string) $this->status->getOptionText((int)$banner->getStatus())
+                    ];
+                }
+                usort($newBannerData, function ($a, $b) {
+                    return $a['position'] <=> $b['position'];
+                });
+                $slider->setData('assigned_banners', $newBannerData);
+            }
+        }
+    }
+
+    /**
+     * Prepare CMS Page Data
+     *
+     * @param \Boolfly\BannerSlider\Model\Slider $slider
+     */
+    private function prepareCmsPageData($slider)
+    {
+        $cmsPageIds = $slider->getData('cms_pages');
+        if (is_array($cmsPageIds) && !empty($cmsPageIds)) {
+            $pageCollection = $this->pageCollectionFactory->create();
+            $pageCollection->addFieldToFilter('page_id', $cmsPageIds);
+            $newCmsPageData = [];
+            /** @var \Magento\Cms\Model\Page $page */
+            foreach ($pageCollection as $page) {
+                $status           = $page->getAvailableStatuses();
+                $isActiveText     = (string)$status[(int)$page->getData('is_active')];
+                $newCmsPageData[] = [
+                    'page_id' => $page->getId(),
+                    'title' => $page->getTitle(),
+                    'identifier' => $page->getIdentifier(),
+                    'is_active' => $isActiveText
+                ];
+            }
+            $slider->setData('cms_pages', $newCmsPageData);
+        }
     }
 
     /**

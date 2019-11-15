@@ -7,28 +7,27 @@
  *  * @author    info@boolfly.com
  * *
  */
-namespace Boolfly\BannerSlider\Block\Cms;
+namespace Boolfly\BannerSlider\Block\Category;
 
 use Boolfly\BannerSlider\Model\ResourceModel\Slider\Collection as SliderCollection;
-use Magento\Cms\Model\PageFactory;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template as Template;
 use Boolfly\BannerSlider\Model\ResourceModel\Banner\CollectionFactory as BannerCollectionFactory;
 use Boolfly\BannerSlider\Model\ResourceModel\Slider\CollectionFactory as SliderCollectionFactory;
-use Magento\Cms\Helper\Page;
 use Boolfly\BannerSlider\Block\AbstractSlider;
 
 /**
  * Class Slider
  *
- * @package Boolfly\BannerSlider\Block\Cms
+ * @package Boolfly\BannerSlider\Block\Category
  */
 class Slider extends AbstractSlider
 {
     /**
-     * @var PageFactory
+     * @var Registry
      */
-    private $pageFactory;
+    protected $coreRegistry;
 
     /**
      * Slider constructor.
@@ -36,7 +35,7 @@ class Slider extends AbstractSlider
      * @param Template\Context        $context
      * @param BannerCollectionFactory $bannerCollectionFactory
      * @param SliderCollectionFactory $sliderCollectionFactory
-     * @param PageFactory             $pageFactory
+     * @param Registry                $registry
      * @param Json                    $serializer
      * @param array                   $data
      */
@@ -44,7 +43,7 @@ class Slider extends AbstractSlider
         Template\Context $context,
         BannerCollectionFactory $bannerCollectionFactory,
         SliderCollectionFactory $sliderCollectionFactory,
-        PageFactory $pageFactory,
+        Registry $registry,
         Json $serializer,
         array $data = []
     ) {
@@ -55,7 +54,7 @@ class Slider extends AbstractSlider
             $serializer,
             $data
         );
-        $this->pageFactory = $pageFactory;
+        $this->coreRegistry = $registry;
     }
 
     /**
@@ -67,11 +66,11 @@ class Slider extends AbstractSlider
     {
         if ($this->slider === null) {
             $this->slider = false;
-            $pageId       = $this->getPageId();
-            if ($pageId) {
+            $catId        = $this->getCategoryId();
+            if ($catId) {
                 /** @var SliderCollection $sliderCollection */
                 $sliderCollection = $this->sliderCollectionFactory->create();
-                $sliderCollection->addCmsPageToFilter($pageId);
+                $sliderCollection->addCategoryToFilter($catId);
                 $sliderCollection->addActiveStatusFilter();
                 if ($sliderCollection->getSize() > 0) {
                     $this->slider = $sliderCollection->getFirstItem();
@@ -83,28 +82,26 @@ class Slider extends AbstractSlider
     }
 
     /**
-     * @return $this|mixed
+     * Get Current Category
+     *
+     * @return \Magento\Catalog\Model\Category
      */
-    protected function getPageId()
+    public function getCurrentCategory()
     {
-        if ($this->isHomepage()) {
-            $pageIdentifier = $this->_scopeConfig->getValue(Page::XML_PATH_HOME_PAGE);
-            $page           = $this->pageFactory->create()->load($pageIdentifier);
-            return $page->getId();
-        } else {
-            $pageId = $this->getRequest()->getParam('page_id', false);
-        }
-
-        return $pageId;
+        return $this->coreRegistry->registry('current_category');
     }
 
     /**
-     * Check is homepage
+     * Get Category
      *
-     * @return boolean
+     * @return boolean|mixed
      */
-    public function isHomepage()
+    protected function getCategoryId()
     {
-        return $this->getRequest()->getFullActionName() === 'cms_index_index';
+        $category = $this->getCurrentCategory();
+        if ($category && $category->getId()) {
+            return $category->getId();
+        }
+        return false;
     }
 }

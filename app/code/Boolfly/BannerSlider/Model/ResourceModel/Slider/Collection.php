@@ -59,7 +59,6 @@ class Collection extends AbstractCollection
         return $this->addFieldToFilter('status', Status::STATUS_ENABLED);
     }
 
-
     /**
      * @param $pageId
      * @return $this
@@ -76,6 +75,21 @@ class Collection extends AbstractCollection
                 $conditions,
                 'page_id'
             );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add Category To Filter
+     *
+     * @param $catId
+     * @return $this
+     */
+    public function addCategoryToFilter($catId)
+    {
+        if ($catId && is_numeric($catId)) {
+            $this->addFieldToFilter('category_id', ['finset' => $catId]);
         }
 
         return $this;

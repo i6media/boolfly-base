@@ -67,7 +67,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">boolfly_slider</item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="string">1</item>
                 </item>
             </argument>
             <settings>
@@ -110,6 +110,29 @@
                         <caption translate="true">-- Please Select --</caption>
                     </settings>
                 </select>
+            </formElements>
+        </field>
+        <field name="category_id" formElement="multiselect" sortOrder="75" component="Magento_Ui/js/form/element/ui-select" template="ui/form/field">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">boolfly_slider</item>
+                    <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                    <item name="showCheckbox" xsi:type="boolean">false</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Display In Category</label>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Boolfly\BannerSlider\Model\Source\CategoryTree"/>
+                    </settings>
+                </multiselect>
             </formElements>
         </field>
         <field name="auto_play" sortOrder="80" formElement="checkbox">
