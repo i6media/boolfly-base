@@ -12,9 +12,9 @@
 <?php
 $type = 'left_block';
 ?>
-<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
+<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))) :?>
     <div class="left-wrapper" style="<?= /* @escapeNotVerified */ $block->getWidthStyle($type)?>">
-        <div class="bf-menu-content left">
+        <div class="boolfly-menu-content left">
             <?= /* @escapeNotVerified */ $html;?>
         </div>
     </div>

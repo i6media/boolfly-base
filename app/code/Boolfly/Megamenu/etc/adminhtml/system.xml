@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /************************************************************
+ * *
+ *  * Copyright © Boolfly. All rights reserved.
+ *  * See COPYING.txt for license details.
+ *  *
+ *  * @author    info@boolfly.com
+ * *  @project   Megamenu
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="boolfly" translate="label" sortOrder="400">
+            <label><![CDATA[Boolfly]]></label>
+        </tab>
+        <section id="megamenu" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+            <class>separator-top</class>
+            <tab>boolfly</tab>
+            <label>Megamenu</label>
+            <resource>Boolfly_Megamenu::config</resource>
+            <group id="settings" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="1">
+                <label>Settings</label>
+                <field id="enable" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_menu" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Select Default Megamenu</label>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <source_model>Boolfly\Megamenu\Model\Config\Source\Megamenu</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

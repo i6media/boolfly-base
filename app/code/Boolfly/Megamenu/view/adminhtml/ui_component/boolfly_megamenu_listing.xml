@@ -2,23 +2,23 @@
 <!--
  /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
- * *  @project   Banner Slider
+ * *  @project   Megamenu
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">bf_megamenu_listing.bf_megamenu_listing_data_source</item>
+            <item name="provider" xsi:type="string">boolfly_megamenu_listing.boolfly_megamenu_listing_data_source</item>
         </item>
     </argument>
     <settings>
         <spinner>megamenu_columns</spinner>
         <deps>
-            <dep>bf_megamenu_listing.bf_megamenu_listing_data_source</dep>
+            <dep>boolfly_megamenu_listing.boolfly_megamenu_listing_data_source</dep>
         </deps>
         <buttons>
             <button name="add">
@@ -28,7 +28,7 @@
             </button>
         </buttons>
     </settings>
-    <dataSource name="bf_megamenu_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="boolfly_megamenu_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="cacheRequests" xsi:type="boolean">false</param>
@@ -36,7 +36,7 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Boolfly_Megamenu::menu</aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="bf_megamenu_listing_data_source">
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="boolfly_megamenu_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>menu_id</primaryFieldName>
@@ -150,7 +150,7 @@
                 <options class="Magento\Config\Model\Config\Source\Yesno"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
-                <label translate="true">Scroll To Fixed</label>
+                <label translate="true">Sticky</label>
             </settings>
         </column>
         <column name="created_at" sortOrder="80">

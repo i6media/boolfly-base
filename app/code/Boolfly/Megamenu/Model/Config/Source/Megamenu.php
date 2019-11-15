@@ -7,40 +7,56 @@
  *  * @author    info@boolfly.com
  * *  @project   Megamenu
  */
-namespace Boolfly\Megamenu\Model\Source;
+namespace Boolfly\Megamenu\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use Boolfly\Megamenu\Model\ResourceModel\Menu\CollectionFactory;
 
 /**
- * Class DesktopTemplate
+ * Class Megamenu
  *
- * @package Boolfly\Megamenu\Model\Source
+ * @package Boolfly\Megamenu\Model\Config\Source
  */
-class DesktopTemplate implements OptionSourceInterface
+class Megamenu implements OptionSourceInterface
 {
-
-    /**@#%
-     *
-     * @const
+    /**
+     * @var array
      */
-    const VERTICAL_LEFT = 'vertical-left';
+    protected $options;
 
-    const VERTICAL_RIGHT = 'vertical-right';
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
-    const HORIZONTAL = 'horizontal';
+    /**
+     * Megamenu constructor.
+     *
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        CollectionFactory $collectionFactory
+    ) {
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * Retrieve option array
      *
      * @return string[]
      */
-    public static function getOptionArray()
+    public function getOptionArray()
     {
-        return [
-            self::VERTICAL_LEFT => __('Vertical Left'),
-            self::VERTICAL_RIGHT => __('Vertical Right'),
-            self::HORIZONTAL => __('Horizontal')
-        ];
+        if ($this->options === null) {
+            $this->options = [];
+            $collection    = $this->collectionFactory->create();
+            /** @var \Boolfly\Megamenu\Model\Menu $item */
+            foreach ($collection as $item) {
+                $this->options[$item->getId()] = $item->getTitle();
+            }
+        }
+
+        return $this->options;
     }
 
     /**
@@ -59,7 +75,6 @@ class DesktopTemplate implements OptionSourceInterface
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }
@@ -76,7 +91,6 @@ class DesktopTemplate implements OptionSourceInterface
     public function getOptionText($optionId)
     {
         $options = self::getOptionArray();
-
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
 }

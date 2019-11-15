@@ -9,9 +9,11 @@
  */
 namespace Boolfly\Megamenu\Block\Html;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
+use Boolfly\Megamenu\Api\Data\MenuInterface;
 
 /**
  * Menu block
@@ -33,31 +35,90 @@ class Menu extends Template implements IdentityInterface
     private $itemBlock;
 
     /**
-     * Topmenu constructor.
+     * @var MenuInterface
+     */
+    protected $menuModel;
+
+    /**
+     * @var int
+     */
+    protected $menuId;
+
+    /**
+     * @var DataObject
+     */
+    protected $dataObject;
+
+    /**
+     * Menu constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context     $context
+     * @param DataObject           $dataObject
      * @param MenuInterfaceFactory $menuFactory
-     * @param array $data
+     * @param array                $data
      */
     public function __construct(
         Template\Context $context,
+        DataObject $dataObject,
         MenuInterfaceFactory $menuFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->dataObject  = $dataObject;
         $this->menuFactory = $menuFactory;
     }
 
     /**
-     *
+     * @param $menuId
+     * @return $this
+     */
+    public function setMenuId($menuId)
+    {
+        $this->menuId = $menuId;
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getMenuId()
+    {
+        return $this->menuId;
+    }
+
+    /**
+     * @param $menu
+     * @return $this
+     */
+    public function setMenu($menu)
+    {
+        $this->menuModel = $menu;
+        return $this;
+    }
+
+    /**
+     * @return \Boolfly\Megamenu\Model\Menu
      */
     public function getMenu()
     {
-        /** @var \Boolfly\Megamenu\Model\Menu $menu */
-        $menu = $this->menuFactory->create();
-        $menu->load(8);
+        if ($this->menuModel === null) {
+            /** @var \Boolfly\Megamenu\Model\Menu $menu */
+            $menu = $this->menuFactory->create();
+            $menu->load($this->getMenuId());
+            $this->menuModel = $menu;
+        }
 
-        return $menu;
+        return $this->menuModel;
+    }
+
+    /**
+     * Get Menu Template: vertical or horizontal
+     *
+     * @return null|string
+     */
+    public function getMenuTemplate()
+    {
+        return $this->getMenu()->getDesktopTemplate();
     }
 
     /**
@@ -85,13 +146,38 @@ class Menu extends Template implements IdentityInterface
     /**
      * @param $item
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getLinkHtml($item)
+    public function getAdditionalClasses($item)
     {
-        return $this->getItemBlock()
-            ->setItem($item)
-            ->setTemplate('Boolfly_Megamenu::html/link.phtml')->toHtml();
+        /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
+        $item  = $this->getItemObject($item);
+        $class = [];
+        if ($item->getAdditionalClass()) {
+            $class[] = $item->getAdditionalClass();
+        }
+
+        if ($item->getData('first')) {
+            $class[] = 'first';
+        }
+        if ($item->getData('last')) {
+            $class[] = 'last';
+        }
+        if ($item->getChildren()) {
+            $class[] = 'has-children';
+        }
+
+        return join(' ', $class);
+    }
+
+    /**
+     * @param $item
+     * @return DataObject
+     */
+    private function getItemObject($item)
+    {
+        $this->dataObject->setData($item);
+
+        return $this->dataObject;
     }
 
     /**
@@ -103,7 +189,8 @@ class Menu extends Template implements IdentityInterface
     {
         return $this->getItemBlock()
             ->setItem($item)
-            ->setTemplate('Boolfly_Megamenu::html/content.phtml')->toHtml();
+            ->setTemplate('Boolfly_Megamenu::html/content.phtml')
+            ->toHtml();
     }
 
     /**
@@ -113,7 +200,6 @@ class Menu extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        return [];
+        return $this->getMenu()->getIdentities();
     }
-
 }

@@ -12,9 +12,9 @@
 <?php
 $type = 'header';
 ?>
-<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))):?>
+<?php if ($block->isEnableBlock($type) && ($html = $block->getWysiwygContent($type))) :?>
     <div class="head-wrapper">
-        <div class="bf-menu-content header">
+        <div class="boolfly-menu-content header">
             <?= /* @escapeNotVerified */ $html;?>
         </div>
     </div>

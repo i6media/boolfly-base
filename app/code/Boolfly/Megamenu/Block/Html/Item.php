@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Template;
 use Boolfly\Megamenu\Api\Data\MenuInterfaceFactory;
 use Boolfly\Megamenu\Model\Source\LayoutType;
 use Boolfly\Megamenu\Model\Source\MainContentType;
+use Magento\Framework\DataObject;
 
 /**
  * Item block
@@ -59,25 +60,33 @@ class Item extends Template implements IdentityInterface
     private $subCategoryBlock;
 
     /**
+     * @var DataObject
+     */
+    private $dataObject;
+
+    /**
      * Item constructor.
      *
-     * @param Template\Context $context
+     * @param Template\Context     $context
      * @param MenuInterfaceFactory $menuFactory
-     * @param FilterProvider $filterProvider
-     * @param ItemInterface $menuItem
-     * @param array $data
+     * @param DataObject           $dataObject
+     * @param FilterProvider       $filterProvider
+     * @param ItemInterface        $menuItem
+     * @param array                $data
      */
     public function __construct(
         Template\Context $context,
         MenuInterfaceFactory $menuFactory,
+        DataObject $dataObject,
         FilterProvider $filterProvider,
         ItemInterface $menuItem,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->menuFactory = $menuFactory;
-        $this->menuItem = $menuItem;
+        $this->menuFactory    = $menuFactory;
+        $this->menuItem       = $menuItem;
         $this->filterProvider = $filterProvider;
+        $this->dataObject     = $dataObject;
     }
 
     /**
@@ -141,11 +150,17 @@ class Item extends Template implements IdentityInterface
     /**
      * Get Sub Categories Html
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return string
      */
     public function getSubCategoriesHtml()
     {
-        return $this->getSubCategoryBlock()->setItem($this->getItem())->toHtml();
+        try {
+            return $this->getSubCategoryBlock()
+                ->setItem($this->getItem())
+                ->toHtml();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**
@@ -167,7 +182,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Group children by config columns
      *
-     * @return array|bool
+     * @return array|boolean
      */
     public function groupChildren()
     {
@@ -175,12 +190,12 @@ class Item extends Template implements IdentityInterface
             && $this->getContentType() == MainContentType::CHILD_ITEM_TYPE
         ) {
             $groupChildren = [];
-            $childCols = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
-            $totals = count($children);
-            $col = (int)ceil($totals / $childCols);
-            $remainder = $totals % $childCols;
-            $temp = $remainder > 0 ? $col + 1 : $col;
-            $group = 0;
+            $childCols     = (int)$this->getItem()->getData('main_content_child_columns') ?: 1;
+            $totals        = count($children);
+            $col           = (int)floor($totals / $childCols);
+            $remainder     = $totals % $childCols;
+            $temp          = $remainder > 0 ? $col + 1 : $col;
+            $group         = 0;
             foreach ($children as $child) {
                 if ($temp == 0) {
                     $remainder--;
@@ -197,7 +212,7 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
-     * @return int
+     * @return integer
      */
     private function getContentType()
     {
@@ -207,7 +222,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Show Content Html
      *
-     * @return bool
+     * @return boolean
      */
     public function showMainContentHtml()
     {
@@ -217,7 +232,7 @@ class Item extends Template implements IdentityInterface
     /**
      * Show Subcategories
      *
-     * @return bool
+     * @return boolean
      */
     public function showSubCategories()
     {
@@ -266,7 +281,7 @@ class Item extends Template implements IdentityInterface
      * Check Enable
      *
      * @param $type
-     * @return bool
+     * @return boolean
      */
     public function isEnableBlock($type)
     {
@@ -274,16 +289,57 @@ class Item extends Template implements IdentityInterface
     }
 
     /**
-     * Additional class for item
+     * Get Additional Classes
+     *
+     * @param array||null $item
+     * @return string
+     */
+    public function getAdditionalClasses($item = null)
+    {
+        /** @var \Boolfly\Megamenu\Model\Menu\Item $item */
+        if ($item === null) {
+            $item = $this->getItem();
+        } else {
+            $item = $this->getItemObject($item);
+        }
+        $class = [];
+        if ($item->getAdditionalClass()) {
+            $class[] = $item->getAdditionalClass();
+        }
+        if ($item->getData('first')) {
+            $class[] = 'first';
+        }
+        if ($item->getData('last')) {
+            $class[] = 'last';
+        }
+        if ($item->getChildren()) {
+            $class[] = 'has-children';
+        }
+
+        return join(' ', $class);
+    }
+
+    /**
+     * @param $item
+     * @return DataObject
+     */
+    protected function getItemObject($item)
+    {
+        $this->dataObject->setData($item);
+        return $this->dataObject;
+    }
+
+    /**
+     * Additional class for content
      *
      * @return string
      */
-    public function getAdditionalClass()
+    public function getContentAdditionalClass()
     {
-        $item = $this->getItem();
+        $item            = $this->getItem();
         $additionalClass = [
             'level' . $item->getLevel(),
-            'bf-column-' . $item->getData('main_content_child_columns')
+            'boolfly-column-' . $item->getData('main_content_child_columns') ?: 0
         ];
 
         return implode(' ', $additionalClass);
@@ -307,9 +363,6 @@ class Item extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        return [
-            self::CACHE_TAG,
-            $this->getItem()->getId()
-        ];
+        return $this->getItem()->getIdentities();
     }
 }

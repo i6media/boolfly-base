@@ -44,16 +44,20 @@ class Save extends AbstractMenu
             try {
                 $model->save();
                 $this->messageManager->addSuccessMessage(__('The menu has been saved.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData(false);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId(), '_current' => true]);
                 }
 
                 return $resultRedirect->setPath('*/*/');
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
             } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving the menu.'));
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e->getMessage());
-                return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+                return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
             }
         }
 

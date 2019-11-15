@@ -15,13 +15,13 @@ $item = $block->getItem();
 $level = $block->getLevel();
 ?>
 <?php $i = 1;?>
-<?php foreach ($groupCategory as $categories):?>
-    <div class="bf-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $level?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
+<?php foreach ($groupCategory as $categories) :?>
+    <div class="boolfly-mega-col mega-col-4 mega-col-level-<?= /* @escapeNotVerified */ $level?> mega-column-<?= /* @escapeNotVerified */ $i;?>">
         <?php /** @var \Magento\Catalog\Model\Category $category */?>
-        <?php foreach ($categories as $category):?>
+        <?php foreach ($categories as $category) :?>
             <?php $html = $block->setCurrentCategory($category)->setLevel($level + 1)->getContentHtml();?>
-            <div id="boolfly-menu-item-category<?= /* @escapeNotVerified */ $category->getId()?>"
-                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?>">
+            <div id="boolfly-menu-item<?= /* @escapeNotVerified */ $item->getRecordId();?>-category<?= /* @escapeNotVerified */ $category->getId()?>"
+                 class="boolfly-item nav-item mega-level-<?= /* @escapeNotVerified */ $level?> <?= $html ? 'has-children' : ''?>">
                 <a href="<?= /* @escapeNotVerified */ $category->getUrl()?>"
                    target="<?= /* @escapeNotVerified */ $item->getLinkTarget()?:'_self';?>"
                    title="<?= /* @escapeNotVerified */ $block->escapeHtml(__($category->getName()))?>"
@@ -30,7 +30,7 @@ $level = $block->getLevel();
                     <span class="caret"></span>
                     <span class="opener"></span>
                 </a>
-                <?php if ($html):?>
+                <?php if ($html) :?>
                     <div class="boolfly-content child-content">
                         <div class="child-inner">
                             <div class="content-wrapper">

@@ -15,14 +15,16 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="bf_megamenu_listing_data_source" xsi:type="string">BoolflyMegamenuGridCollection</item>
+                <item name="boolfly_megamenu_listing_data_source" xsi:type="string">Boolfly\Megamenu\Model\ResourceModel\Menu\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="BoolflyMegamenuGridCollection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Boolfly\Megamenu\Model\ResourceModel\Menu\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">bf_megamenu</argument>
+            <argument name="mainTable" xsi:type="string">boolfly_megamenu</argument>
+            <argument name="eventPrefix" xsi:type="string">megamenu_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">menu_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Boolfly\Megamenu\Model\ResourceModel\Menu</argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

@@ -10,7 +10,6 @@
 namespace Boolfly\Megamenu\Block\Adminhtml\Edit;
 
 use Magento\Backend\Block\Template;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**

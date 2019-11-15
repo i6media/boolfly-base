@@ -9,12 +9,13 @@
   */
 namespace Boolfly\Megamenu\Model\ResourceModel;
 
-use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Boolfly\Megamenu\Model\Menu as MenuModel;
+use Zend_Db_Select;
 
 /**
  * Class Menu
@@ -52,7 +53,7 @@ class Menu extends AbstractDb
      */
     public function _construct()
     {
-        $this->_init('bf_megamenu', 'menu_id');
+        $this->_init('boolfly_megamenu', 'menu_id');
     }
 
     /**
@@ -75,7 +76,6 @@ class Menu extends AbstractDb
         $this->getStoreLink($object);
     }
 
-
     /**
      * Get Banner Link
      *
@@ -87,24 +87,45 @@ class Menu extends AbstractDb
         $select     = $connection->select()
             ->from($this->getMenuStoreTable(), ['store_id'])
             ->where('menu_id = ?', $object->getId());
-        $storeIds = $connection->fetchCol($select);
+        $storeIds   = $connection->fetchCol($select);
         $object->setData('store_id', $storeIds);
     }
 
-
     /**
-     * Before save
-     *
      * @param AbstractModel $object
      * @return mixed
+     * @throws LocalizedException
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        $gmtDate = $this->dateTime->gmtDate();
+        $gmtDate            = $this->dateTime->gmtDate();
+        $isUniqueIdentifier = $this->checkIdentifier($object->getData('identifier'));
         if ($object->isObjectNew()) {
             $object->setData('created_at', $gmtDate);
+            if ($isUniqueIdentifier) {
+                throw new LocalizedException(
+                    __('The identifier of menu must be unique.')
+                );
+            }
+        } else {
+            if ($isUniqueIdentifier && $isUniqueIdentifier != $object->getId()) {
+                throw new LocalizedException(
+                    __('The identifier of menu must be unique.')
+                );
+            }
         }
         $object->setData('updated_at', $gmtDate);
+        if (!$this->isValidIdentifier($object)) {
+            throw new LocalizedException(
+                __('The identifier contains capital letters or disallowed symbols.')
+            );
+        }
+
+        if ($this->isNumericIdentifier($object)) {
+            throw new LocalizedException(
+                __('The identifier key cannot be made of only numbers.')
+            );
+        }
 
         return parent::_beforeSave($object);
     }
@@ -116,7 +137,7 @@ class Menu extends AbstractDb
      */
     public function getMenuStoreTable()
     {
-        return $this->getTable('bf_megamenu_store');
+        return $this->getTable('boolfly_megamenu_store');
     }
 
     /**
@@ -141,10 +162,10 @@ class Menu extends AbstractDb
     protected function saveItemsCollection($object)
     {
         $itemsCollection = $object->getItemsCollection();
-        $oldItemIds = $itemsCollection->getAllIds();
-        $menuTree = $object->getData('menu_tree');
-        $newItemIds = array_column($menuTree, 'item_id');
-        $itemDeleted = array_diff($oldItemIds, $newItemIds);
+        $oldItemIds      = $itemsCollection->getAllIds();
+        $menuTree        = $object->getData('menu_tree');
+        $newItemIds      = array_column($menuTree, 'item_id');
+        $itemDeleted     = array_diff($oldItemIds, $newItemIds);
         //Delete Item
         foreach ($itemDeleted as $delId) {
             /** @var AbstractModel $menuItem */
@@ -159,7 +180,7 @@ class Menu extends AbstractDb
                  * Add New Empty Item
                  */
                 if (empty($item['item_id'])) {
-                    $newItem = $itemsCollection->getNewEmptyItem();
+                    $newItem         = $itemsCollection->getNewEmptyItem();
                     $item['menu_id'] = $object->getId();
                     if ($item['parent_id'] === '') {
                         $item['parent_id'] = null;
@@ -192,21 +213,68 @@ class Menu extends AbstractDb
     }
 
     /**
-     * Save data to bf_megamenu_store
+     * @param AbstractModel $object
+     * @return false|integer
+     */
+    protected function isValidIdentifier(AbstractModel $object)
+    {
+        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+    }
+    /**
+     *  Check whether post url key is numeric
+     *
+     * @param AbstractModel $object
+     * @return boolean
+     */
+    protected function isNumericIdentifier(AbstractModel $object)
+    {
+        return preg_match('/^[0-9]+$/', $object->getData('identifier'));
+    }
+
+    /**
+     * @param $identifier
+     * @return string
+     * @throws LocalizedException
+     */
+    public function checkIdentifier($identifier)
+    {
+        $select = $this->getLoadByIdentifierSelect($identifier);
+        $select->reset(Zend_Db_Select::COLUMNS)->columns('menu.menu_id')->limit(1);
+        return $this->getConnection()->fetchOne($select);
+    }
+
+    /**
+     * @param $identifier
+     * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
+     */
+    protected function getLoadByIdentifierSelect($identifier)
+    {
+        $select = $this->getConnection()->select()->from(
+            ['menu' => $this->getMainTable()]
+        )->where(
+            'menu.identifier = ?',
+            $identifier
+        );
+
+        return $select;
+    }
+
+    /**
+     * Save data to boolfly_megamenu_store
      *
      * @param AbstractModel $model
      */
     private function processMenuStoreTable(AbstractModel $model)
     {
-        $storeIds         = $model->getData('store_id');
+        $storeIds       = $model->getData('store_id');
         $menuStoreTable = $this->getMenuStoreTable();
         if ($model->getId() && is_array($storeIds) && !empty($storeIds)) {
             $importData = [];
-            $select            = $this->getConnection()
+            $select     = $this->getConnection()
                 ->select()
                 ->from($menuStoreTable, ['store_id'])
                 ->where('store_id = ?', $model->getId());
-
             /**
              * Remove store unselected
              */

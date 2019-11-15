@@ -31,7 +31,6 @@ class CmsPage implements OptionSourceInterface
      */
     private $collectionFactory;
 
-
     /**
      * CmsPage constructor.
      *
@@ -52,7 +51,7 @@ class CmsPage implements OptionSourceInterface
     {
         if ($this->options === null) {
             $this->options = [];
-            $collection = $this->collectionFactory->create();
+            $collection    = $this->collectionFactory->create();
             /** @var \Magento\Cms\Model\Page $item */
             foreach ($collection as $item) {
                 $this->options[$item->getId()] = $item->getTitle();

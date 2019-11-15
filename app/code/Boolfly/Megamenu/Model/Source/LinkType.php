@@ -29,7 +29,6 @@ class LinkType implements OptionSourceInterface
 
     const CMS_PAGE_LINK = 'cms_page';
 
-
     /**
      * Retrieve option array
      *
@@ -60,7 +59,6 @@ class LinkType implements OptionSourceInterface
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }

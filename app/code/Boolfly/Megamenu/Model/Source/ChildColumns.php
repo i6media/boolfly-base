@@ -35,7 +35,6 @@ class ChildColumns implements OptionSourceInterface
 
     const SIX_COL = 6;
 
-
     /**
      * Retrieve option array
      *

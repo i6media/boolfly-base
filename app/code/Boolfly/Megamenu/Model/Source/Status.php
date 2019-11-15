@@ -46,7 +46,6 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }
