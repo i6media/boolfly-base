@@ -79,7 +79,7 @@ class RedundantImageChecker
         }
         $conditions = join(' OR ', $conditionArray);
         $select     = $connection->select()
-            ->from($connection->getTableName('bf_banner'), 'banner_id')
+            ->from($connection->getTableName('boolfly_banner'), 'banner_id')
             ->where($conditions)
             ->limit(1);
 

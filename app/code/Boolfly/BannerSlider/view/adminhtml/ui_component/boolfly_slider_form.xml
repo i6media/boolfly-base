@@ -12,7 +12,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">bf_slider_form.bf_slider_form_data_source</item>
+            <item name="provider" xsi:type="string">boolfly_slider_form.boolfly_slider_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Slider Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -25,13 +25,13 @@
             <button name="delete" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\DeleteButton"/>
             <button name="save_and_continue" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveAndContinueButton"/>
         </buttons>
-        <namespace>bf_slider_form</namespace>
+        <namespace>boolfly_slider_form</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>bf_slider_form.bf_slider_form_data_source</dep>
+            <dep>boolfly_slider_form.boolfly_slider_form_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="bf_slider_form_data_source">
+    <dataSource name="boolfly_slider_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
@@ -41,7 +41,7 @@
             <validateUrl path="bannerslider/slider/validate"/>
             <submitUrl path="bannerslider/slider/save"/>
         </settings>
-        <dataProvider class="Boolfly\BannerSlider\Model\Slider\DataProvider" name="bf_slider_form_data_source">
+        <dataProvider class="Boolfly\BannerSlider\Model\Slider\DataProvider" name="boolfly_slider_form_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>banner_id</primaryFieldName>
@@ -56,7 +56,7 @@
         <field name="id" formElement="hidden">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_slider</item>
+                    <item name="source" xsi:type="string">boolfly_slider</item>
                 </item>
             </argument>
             <settings>
@@ -66,7 +66,7 @@
         <field name="status" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_slider</item>
+                    <item name="source" xsi:type="string">boolfly_slider</item>
                     <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
@@ -98,32 +98,6 @@
                 <label translate="true">Title</label>
             </settings>
         </field>
-        <field name="display_title" sortOrder="40" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_slider</item>
-                    <item name="default" xsi:type="number">1</item>
-                </item>
-            </argument>
-            <settings>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">false</rule>
-                </validation>
-                <dataType>boolean</dataType>
-                <label translate="true">Display Title</label>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="string">0</map>
-                            <map name="true" xsi:type="string">1</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
         <field name="animation_effect" sortOrder="70" formElement="select">
             <settings>
                 <dataType>string</dataType>
@@ -141,7 +115,7 @@
         <field name="auto_play" sortOrder="80" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_slider</item>
+                    <item name="source" xsi:type="string">boolfly_slider</item>
                     <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
@@ -201,7 +175,7 @@
                     <item name="columnsHeaderAfterRender" xsi:type="boolean">true</item>
                     <item name="deleteButtonLabel" xsi:type="string" translate="true">Remove</item>
                     <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
-                    <item name="dataProvider" xsi:type="string">data.bf_banner_listing</item>
+                    <item name="dataProvider" xsi:type="string">data.boolfly_banner_listing</item>
                     <item name="map" xsi:type="array">
                         <item name="banner_id" xsi:type="string">banner_id</item>
                         <item name="title" xsi:type="string">title</item>
@@ -326,7 +300,7 @@
                             <item name="class" xsi:type="string">action-primary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">index = bf_banner_listing</item>
+                                    <item name="targetName" xsi:type="string">index = boolfly_banner_listing</item>
                                     <item name="actionName" xsi:type="string">save</item>
                                 </item>
                                 <item name="1" xsi:type="array">
@@ -338,13 +312,13 @@
                     </option>
                 </options>
             </settings>
-            <insertListing name="bf_banner_listing">
+            <insertListing name="boolfly_banner_listing">
                 <settings>
                     <autoRender>true</autoRender>
-                    <dataScope>bf_banner_listing</dataScope>
-                    <ns>bf_banner_listing</ns>
-                    <externalProvider>bf_banner_listing.bf_banner_listing_data_source</externalProvider>
-                    <selectionsProvider>bf_banner_listing.bf_banner_listing.banner_columns.ids</selectionsProvider>
+                    <dataScope>boolfly_banner_listing</dataScope>
+                    <ns>boolfly_banner_listing</ns>
+                    <externalProvider>boolfly_banner_listing.boolfly_banner_listing_data_source</externalProvider>
+                    <selectionsProvider>boolfly_banner_listing.boolfly_banner_listing.banner_columns.ids</selectionsProvider>
                     <dataLinks>
                         <imports>false</imports>
                         <exports>true</exports>

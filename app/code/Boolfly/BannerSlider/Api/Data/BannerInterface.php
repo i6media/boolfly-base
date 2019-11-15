@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -20,7 +20,7 @@ interface BannerInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_banner';
+    const CACHE_TAG = 'boolfly_banner';
 
     /**#@+
      * Constants defined for keys of data array

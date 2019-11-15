@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -27,7 +27,7 @@ class InstallSchema implements InstallSchemaInterface
      *
      * @const
      */
-    const PREFIX_TABLE_NAME = 'bf_';
+    const PREFIX_TABLE_NAME = 'boolfly_';
 
     /**@#%
      * Table Name

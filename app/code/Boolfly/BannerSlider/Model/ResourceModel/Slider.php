@@ -1,7 +1,7 @@
 <?php
  /************************************************************
   * *
-  *  * Copyright © 2019 Boolfly. All rights reserved.
+  *  * Copyright © Boolfly. All rights reserved.
   *  * See COPYING.txt for license details.
   *  *
   *  * @author    info@boolfly.com
@@ -170,7 +170,7 @@ class Slider extends AbstractDb
     }
 
     /**
-     * Save data to bf_banner_slider table
+     * Save data to boolfly_banner_slider table
      *
      * @param AbstractModel $object
      */
@@ -218,7 +218,7 @@ class Slider extends AbstractDb
     }
 
     /**
-     * Save data to bf_slider_cms_page
+     * Save data to boolfly_slider_cms_page
      *
      * @param AbstractModel $model
      */

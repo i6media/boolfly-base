@@ -49,15 +49,13 @@ $bannerCollection = $block->getBannerCollection();
                         </div>
                     <?php endif;?>
                     <?php if ($banner->hasButton()) :?>
+                        <?php $buttonUrl  = $banner->getButtonUrl();?>
+                        <?php $buttonText = $banner->getButtonText() ?: __('Shop Now');?>
                         <div class="banner-button">
-                            <?php if ($buttonUrl = $banner->getButtonUrl()) :?>
-                                <a href="<?= /* @escapeNotVerified */ $buttonUrl?>"
-                                   title="<?= /* @escapeNotVerified */ $banner->getButtonText() ?: __('Shop Now')?>">
-                                    <span><?= /* @escapeNotVerified */ $banner->getButtonText() ?: __('Shop Now')?></span>
-                                </a>
-                            <?php elseif ($banner->getButtonText()) :?>
-                                <span><?= /* @escapeNotVerified */ $banner->getButtonText()?></span>
-                            <?php endif;?>
+                            <a href="<?= /* @escapeNotVerified */ $buttonUrl ?: 'javascript:void(0);'?>"
+                               title="<?= /* @escapeNotVerified */ $buttonText?>">
+                                <span><?= /* @escapeNotVerified */ $buttonText?></span>
+                            </a>
                         </div>
                     <?php endif;?>
                 </div>

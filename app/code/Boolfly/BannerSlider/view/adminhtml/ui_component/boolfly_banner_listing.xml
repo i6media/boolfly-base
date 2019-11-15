@@ -2,7 +2,7 @@
 <!--
  /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -12,13 +12,13 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">bf_banner_listing.bf_banner_listing_data_source</item>
+            <item name="provider" xsi:type="string">boolfly_banner_listing.boolfly_banner_listing_data_source</item>
         </item>
     </argument>
     <settings>
         <spinner>banner_columns</spinner>
         <deps>
-            <dep>bf_banner_listing.bf_banner_listing_data_source</dep>
+            <dep>boolfly_banner_listing.boolfly_banner_listing_data_source</dep>
         </deps>
         <buttons>
             <button name="add">
@@ -28,7 +28,7 @@
             </button>
         </buttons>
     </settings>
-    <dataSource name="bf_banner_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="boolfly_banner_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="cacheRequests" xsi:type="boolean">false</param>
@@ -36,7 +36,7 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Boolfly_BannerSlider::banner</aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="bf_banner_listing_data_source">
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="boolfly_banner_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>banner_id</primaryFieldName>

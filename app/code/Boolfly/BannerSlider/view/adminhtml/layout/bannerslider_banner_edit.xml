@@ -2,7 +2,7 @@
 <!--
  /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -12,7 +12,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer	name="content">
-            <uiComponent name="bf_banner_form"/>
+            <uiComponent name="boolfly_banner_form"/>
         </referenceContainer>
     </body>
 </page>

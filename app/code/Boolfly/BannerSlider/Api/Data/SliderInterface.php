@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -20,7 +20,7 @@ interface SliderInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_slider';
+    const CACHE_TAG = 'boolfly_slider';
 
     /**#@+
      * Constants defined for keys of data array

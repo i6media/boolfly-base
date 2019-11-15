@@ -2,7 +2,7 @@
 <!--
  /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -16,21 +16,21 @@
    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
       <arguments>
          <argument name="collections" xsi:type="array">
-            <item name="bf_banner_listing_data_source" xsi:type="string">BoolflyBannerCollection</item>
-            <item name="bf_banner_grid_data_source" xsi:type="string">BoolflyBannerCollection</item>
-            <item name="bf_slider_listing_data_source" xsi:type="string">BoolflySliderCollection</item>
+            <item name="boolfly_banner_listing_data_source" xsi:type="string">BoolflyBannerCollection</item>
+            <item name="boolfly_banner_grid_data_source" xsi:type="string">BoolflyBannerCollection</item>
+            <item name="boolfly_slider_listing_data_source" xsi:type="string">BoolflySliderCollection</item>
          </argument>
       </arguments>
    </type>
    <virtualType name="BoolflyBannerCollection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
       <arguments>
-         <argument name="mainTable" xsi:type="string">bf_banner</argument>
+         <argument name="mainTable" xsi:type="string">boolfly_banner</argument>
          <argument name="resourceModel" xsi:type="string">Boolfly\BannerSlider\Model\ResourceModel\Banner</argument>
       </arguments>
    </virtualType>
    <virtualType name="BoolflySliderCollection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
       <arguments>
-         <argument name="mainTable" xsi:type="string">bf_slider</argument>
+         <argument name="mainTable" xsi:type="string">boolfly_slider</argument>
          <argument name="resourceModel" xsi:type="string">Boolfly\BannerSlider\Model\ResourceModel\Slider</argument>
       </arguments>
    </virtualType>
