@@ -72,7 +72,7 @@ class ProcessingImageUpload implements ObserverInterface
     protected function processFile(BannerInterface $object, $key)
     {
         $files = $object->getData($key);
-        $object->unsetData($key);
+        $object->setData($key, null);
         if (is_array($files) && !empty($files)) {
             foreach ($files as $file) {
                 if (is_array($file) && empty($file['name'])) {
@@ -82,8 +82,6 @@ class ProcessingImageUpload implements ObserverInterface
                 // Upload New File
                 if (isset($file['type']) && $file['tmp_name']) {
                     $this->imageUploader->moveFileFromTmp($name);
-                } elseif (!empty($file['delete'])) {
-                    $name = null;
                 }
                 $object->setData($key, $name);
             }
