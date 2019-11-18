@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -230,7 +230,7 @@ class Slider extends AbstractModel implements SliderInterface, IdentityInterface
      */
     public function getBannerIds()
     {
-        $assignedBanner = $this->getDataByPath('banners/assigned_banners');
+        $assignedBanner = $this->getData('assigned_banners');
         if (is_array($assignedBanner)) {
             return array_keys($assignedBanner);
         }
@@ -253,5 +253,52 @@ class Slider extends AbstractModel implements SliderInterface, IdentityInterface
         }
 
         return array_unique($identities);
+    }
+
+    /**
+     * Get Category Id
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getCategoryIds()
+    {
+        return $this->_getData(self::CATEGORY_ID);
+    }
+
+    /**
+     * After Load Slider
+     *
+     * @return mixed
+     */
+    public function _afterLoad()
+    {
+        $categoryIds = $this->_getData(self::CATEGORY_ID);
+        if ($categoryIds && is_string($categoryIds)) {
+            $this->setData(self::CATEGORY_ID, explode(',', $categoryIds));
+        }
+        return parent::_afterLoad();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function beforeSave()
+    {
+        $this->setCategoryIds($this->_getData(self::CATEGORY_ID));
+        return parent::beforeSave();
+    }
+
+    /**
+     * Set Category Id
+     *
+     * @param array $categoryIds
+     *
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCategoryIds($categoryIds)
+    {
+        return $this->setData(self::CATEGORY_ID, implode(',', $categoryIds));
     }
 }

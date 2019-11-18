@@ -1,7 +1,7 @@
 <?php
  /************************************************************
   * *
-  *  * Copyright © 2019 Boolfly. All rights reserved.
+  *  * Copyright © Boolfly. All rights reserved.
   *  * See COPYING.txt for license details.
   *  *
   *  * @author    info@boolfly.com
@@ -125,7 +125,7 @@ class Slider extends AbstractDb
             ->where('slider_id = ?', $object->getId())
             ->order('position ASC');
         $bannerData = $connection->fetchPairs($select);
-        $object->setData('banners', ['assigned_banners' => $bannerData]);
+        $object->setData('assigned_banners', $bannerData);
     }
 
     /**
@@ -140,7 +140,7 @@ class Slider extends AbstractDb
             ->from($this->getSliderCmsPageTable(), ['page_id'])
             ->where('slider_id = ?', $object->getId());
         $data       = $connection->fetchCol($select);
-        $object->setData('cms_page_ids', $data);
+        $object->setData('cms_pages', $data);
     }
 
     /**
@@ -152,7 +152,6 @@ class Slider extends AbstractDb
     protected function _afterSave(AbstractModel $object)
     {
         $this->processLinkTable($object);
-
         return parent::_afterSave($object);
     }
 
@@ -171,13 +170,13 @@ class Slider extends AbstractDb
     }
 
     /**
-     * Save data to bf_banner_slider table
+     * Save data to boolfly_banner_slider table
      *
      * @param AbstractModel $object
      */
     private function processBannerSliderTable(AbstractModel $object)
     {
-        $assignedBanners = $object->getDataByPath('banners/assigned_banners');
+        $assignedBanners = $object->getDataByPath('assigned_banners');
         if ($object->getId() && is_array($assignedBanners) && !empty($assignedBanners)) {
             $bannerSliderData  = [];
             $bannerSliderTable = $this->getBannerSliderTable();
@@ -202,12 +201,11 @@ class Slider extends AbstractDb
                     );
                 }
             }
-
             foreach ($assignedBanners as $assignedBanner) {
                 $bannerSliderData[] = [
                     'banner_id' => $assignedBanner['banner_id'],
                     'slider_id' => $object->getId(),
-                    'position' => $assignedBanner['priority']
+                    'position' => $assignedBanner['position']
                 ];
             }
             if (!empty($bannerSliderData)) {
@@ -220,15 +218,16 @@ class Slider extends AbstractDb
     }
 
     /**
-     * Save data to bf_slider_cms_page
+     * Save data to boolfly_slider_cms_page
      *
      * @param AbstractModel $model
      */
     private function processSliderCmsPageTable(AbstractModel $model)
     {
-        $cmsPageIds         = $model->getData('cms_page_ids');
+        $cmsPageIds         = $model->getData('cms_pages');
         $sliderCmsPageTable = $this->getSliderCmsPageTable();
         if ($model->getId() && is_array($cmsPageIds) && !empty($cmsPageIds)) {
+            $cmsPageIds        = array_column($cmsPageIds, 'page_id');
             $sliderCmsPageData = [];
             $select            = $this->getConnection()
                 ->select()

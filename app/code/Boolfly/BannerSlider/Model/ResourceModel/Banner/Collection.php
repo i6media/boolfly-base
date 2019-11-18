@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -57,7 +57,8 @@ class Collection extends AbstractCollection
     {
         if ($sliderId && is_numeric($sliderId)) {
             $conditions = $this->getConnection()->quoteInto(
-                'main_table.banner_id = banner_slider.banner_id AND banner_slider.slider_id = ?', $sliderId
+                'main_table.banner_id = banner_slider.banner_id AND banner_slider.slider_id = ?',
+                $sliderId
             );
             $this->getSelect()->joinInner(
                 ['banner_slider' => $this->getTable(InstallSchema::BANNER_SLIDER_TABLE_NAME)],

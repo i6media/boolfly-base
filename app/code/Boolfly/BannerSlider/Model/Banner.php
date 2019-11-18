@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -383,7 +383,7 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
     /**
      * Check Button
      *
-     * @return bool
+     * @return boolean
      */
     public function hasButton()
     {
@@ -419,32 +419,5 @@ class Banner extends AbstractModel implements BannerInterface, IdentityInterface
         }
 
         return array_unique($identities);
-    }
-
-    /**
-     * After Delete Commit
-     *
-     * @return mixed
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    public function afterDeleteCommit()
-    {
-        $this->deleteImageUploaded();
-        return parent::afterDeleteCommit();
-    }
-
-    /**
-     * Delete image when delete banner
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    protected function deleteImageUploaded()
-    {
-        foreach (ImageField::getField() as $field) {
-            $image = $this->getData($field);
-            if ($image) {
-                $this->imageUploader->deleteImageFile($image);
-            }
-        }
     }
 }

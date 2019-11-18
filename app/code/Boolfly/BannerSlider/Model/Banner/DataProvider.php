@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -89,17 +89,22 @@ class DataProvider extends AbstractDataProvider
                 unset($bannerData[$field]);
                 $imageName = $banner->getData($field);
                 if ($imageSrc = $banner->getImageUrl($imageName)) {
+                    try {
+                        $size = $this->imageUploader->getSize($imageName);
+                    } catch (\Exception $e) {
+                        $size = 'undefined';
+                    }
                     $bannerData[$field][] = [
                         'name' => $imageName,
                         'url' => $imageSrc,
-                        'size' => $this->imageUploader->getSize($imageName)
+                        'size' => $size
                     ];
                 }
             }
             if ($banner->getButtonText() || $banner->getButtonUrl()) {
-                $bannerData['enable_button'] = true;
+                $bannerData['enable_button'] = '1';
             } else {
-                $bannerData['enable_button'] = false;
+                $bannerData['enable_button'] = '0';
             }
             $this->loadedData[$banner->getId()] = $bannerData;
         } else {

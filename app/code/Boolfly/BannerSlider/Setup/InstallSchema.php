@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -27,7 +27,7 @@ class InstallSchema implements InstallSchemaInterface
      *
      * @const
      */
-    const PREFIX_TABLE_NAME = 'bf_';
+    const PREFIX_TABLE_NAME = 'boolfly_';
 
     /**@#%
      * Table Name
@@ -250,6 +250,12 @@ class InstallSchema implements InstallSchemaInterface
                     ['nullable' => true],
                     'Position of Slider'
                 )->addColumn(
+                    'category_id',
+                    Table::TYPE_TEXT,
+                    255,
+                    ['nullable' => true],
+                    'Category Id'
+                )->addColumn(
                     'created_at',
                     Table::TYPE_TIMESTAMP,
                     null,
@@ -355,6 +361,74 @@ class InstallSchema implements InstallSchemaInterface
      * @throws \Zend_Db_Exception
      */
     private function createSliderCmsPageTable(SchemaSetupInterface $installer)
+    {
+        $tableName        = $installer->getTable(self::SLIDER_CMS_PAGE_TABLE_NAME);
+        $sliderTableName  = $installer->getTable(self::SLIDER_TABLE_NAME);
+        $cmsPageTableName = $installer->getTable('cms_page');
+        if (!$installer->tableExists($tableName)) {
+            $table = $installer->getConnection()
+                ->newTable($installer->getTable($tableName))
+                ->addColumn(
+                    'slider_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    [
+                        'unsigned' => true,
+                        'nullable' => false,
+                        'primary'  => true,
+                    ],
+                    'Slider Id'
+                )->addColumn(
+                    'page_id',
+                    Table::TYPE_SMALLINT,
+                    6,
+                    [
+                        'unsigned' => false,
+                        'nullable' => false,
+                        'primary'  => true,
+                    ],
+                    'Page Id'
+                )->addIndex(
+                    $installer->getIdxName($tableName, ['slider_id']),
+                    ['slider_id']
+                )->addIndex(
+                    $installer->getIdxName($tableName, ['page_id']),
+                    ['page_id']
+                )->addForeignKey(
+                    $installer->getFkName(
+                        $tableName,
+                        'slider_id',
+                        $sliderTableName,
+                        'slider_id'
+                    ),
+                    'slider_id',
+                    $sliderTableName,
+                    'slider_id',
+                    Table::ACTION_CASCADE
+                )->addForeignKey(
+                    $installer->getFkName(
+                        $tableName,
+                        'page_id',
+                        $cmsPageTableName,
+                        'page_id'
+                    ),
+                    'page_id',
+                    $cmsPageTableName,
+                    'page_id',
+                    Table::ACTION_CASCADE
+                )->setComment('Slider and CMS Page Relations');
+
+            $installer->getConnection()->createTable($table);
+        }
+    }
+
+    /**
+     * Create Slider Category Table
+     *
+     * @param SchemaSetupInterface $installer
+     * @throws \Zend_Db_Exception
+     */
+    private function createSliderCategoryTable(SchemaSetupInterface $installer)
     {
         $tableName        = $installer->getTable(self::SLIDER_CMS_PAGE_TABLE_NAME);
         $sliderTableName  = $installer->getTable(self::SLIDER_TABLE_NAME);

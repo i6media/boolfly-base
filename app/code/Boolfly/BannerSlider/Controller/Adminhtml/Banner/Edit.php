@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -10,6 +10,7 @@
 namespace Boolfly\BannerSlider\Controller\Adminhtml\Banner;
 
 use Boolfly\BannerSlider\Controller\Adminhtml\AbstractBanner;
+use Boolfly\BannerSlider\Model\ImageField;
 
 /**
  * Class Edit
@@ -39,6 +40,9 @@ class Edit extends AbstractBanner
         }
         $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
         if (!empty($data)) {
+            foreach (ImageField::getField() as $field) {
+                unset($data[$field]);
+            }
             $model->addData($data);
         }
 

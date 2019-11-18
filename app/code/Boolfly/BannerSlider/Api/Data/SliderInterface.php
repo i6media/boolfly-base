@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -20,7 +20,7 @@ interface SliderInterface
     /**#@+
      * Constants Cache Tag
      */
-    const CACHE_TAG = 'bf_slider';
+    const CACHE_TAG = 'boolfly_slider';
 
     /**#@+
      * Constants defined for keys of data array
@@ -34,6 +34,8 @@ interface SliderInterface
     const DISPLAY_TITLE = 'display_title';
 
     const MODE = 'mode';
+
+    const CATEGORY_ID = 'category_id';
 
     const ANIMATION_EFFECT = 'animation_effect';
 
@@ -122,6 +124,24 @@ interface SliderInterface
      * @since 1.0.0
      */
     public function setMode($mode);
+
+    /**
+     * Get Category Ids
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getCategoryIds();
+
+    /**
+     * Set Category Ids
+     *
+     * @param array $categoryIds
+     *
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCategoryIds($categoryIds);
 
     /**
      * Get Animation Effect

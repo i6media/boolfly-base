@@ -1,7 +1,7 @@
 <?php
 /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -14,6 +14,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Boolfly\BannerSlider\Model\ImageUploader;
 use Boolfly\BannerSlider\Model\ImageField;
+use Boolfly\BannerSlider\Helper\RedundantImageChecker;
 
 /**
  * Class ProcessingImageUpload
@@ -28,14 +29,22 @@ class ProcessingImageUpload implements ObserverInterface
     private $imageUploader;
 
     /**
+     * @var RedundantImageChecker
+     */
+    private $redundantImageChecker;
+
+    /**
      * ProcessingImageUpload constructor.
      *
-     * @param ImageUploader $imageUploader
+     * @param ImageUploader         $imageUploader
+     * @param RedundantImageChecker $redundantImageChecker
      */
     public function __construct(
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
+        RedundantImageChecker $redundantImageChecker
     ) {
-        $this->imageUploader = $imageUploader;
+        $this->imageUploader         = $imageUploader;
+        $this->redundantImageChecker = $redundantImageChecker;
     }
 
     /**
@@ -53,7 +62,7 @@ class ProcessingImageUpload implements ObserverInterface
     }
 
     /**
-     * Process Field
+     * Process File
      *
      * @param \Boolfly\BannerSlider\Model\Banner|BannerInterface $object
      * @param $key
@@ -63,7 +72,7 @@ class ProcessingImageUpload implements ObserverInterface
     protected function processFile(BannerInterface $object, $key)
     {
         $files = $object->getData($key);
-        $object->unsetData($key);
+        $object->setData($key, null);
         if (is_array($files) && !empty($files)) {
             foreach ($files as $file) {
                 if (is_array($file) && empty($file['name'])) {
@@ -71,10 +80,8 @@ class ProcessingImageUpload implements ObserverInterface
                 }
                 $name = $file['name'];
                 // Upload New File
-                if (isset($file['type'])) {
+                if (isset($file['type']) && $file['tmp_name']) {
                     $this->imageUploader->moveFileFromTmp($name);
-                } elseif (!empty($file['delete'])) {
-                    $name = null;
                 }
                 $object->setData($key, $name);
             }

@@ -1,5 +1,5 @@
 /**********************************************************************
- * banner-slider
+ * banner-slider widget
  *
  * @copyright Copyright © Boolfly. All rights reserved.
  * @author    info@boolfly.com
@@ -46,20 +46,19 @@ define([
                             arrows: false,
                             dots: true
                         }
-                    },
+                },
                     {
                         breakpoint: 768,
                         settings:{
                             dots: false
                         }
-                    }
+                }
                 ]
             });
-            var parent = element.parent();
             $(this.element).on('lazyLoaded', function () {
-                $('.slick-slider').get(0).slick.setPosition();
+                element.slick('setPosition');
                 element.removeClass('no-display');
-                parent.find('[data-role=loader]').remove();
+                element.parent().find('[data-role=loader]').remove();
             })
         }
     });

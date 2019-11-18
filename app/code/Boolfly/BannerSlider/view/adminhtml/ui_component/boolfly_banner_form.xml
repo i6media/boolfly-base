@@ -2,7 +2,7 @@
 <!--
  /************************************************************
  * *
- *  * Copyright © 2019 Boolfly. All rights reserved.
+ *  * Copyright © Boolfly. All rights reserved.
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
@@ -12,7 +12,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">bf_banner_form.bf_banner_form_data_source</item>
+            <item name="provider" xsi:type="string">boolfly_banner_form.boolfly_banner_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Banner Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -25,13 +25,13 @@
             <button name="delete" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\DeleteButton"/>
             <button name="save_and_continue" class="Boolfly\BannerSlider\Block\Adminhtml\Edit\SaveAndContinueButton"/>
         </buttons>
-        <namespace>bf_banner_form</namespace>
+        <namespace>boolfly_banner_form</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>bf_banner_form.bf_banner_form_data_source</dep>
+            <dep>boolfly_banner_form.boolfly_banner_form_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="bf_banner_form_data_source">
+    <dataSource name="boolfly_banner_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
@@ -41,7 +41,7 @@
             <validateUrl path="bannerslider/banner/validate"/>
             <submitUrl path="bannerslider/banner/save"/>
         </settings>
-        <dataProvider class="Boolfly\BannerSlider\Model\Banner\DataProvider" name="bf_banner_form_data_source">
+        <dataProvider class="Boolfly\BannerSlider\Model\Banner\DataProvider" name="boolfly_banner_form_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>banner_id</primaryFieldName>
@@ -57,7 +57,7 @@
         <field name="id" formElement="hidden">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
                 </item>
             </argument>
             <settings>
@@ -67,7 +67,7 @@
         <field name="status" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
                     <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
@@ -114,7 +114,7 @@
         <field name="enable_button" sortOrder="60" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
                     <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
@@ -174,7 +174,8 @@
         <field name="image_desktop" sortOrder="90" formElement="imageUploader">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
@@ -205,7 +206,8 @@
         <field name="image_tablet" sortOrder="100" formElement="imageUploader">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
@@ -234,7 +236,8 @@
         <field name="image_mobile" sortOrder="110" formElement="imageUploader">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">bf_banner</item>
+                    <item name="source" xsi:type="string">boolfly_banner</item>
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
                 </item>
             </argument>
             <settings>
