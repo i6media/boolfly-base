@@ -5,16 +5,16 @@
  *  * See COPYING.txt for license details.
  *  *
  *  * @author    info@boolfly.com
- * *  @project   Banner Slider
+ * *  @project   Core
  */
-namespace Boolfly\BannerSlider\Model\Source;
+namespace Boolfly\Base\Model\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Banner status functionality model
+ * Status functionality model
  *
  * @api
  * @since 100.0.2
@@ -22,7 +22,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
     /**#@+
-     * Banner Status values
+     * Status values
      */
     const STATUS_ENABLED = 1;
 
@@ -46,7 +46,6 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     public function getAllOptions()
     {
         $result = [];
-
         foreach (self::getOptionArray() as $index => $value) {
             $result[] = ['value' => $index, 'label' => $value];
         }
