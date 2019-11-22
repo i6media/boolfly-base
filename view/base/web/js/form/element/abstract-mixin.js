@@ -34,6 +34,17 @@ define([
             },
 
             /**
+             * Trigger Update Value
+             *
+             * @param value
+             */
+            forceUpdateValue:function (value) {
+                if (value) {
+                    this.value.valueHasMutated();
+                }
+            },
+
+            /**
              * Change Visible And Disable property
              *
              * @param value
