@@ -9,7 +9,7 @@ var config = {
     map: {
         '*': {
             slick: 'Boolfly_Base/js/slick.min',
-            fancybox: 'Boolfly_Base/js/fancybox.min',
+            magnificPopup: 'Boolfly_Base/js/jquery.magnific-popup.min',
             'jquery/lazy': 'Boolfly_Base/js/jquery.lazy.min',
             'jquery/lazy/plugins': 'Boolfly_Base/js/jquery.lazy.plugins.min',
             lazyload: 'Boolfly_Base/js/verlok/lazyload.min',
@@ -21,7 +21,7 @@ var config = {
         slick: {
             deps: ['jquery']
         },
-        fancybox: {
+        magnificPopup: {
             deps: ['jquery']
         },
         'jquery/lazy': {
